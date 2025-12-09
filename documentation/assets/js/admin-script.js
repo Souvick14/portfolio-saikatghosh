@@ -361,30 +361,41 @@ class AdminPanel {
     }
 
     async saveSkill() {
-        const skillData = {
-            name: document.getElementById('skillName').value.trim(),
-            category: document.getElementById('skillCategory').value.trim(),
-            icon: document.getElementById('skillIcon').value.trim(),
-            proficiency: parseInt(document.getElementById('skillProficiency').value),
-            description: document.getElementById('skillDescription').value.trim(),
-            projects: []
-        };
+        // Create FormData for file upload
+        const formData = new FormData();
 
+        // Add text fields
+        formData.append('name', document.getElementById('skillName').value.trim());
+        formData.append('category', document.getElementById('skillCategory').value.trim());
+        formData.append('icon', document.getElementById('skillIcon').value.trim());
+        formData.append('proficiency', document.getElementById('skillProficiency').value);
+        formData.append('description', document.getElementById('skillDescription').value.trim());
+        
         // Collect projects
+        const projects = [];
         const projectInputs = document.querySelectorAll('.project-input');
         projectInputs.forEach(input => {
             if (input.value.trim()) {
-                skillData.projects.push(input.value.trim());
+                projects.push(input.value.trim());
             }
         });
+        
+        // Add projects as JSON string
+        formData.append('projects', JSON.stringify(projects));
+        
+        // Add background image file if selected
+        const fileInput = document.getElementById('skillBackgroundImage');
+        if (fileInput && fileInput.files && fileInput.files[0]) {
+            formData.append('backgroundImage', fileInput.files[0]);
+        }
 
         // Validate
-        if (!skillData.name || !skillData.category || !skillData.icon || !skillData.description) {
+        if (!formData.get('name') || !formData.get('category') || !formData.get('icon') || !formData.get('description')) {
             this.showNotification('Please fill in  required fields', 'error');
             return;
         }
 
-        if (skillData.projects.length === 0) {
+        if (projects.length === 0) {
             this.showNotification('Please add at least one project', 'error');
             return;
         }
@@ -396,10 +407,8 @@ class AdminPanel {
             
             const response = await fetch(url, {
                 method: method,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(skillData)
+                body: formData
+                // Don't set Content-Type header - browser will set it with boundary
             });
 
             if (!response.ok) {

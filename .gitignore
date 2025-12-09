@@ -6,6 +6,9 @@ yarn-error.log*
 
 # Environment variables
 .env
+
+# Uploads directory (user-uploaded files)
+uploads/
 .env.local
 .env.production
 

@@ -7,6 +7,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,8 +30,11 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Static Files (serve documentation folder)
-app.use(express.static('documentation'));
+// Serve static files from documentation folder
+app.use(express.static(path.join(__dirname, 'documentation')));
+
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Request Logging (development)
 if (process.env.NODE_ENV === 'development') {

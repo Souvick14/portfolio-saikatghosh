@@ -648,14 +648,20 @@ class SkillsManager {
         card.className = 'skill-flip-card animate-on-scroll';
         card.style.animationDelay = `${index * 0.1}s`;
         
-        // Determine if skill has background image
-        const hasBackgroundImage = skill.backgroundImage && skill.backgroundImage.trim() !== '';
-        const backgroundImageStyle = hasBackgroundImage ? `background-image: url('${skill.backgroundImage}');` : '';
+        // Determine if skill has background image for FRONT card
+        const hasFrontBackgroundImage = skill.backgroundImage && skill.backgroundImage.trim() !== '';
+        
+        // Create background image style for front card combining gradient and image
+        let frontBackgroundStyle = '';
+        if (hasFrontBackgroundImage) {
+            // Layer gradient over the custom image
+            frontBackgroundStyle = `background-image: linear-gradient(45deg, #000537cc, #010012dd), url('${skill.backgroundImage}');`;
+        }
         
         card.innerHTML = `
             <div class="skill-card-inner">
                 <!-- Front Face -->
-                <div class="skill-card-front">
+                <div class="skill-card-front" ${frontBackgroundStyle ? `style="${frontBackgroundStyle}"` : ''}>
                     <div class="skill-icon-wrapper">
                         <div class="skill-icon">
                             <i class="${skill.icon}"></i>
