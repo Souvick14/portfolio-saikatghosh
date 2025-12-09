@@ -722,11 +722,8 @@ p {
     margin: 0 auto;
 }
 
-.skill-flip-card:hover {
-    transform: scale(1.02);
-}
-
-.skill-flip-card.flipped .skill-card-inner {
+/* Flip on hover */
+.skill-flip-card:hover .skill-card-inner {
     transform: rotateY(180deg);
 }
 

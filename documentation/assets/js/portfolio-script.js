@@ -723,13 +723,9 @@ class SkillsManager {
     }
 
     setupFlipInteractions() {
-        const flipCards = document.querySelectorAll('.skill-flip-card');
-        
-        flipCards.forEach(card => {
-            card.addEventListener('click', () => {
-                card.classList.toggle('flipped');
-            });
-        });
+        // Flip now happens on hover via CSS
+        // No JavaScript needed for the flip animation
+        // This function kept for potential future enhancements
     }
 
     setupScrollAnimations() {
