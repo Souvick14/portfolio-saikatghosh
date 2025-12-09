@@ -905,7 +905,8 @@ p {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    position: relative;
+    position: absolute;
+    top: 0px;
 }
 
 /* Overlay for background images to ensure text readability */
