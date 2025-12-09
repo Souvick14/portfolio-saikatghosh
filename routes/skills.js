@@ -5,32 +5,48 @@ const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const Skill = require('../models/Skill');
 
-// Configure Cloudinary
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-});
+// Configure Cloudinary only if credentials are provided
+let cloudinaryConfigured = false;
+if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET
+    });
+    cloudinaryConfigured = true;
+    console.log('✅ Cloudinary configured for image uploads');
+} else {
+    console.warn('⚠️  Cloudinary credentials not found. Image uploads will be disabled.');
+}
 
-// Configure Multer with Cloudinary storage
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: 'portfolio/skills',
-        allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
-        transformation: [{ width: 800, height: 600, crop: 'limit' }], // Optional: resize large images
-        public_id: (req, file) => {
-            // Generate unique filename
-            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-            return `skill-${uniqueSuffix}`;
+// Configure Multer with Cloudinary storage (or memory storage as fallback)
+let storage;
+let upload;
+
+if (cloudinaryConfigured) {
+    storage = new CloudinaryStorage({
+        cloudinary: cloudinary,
+        params: {
+            folder: 'portfolio/skills',
+            allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+            transformation: [{ width: 800, height: 600, crop: 'limit' }],
+            public_id: (req, file) => {
+                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                return `skill-${uniqueSuffix}`;
+            }
         }
-    }
-});
-
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 } // 5MB max
-});
+    });
+    upload = multer({
+        storage: storage,
+        limits: { fileSize: 5 * 1024 * 1024 }
+    });
+} else {
+    // Fallback: use memory storage (images won't be saved)
+    upload = multer({
+        storage: multer.memoryStorage(),
+        limits: { fileSize: 5 * 1024 * 1024 }
+    });
+}
 
 // GET all skills
 router.get('/', async (req, res) => {
