@@ -1,0 +1,80 @@
+/* ============================================
+   Instagram Reels Carousel Styles
+   ============================================ */
+
+.instagram-carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+}
+
+.instagram-carousel-wrapper {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+    will-change: transform;
+}
+
+.instagram-carousel-slide {
+    min-width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    flex-shrink: 0;
+}
+
+/* Instagram embed container */
+.instagram-embed-wrapper {
+    max-width: 540px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.instagram-embed-wrapper iframe {
+    width: 100%;
+    height: auto;
+    min-height: 600px;
+    border: none;
+    border-radius: var(--radius-md);
+}
+
+/* Instagram blockquote styling (before embed loads) */
+.instagram-embed-wrapper blockquote {
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid var(--primary-purple);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+}
+
+/* Loading state for Instagram carousel */
+.instagram-carousel-slide.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 600px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .instagram-carousel-slide {
+        padding: 1rem;
+    }
+
+    .instagram-embed-wrapper {
+        max-width: 100%;
+    }
+
+    .instagram-embed-wrapper iframe {
+        min-height: 500px;
+    }
+}
+
+@media (max-width: 480px) {
+    .instagram-embed-wrapper iframe {
+        min-height: 450px;
+    }
+}

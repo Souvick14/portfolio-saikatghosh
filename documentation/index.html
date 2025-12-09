@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Basic metas -->
+    <meta charset="utf-8">
+    <meta name="author" content="Influencer Portfolio">
+    <meta name="description"
+        content="Dynamic influencer portfolio showcasing reels, blogs, and commercial work with automatic content from YouTube and Google Drive.">
+    <meta name="keywords"
+        content="influencer, content creator, reels, blogs, youtube, social media, brand collaborations">
+
+    <!-- Mobile specific metas -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta property="og:title" content="Influencer Portfolio">
+    <meta property="og:description" content="Creating engaging content across all platforms">
+
+    <!-- Page Title -->
+    <title>Influencer Portfolio | Reels, Blogs & Commercial Work</title>
+
+    <!-- Favicon -->
+    <!-- <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png"> -->
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/portfolio-style.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/carousel.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/instagram-carousel.css">
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader-content">
+            <div class="loader-logo">The-Creator</div>
+
+            <div class="loader-text-container">
+                <div class="loader-text">Creating Viral Content</div>
+                <div class="loader-text">Building Communities</div>
+                <div class="loader-text">Inspiring Millions</div>
+                <div class="loader-text">Making an Impact</div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="loading-percentage" id="loadingPercentage">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="portfolio-nav" id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">Creator</a>
+
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#reels" class="nav-link">Reels</a></li>
+                <li><a href="#blogs" class="nav-link">Blogs</a></li>
+                <li><a href="#commercial" class="nav-link">Commercial</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <p class="hero-greeting">👋 Hello, I'm a</p>
+            <h1 class="hero-title">
+                <span class="gradient-text">Video Editor</span><br>
+                & Motion Designer
+            </h1>
+            <p class="hero-subtitle">
+                Transforming raw footage into <span class="typing-text" id="typingText">captivating stories</span>
+            </p>
+            <div class="hero-cta">
+                <a href="#work" class="btn btn-primary">View My Work</a>
+                <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Latest Instagram Reels Section -->
+    <section class="section carousel-section" id="instagram-reels">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Latest Reels</h2>
+                <p class="section-description">
+                    Fresh viral content straight from Instagram
+                </p>
+            </div>
+
+            <div class="instagram-carousel-container" id="instagramReelsCarousel">
+                <div class="instagram-carousel-wrapper" id="instagramReelsWrapper">
+                    <!-- Instagram reel embeds will be loaded dynamically -->
+                    <div class="instagram-carousel-slide loading">
+                        <div class="carousel-loader"></div>
+                    </div>
+                </div>
+
+                <div class="carousel-nav">
+                    <div class="carousel-arrows">
+                        <button class="carousel-arrow prev-arrow" data-target="instagram-reels">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="carousel-arrow next-arrow" data-target="instagram-reels">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="carousel-dots" id="instagramReelsDots"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reels Section -->
+    <section class="section carousel-section" id="reels">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Latest Reels</h2>
+                <p class="section-description">
+                    Viral short-form content that captivates and engages
+                </p>
+            </div>
+
+            <div class="carousel-container" id="reelsCarousel" data-carousel="reels">
+                <div class="carousel-wrapper" id="reelsWrapper">
+                    <!-- Reel slides will be loaded dynamically -->
+                    <div class="carousel-slide loading">
+                        <div class="carousel-loader"></div>
+                    </div>
+                </div>
+
+                <div class="carousel-nav">
+                    <div class="carousel-arrows">
+                        <button class="carousel-arrow prev-arrow" data-target="reels">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="carousel-arrow next-arrow" data-target="reels">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="carousel-dots" id="reelsDots"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blogs Section -->
+    <section class="section carousel-section" id="blogs">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Blog & Articles</h2>
+                <p class="section-description">
+                    Insights, tips, and stories from my creative journey
+                </p>
+            </div>
+
+            <div class="carousel-container" id="blogsCarousel" data-carousel="blogs">
+                <div class="carousel-wrapper" id="blogsWrapper">
+                    <!-- Blog slides will be loaded dynamically -->
+                    <div class="carousel-slide loading">
+                        <div class="carousel-loader"></div>
+                    </div>
+                </div>
+
+                <div class="carousel-nav">
+                    <div class="carousel-arrows">
+                        <button class="carousel-arrow prev-arrow" data-target="blogs">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="carousel-arrow next-arrow" data-target="blogs">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="carousel-dots" id="blogsDots"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commercial Section -->
+    <section class="section carousel-section" id="commercial">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Commercial Work</h2>
+                <p class="section-description">
+                    Brand collaborations and sponsored content that delivers results
+                </p>
+            </div>
+
+            <div class="carousel-container" id="commercialCarousel" data-carousel="commercial">
+                <div class="carousel-wrapper" id="commercialWrapper">
+                    <!-- Commercial slides will be loaded dynamically -->
+                    <div class="carousel-slide loading">
+                        <div class="carousel-loader"></div>
+                    </div>
+                </div>
+
+                <div class="carousel-nav">
+                    <div class="carousel-arrows">
+                        <button class="carousel-arrow prev-arrow" data-target="commercial">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="carousel-arrow next-arrow" data-target="commercial">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="carousel-dots" id="commercialDots"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section" id="skills">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Skills & Expertise</h2>
+                <p class="section-description">
+                    Proficient in industry-standard tools and techniques for professional video production
+                </p>
+            </div>
+
+            <div class="skills-grid" id="skillsGrid">
+                <!-- Skills will be loaded dynamically -->
+                <div class="skills-loading">
+                    <div class="loader"></div>
+                    <p>Loading skills...</p>
+                </div>
+            </div>
+
+            <!-- Empty state message -->
+            <div class="skills-empty" id="skillsEmpty" style="display: none;">
+                <i class="fas fa-tools"></i>
+                <p>No skills added yet. Use the admin panel to add your expertise!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">About Me</h2>
+                <p class="section-description">
+                    Passionate about crafting visual stories that resonate
+                </p>
+            </div>
+
+            <div class="about-content animate-on-scroll">
+                <div class="about-image-wrapper">
+                    <div class="about-image-bg"></div>
+                    <img src="https://via.placeholder.com/400x500/764ba2/ffffff?text=Your+Photo" alt="Video Editor"
+                        class="about-image">
+                </div>
+
+                <div class="about-text">
+                    <h3>Bringing Stories to Life Through Video</h3>
+                    <p>
+                        With over 5 years of experience in video editing and post-production, I specialize in
+                        transforming
+                        raw footage into compelling visual narratives. My passion lies in the art of storytelling
+                        through
+                        seamless edits, dynamic motion graphics, and stunning color grading.
+                    </p>
+                    <p>
+                        I've worked with diverse clients ranging from indie musicians to corporate brands, always
+                        striving
+                        to deliver content that not only meets but exceeds expectations. Every project is an opportunity
+                        to push creative boundaries and explore new techniques.
+                    </p>
+                    <p>
+                        When I'm not editing, you'll find me exploring new visual styles, experimenting with the latest
+                        editing software, or capturing footage for personal creative projects.
+                    </p>
+
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number" data-target="150">0</div>
+                            <div class="stat-label">Projects Completed</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" data-target="50">0</div>
+                            <div class="stat-label">Happy Clients</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" data-target="5">0</div>
+                            <div class="stat-label">Years Experience</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Let's Work Together</h2>
+                <p class="section-description">
+                    Have a project in mind? Let's discuss how I can bring your vision to life
+                </p>
+            </div>
+
+            <div class="contact-content">
+                <div class="contact-info animate-on-scroll">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Email</h4>
+                            <p>hello@videoeditor.com</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Phone</h4>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-location-dot"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Location</h4>
+                            <p>Los Angeles, CA</p>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Vimeo">
+                            <i class="fab fa-vimeo"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <form class="contact-form animate-on-scroll" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required placeholder="Your Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" required placeholder="Project Inquiry">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required
+                            placeholder="Tell me about your project..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="portfolio-footer">
+        <div class="footer-content">
+            <p class="footer-text">© 2024 Influencer Portfolio. All rights reserved.</p>
+            <p class="footer-text">Crafted with <i class="fas fa-heart" style="color: var(--accent-pink);"></i> and
+                creativity</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/data-manager.js"></script>
+    <script src="assets/js/api-handler.js"></script>
+    <script src="assets/js/portfolio-script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Portfolio Manager</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Admin CSS -->
+    <link rel="stylesheet" href="assets/css/admin-style.css">
+    <link rel="stylesheet" href="assets/css/admin-additions.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-box">
+            <div class="login-header">
+                <i class="fas fa-user-shield"></i>
+                <h1>Admin Login</h1>
+                <p>Portfolio Management System</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-user"></i> Username
+                    </label>
+                    <input type="text" id="username" required placeholder="Enter username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input type="password" id="password" required placeholder="Enter password">
+                </div>
+                
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                
+                <div class="login-error" id="loginError" style="display: none;"></div>
+            </form>
+            
+            <div class="login-footer">
+                Default credentials: admin / admin123
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-dashboard" id="adminDashboard" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-cog"></i>
+                <h2>Admin Panel</h2>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-tab="skills">
+                    <i class="fas fa-tools"></i>
+                    <span>Skills</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="instagram-reels">
+                    <i class="fab fa-instagram"></i>
+                    <span>Instagram Reels</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="reels">
+                    <i class="fas fa-film"></i>
+                    <span>Reels</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="blogs">
+                    <i class="fas fa-blog"></i>
+                    <span>Blogs</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="commercial">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Commercial</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="contact">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contact Settings</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="about">
+                    <i class="fas fa-user"></i>
+                    <span>About Section</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button class="btn-logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-content">
+            <!-- Header -->
+            <header class="content-header">
+                <h1 id="pageTitle">Skills Management</h1>
+                <a href="index.html" class="btn-view-site" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> View Portfolio
+                </a>
+            </header>
+
+            <!-- Skills Tab -->
+            <section class="content-section active" id="skillsTab">
+                <div class="section-actions">
+                    <button class="btn-primary" id="addSkillBtn">
+                        <i class="fas fa-plus"></i> Add New Skill
+                    </button>
+                    <button class="btn-secondary" id="resetDataBtn">
+                        <i class="fas fa-redo"></i> Reset to Default
+                    </button>
+                </div>
+
+                <!-- Skills List -->
+                <div class="skills-list" id="skillsList">
+                    <!-- Skills will be loaded here -->
+                </div>
+
+                <!-- Skill Form Modal -->
+                <div class="modal" id="skillModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 id="modalTitle">Add New Skill</h2>
+                            <button class="modal-close" id="closeModal">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <form id="skillForm" class="skill-form">
+                            <input type="hidden" id="skillId">
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="skillName">Skill Name *</label>
+                                    <input type="text" id="skillName" required placeholder="e.g., Adobe Premiere Pro">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="skillCategory">Category *</label>
+                                    <input type="text" id="skillCategory" required placeholder="e.g., Video Editing">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="skillIcon">Icon (Font Awesome) *</label>
+                                <div class="icon-picker-container">
+                                    <input type="text" id="skillIcon" required placeholder="fas fa-film">
+                                    <button type="button" class="btn-icon-picker" id="iconPickerBtn">
+                                        <i class="fas fa-icons"></i> Browse Icons
+                                    </button>
+                                </div>
+                                <div class="icon-preview" id="iconPreview">
+                                    <i class="fas fa-film"></i>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="skillProficiency">
+                                    Proficiency Level: <span id="proficiencyValue">0</span>%
+                                </label>
+                                <input type="range" id="skillProficiency" min="0" max="100" value="0" class="proficiency-slider">
+                                <div class="proficiency-indicator">
+                                    <div class="proficiency-fill" id="proficiencyFill" style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="skillDescription">Description *</label>
+                                <textarea id="skillDescription" required rows="3" placeholder="Brief description of your expertise with this tool..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Projects / Work Examples</label>
+                                <div id="projectsList">
+                                    <div class="project-input-group">
+                                        <input type="text" class="project-input" placeholder="Project description or achievement">
+                                        <button type="button" class="btn-icon btn-remove-project" style="display: none;">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-secondary btn-small" id="addProjectBtn">
+                                    <i class="fas fa-plus"></i> Add Another Project
+                                </button>
+                            </div>
+
+                            <!-- Live Preview -->
+                            <div class="form-group">
+                                <label>Live Preview</label>
+                                <div class="skill-card-preview" id="skillPreview">
+                                    <div class="preview-front">
+                                        <div class="preview-icon">
+                                            <i class="fas fa-film"></i>
+                                        </div>
+                                        <div class="preview-category">Category</div>
+                                        <h3 class="preview-name">Skill Name</h3>
+                                        <div class="preview-proficiency">0%</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-actions">
+                                <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-save"></i> <span id="submitBtnText">Save Skill</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Icon Picker Modal -->
+                <div class="modal" id="iconPickerModal">
+                    <div class="modal-content modal-large">
+                        <div class="modal-header">
+                            <h2>Select Icon</h2>
+                            <button class="modal-close" id="closeIconPicker">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="icon-picker-search">
+                            <input type="text" id="iconSearch" placeholder="Search icons...">
+                        </div>
+                        
+                        <div class="icon-picker-grid" id="iconPickerGrid">
+                            <!-- Icons will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Instagram Reels Tab -->
+            <section class="content-section" id="instagram-reelsTab">
+                <div class="section-actions">
+                    <button class="btn-primary" id="addInstagramReelBtn">
+                        <i class="fas fa-plus"></i> Add Instagram Reel
+                    </button>
+                    <button class="btn-secondary" id="refreshInstagramReelsBtn">
+                        <i class="fas fa-sync"></i> Refresh Reels
+                    </button>
+                </div>
+
+                <!-- Instagram Reels List -->
+                <div class="reels-list" id="instagramReelsList">
+                    <!-- Reels will be loaded here -->
+                </div>
+
+                <!-- Instagram Reel Form Modal -->
+                <div class="modal" id="instagramReelModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 id="instagramReelModalTitle">Add Instagram Reel</h2>
+                            <button class="modal-close" id="closeInstagramReelModal">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <form id="instagramReelForm" class="skill-form">
+                            <input type="hidden" id="instagramReelId">
+                            
+                            <div class="form-group">
+                                <label for="instagramReelUrl">Instagram Reel URL *</label>
+                                <input type="url" id="instagramReelUrl" required 
+                                       placeholder="https://www.instagram.com/reel/[REEL_ID]/">
+                                <small style="color: var(--text-muted);">
+                                    Paste the full Instagram reel URL (e.g., https://www.instagram.com/reel/C4mKQp7P8Qx/)
+                                </small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="instagramReelTitle">Title (Optional)</label>
+                                <input type="text" id="instagramReelTitle" 
+                                       placeholder="e.g., Latest Creative Reel">
+                            </div>
+
+                            <!-- Preview -->
+                            <div class="form-group">
+                                <label>Preview</label>
+                                <div class="reel-preview" id="instagramReelPreview">
+                                    <p style="color: var(--text-muted); text-align: center;">
+                                        Enter a URL above to preview the reel
+                                    </p>
+                                </div>
+                                <button type="button" class="btn-secondary btn-small" id="previewInstagramReelBtn">
+                                    <i class="fas fa-eye"></i> Preview Reel
+                                </button>
+                            </div>
+
+                            <div class="modal-actions">
+                                <button type="button" class="btn-secondary" id="cancelInstagramReelBtn">Cancel</button>
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-save"></i> <span id="submitInstagramReelBtnText">Save Reel</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Placeholder for other tabs -->
+            <section class="content-section" id="reelsTab">
+                <h2>Reels Management</h2>
+                <p>Reels are currently managed automatically via YouTube API.</p>
+            </section>
+
+            <section class="content-section" id="blogsTab">
+                <h2>Blogs Management</h2>
+                <p>Blog management features coming soon.</p>
+            </section>
+
+            <section class="content-section" id="commercialTab">
+                <div class="section-actions">
+                    <button class="btn-primary" id="addCommercialBtn">
+                        <i class="fas fa-plus"></i> Add Commercial Work
+                    </button>
+                    <button class="btn-secondary" id="refreshCommercialBtn">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </div>
+
+                <!-- Commercial Work List -->
+                <div class="commercial-list" id="commercialList">
+                    <!-- Commercial items will be loaded here -->
+                </div>
+
+                <!-- Commercial Work Form Modal -->
+                <div class="modal" id="commercialModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 id="commercialModalTitle">Add Commercial Work</h2>
+                            <button class="modal-close" id="closeCommercialModal">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <form id="commercialForm" class="skill-form">
+                            <input type="hidden" id="commercialId">
+                            
+                            <div class="form-group">
+                                <label for="commercialYoutubeUrl">YouTube Video URL *</label>
+                                <input type="url" id="commercialYoutubeUrl" required 
+                                       placeholder="https://www.youtube.com/watch?v=VIDEO_ID">
+                                <small style="color: var(--text-muted);">
+                                    Paste the full YouTube video URL
+                                </small>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="commercialBrand">Brand/Client Name *</label>
+                                    <input type="text" id="commercialBrand" required 
+                                           placeholder="e.g., TechCo">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="commercialTitle">Project Title *</label>
+                                    <input type="text" id="commercialTitle" required 
+                                           placeholder="e.g., Product Launch Campaign">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="commercialDescription">Description *</label>
+                                <textarea id="commercialDescription" required rows="4" 
+                                          placeholder="Describe the commercial work, your role, and key achievements..."></textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="commercialEngagement">Engagement Rate (Optional)</label>
+                                    <input type="text" id="commercialEngagement" 
+                                           placeholder="e.g., 8.2%">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="commercialRevenue">Revenue/Budget (Optional)</label>
+                                    <input type="text" id="commercialRevenue" 
+                                           placeholder="e.g., $15K">
+                                </div>
+                            </div>
+
+                            <!-- YouTube Metadata Preview -->
+                            <div class="form-group">
+                                <label>Video Preview</label>
+                                <div class="youtube-preview" id="commercialYoutubePreview">
+                                    <p style="color: var(--text-muted); text-align: center;">
+                                        Enter a YouTube URL to load video metadata
+                                    </p>
+                                </div>
+                                <button type="button" class="btn-secondary btn-small" id="loadYoutubeMetadataBtn">
+                                    <i class="fab fa-youtube"></i> Load Video Data
+                                </button>
+                            </div>
+
+                            <div class="modal-actions">
+                                <button type="button" class="btn-secondary" id="cancelCommercialBtn">Cancel</button>
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-save"></i> <span id="submitCommercialBtnText">Save Commercial Work</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Settings Tab -->
+            <section class="content-section" id="contactTab">
+                <h2>Contact Settings</h2>
+                
+                <form id="contactSettingsForm" class="settings-form">
+                    <div class="settings-section">
+                        <h3><i class="fas fa-address-card"></i> Contact Information</h3>
+                        
+                        <div class="form-group">
+                            <label for="contactEmail">Email Address *</label>
+                            <input type="email" id="contactEmail" required 
+                                   placeholder="your.email@example.com">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contactPhone">Phone Number</label>
+                                <input type="tel" id="contactPhone" 
+                                       placeholder="+1 (555) 123-4567">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contactLocation">Location</label>
+                                <input type="text" id="contactLocation" 
+                                       placeholder="Los Angeles, CA">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3><i class="fas fa-share-alt"></i> Social Media Links</h3>
+                        
+                        <div class="form-group">
+                            <label for="socialYoutube"><i class="fab fa-youtube"></i> YouTube</label>
+                            <input type="url" id="socialYoutube" 
+                                   placeholder="https://youtube.com/@yourchannel">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="socialInstagram"><i class="fab fa-instagram"></i> Instagram</label>
+                            <input type="url" id="socialInstagram" 
+                                   placeholder="https://instagram.com/yourusername">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="socialTwitter"><i class="fab fa-twitter"></i> Twitter</label>
+                            <input type="url" id="socialTwitter" 
+                                   placeholder="https://twitter.com/yourusername">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="socialLinkedin"><i class="fab fa-linkedin"></i> LinkedIn</label>
+                            <input type="url" id="socialLinkedin" 
+                                   placeholder="https://linkedin.com/in/yourprofile">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Save Contact Settings
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- About Section Tab -->
+            <section class="content-section" id="aboutTab">
+                <h2>About Section Editor</h2>
+                
+                <form id="aboutSectionForm" class="settings-form">
+                    <div class="form-group">
+                        <label for="aboutHeading">Section Heading</label>
+                        <input type="text" id="aboutHeading" 
+                               placeholder="e.g., Bringing Stories to Life Through Video">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aboutContent">About Content *</label>
+                        <textarea id="aboutContent" required rows="12" 
+                                  placeholder="Write your about section content here..."></textarea>
+                        <small style="color: var(--text-muted);">
+                            Tip: Break content into separate paragraphs for better readability
+                        </small>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3><i class="fas fa-chart-line"></i> Statistics</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="statProjects">Projects Completed</label>
+                                <input type="number" id="statProjects" 
+                                       placeholder="150">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="statClients">Happy Clients</label>
+                                <input type="number" id="statClients" 
+                                       placeholder="50">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="statExperience">Years Experience</label>
+                                <input type="number" id="statExperience" 
+                                       placeholder="5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aboutImage">Profile Image URL</label>
+                        <input type="url" id="aboutImage" 
+                               placeholder="https://example.com/your-photo.jpg">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Save About Section
+                        </button>
+                        <button type="button" class="btn-secondary" id="previewAboutBtn">
+                            <i class="fas fa-eye"></i> Preview Changes
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="notificationToast">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationMessage"></span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/data-manager.js"></script>
+    <script src="assets/js/admin-script.js"></script>
+    <script src="assets/js/admin-extensions.js"></script>
+</body>
+</html>
