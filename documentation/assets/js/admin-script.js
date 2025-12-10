@@ -578,5 +578,5 @@ class AdminPanel {
 // Initialize admin panel
 let adminPanel;
 window.addEventListener('DOMContentLoaded', () => {
-    adminPanel = new AdminPanel();
+    window.adminPanel = new AdminPanel();
 });
