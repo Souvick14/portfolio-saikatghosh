@@ -458,8 +458,8 @@ if (typeof AdminPanel !== 'undefined') {
     window.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             if (window.adminPanel) {
-                adminPanel.setupInstagramReelsEvents();
-                adminPanel.setupContactAboutEvents();
+                window.adminPanel.setupInstagramReelsEvents();
+                window.adminPanel.setupContactAboutEvents();
             }
         }, 100);
     });
