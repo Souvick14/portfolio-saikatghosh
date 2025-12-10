@@ -21,21 +21,24 @@ class DataManager {
     getMockData() {
         return {
             instagramReels: [
+                // IMPORTANT: Replace these with YOUR actual Instagram reel URLs
+                // Go to your Instagram profile, click on a reel, and copy the URL
+                // Example: https://www.instagram.com/reel/YOUR_REEL_ID/
                 {
                     id: 1,
-                    reelUrl: 'https://www.instagram.com/reel/C4mKQp7P8Qx/',
+                    reelUrl: 'https://www.instagram.com/reel/C4mKQp7P8Qx/', // Replace with your reel URL
                     title: 'Latest Creative Reel',
                     timestamp: Date.now()
                 },
                 {
                     id: 2,
-                    reelUrl: 'https://www.instagram.com/reel/C3tU5YwPj9k/',
+                    reelUrl: 'https://www.instagram.com/reel/C3tU5YwPj9k/', // Replace with your reel URL
                     title: 'Behind the Scenes',
                     timestamp: Date.now()
                 },
                 {
                     id: 3,
-                    reelUrl: 'https://www.instagram.com/reel/C2hGx3fv1nH/',
+                    reelUrl: 'https://www.instagram.com/reel/C2hGx3fv1nH/', // Replace with your reel URL
                     title: 'Quick Tips & Tricks',
                     timestamp: Date.now()
                 }

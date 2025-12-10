@@ -5,16 +5,38 @@
 const express = require('express');
 const router = express.Router();
 const ContactInfo = require('../models/ContactInfo');
+const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 
 // GET contact info
 router.get('/', async (req, res) => {
     try {
+        // Check if MongoDB is connected
+        if (mongoose.connection.readyState !== 1) {
+            // Return default data when MongoDB is not connected
+            return res.json({
+                _id: 'contact-info',
+                email: 'hello@videoeditor.com',
+                phone: '+1 (555) 123-4567',
+                location: 'Los Angeles, CA',
+                socialMedia: {
+                    youtube: 'https://youtube.com/@yourchannel',
+                    instagram: '',
+                    twitter: '',
+                    linkedin: '',
+                    vimeo: ''
+                },
+                warning: 'MongoDB not connected. Configure MONGODB_URI in .env to enable database functionality.',
+                fallback: true
+            });
+        }
+        
         let contactInfo = await ContactInfo.findById('contact-info');
         
         // If no contact info exists, create default
         if (!contactInfo) {
             contactInfo = new ContactInfo({
+                _id: 'contact-info',
                 email: 'hello@videoeditor.com',
                 phone: '+1 (555) 123-4567',
                 location: 'Los Angeles, CA',
