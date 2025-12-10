@@ -67,9 +67,9 @@ if (typeof AdminPanel !== 'undefined') {
     };
 
     AdminPanel.prototype.convertGoogleDriveUrl = function(url) {
-        // Convert Google Drive sharing link to direct embed link
+        // Convert Google Drive sharing link to embeddable preview link
         // From: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
-        // To: https://drive.google.com/uc?export=download&id=FILE_ID
+        // To: https://drive.google.com/file/d/FILE_ID/preview
         
         if (!url) return url;
         
@@ -91,8 +91,8 @@ if (typeof AdminPanel !== 'undefined') {
             }
             
             if (fileId) {
-                // Return embeddable direct link
-                return `https://drive.google.com/uc?export=download&id=${fileId}`;
+                // Return preview link for video streaming
+                return `https://drive.google.com/file/d/${fileId}/preview`;
             }
         }
         
