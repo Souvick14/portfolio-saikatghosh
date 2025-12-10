@@ -755,6 +755,16 @@ p {
     overflow: hidden;
 }
 
+.skill-back-description::-webkit-scrollbar {
+    display: none;
+    /* Hides the scrollbar */
+}
+
+.skill-back-description {
+    scrollbar-width: none;
+    /* Hides the scrollbar */
+}
+
 /* Front Face */
 .skill-card-front {
     display: flex;
