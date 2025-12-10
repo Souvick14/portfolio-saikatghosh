@@ -25,6 +25,11 @@ const instagramReelSchema = new mongoose.Schema({
         trim: true,
         default: ''
     },
+    technologies: {
+        type: [String],
+        default: [],
+        trim: true
+    },
     order: {
         type: Number,
         default: 0

@@ -381,8 +381,11 @@ class InstagramReelsCarousel {
             
             this.wrapper.innerHTML = '';
             
+            // Duplicate reels for infinite scroll
+            const duplicatedReels = [...reels, ...reels];
+            
             // Load each reel using Instagram oEmbed API
-            for (const reel of reels) {
+            for (const reel of duplicatedReels) {
                 const slide = await this.createReelSlide(reel);
                 this.wrapper.appendChild(slide);
             }
@@ -391,8 +394,9 @@ class InstagramReelsCarousel {
             this.loadInstagramEmbedScript();
             
             this.slides = this.wrapper.querySelectorAll('.instagram-carousel-slide');
-            this.createDots();
-            this.updateNavigation();
+            // Remove navigation since we have infinite scroll
+            // this.createDots();
+            // this.updateNavigation();
             
         } catch (error) {
             console.error('Error loading Instagram reels from API:', error);
@@ -404,7 +408,14 @@ class InstagramReelsCarousel {
         const slide = document.createElement('div');
         slide.className = 'instagram-carousel-slide';
         
-        slide.innerHTML = `
+        // Create flip card structure
+        const flipCardInner = document.createElement('div');
+        flipCardInner.className = 'reel-flip-card-inner';
+        
+        // Front face - Instagram embed
+        const frontFace = document.createElement('div');
+        frontFace.className = 'reel-card-front';
+        frontFace.innerHTML = `
             <div class="instagram-embed-wrapper">
                 <blockquote class="instagram-media" 
                             data-instgrm-permalink="${reel.reelUrl}" 
@@ -420,6 +431,25 @@ class InstagramReelsCarousel {
                 </blockquote>
             </div>
         `;
+        
+        // Back face - Technologies used
+        const backFace = document.createElement('div');
+        backFace.className = 'reel-card-back';
+        
+        const technologies = reel.technologies && reel.technologies.length > 0 
+            ? reel.technologies 
+            : ['Adobe Premiere Pro', 'After Effects']; // Default fallback
+        
+        backFace.innerHTML = `
+            <h3>🎬 Technologies Used</h3>
+            <ul class="reel-tech-list">
+                ${technologies.map(tech => `<li>${tech}</li>`).join('')}
+            </ul>
+        `;
+        
+        flipCardInner.appendChild(frontFace);
+        flipCardInner.appendChild(backFace);
+        slide.appendChild(flipCardInner);
         
         return slide;
     }

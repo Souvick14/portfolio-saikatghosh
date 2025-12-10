@@ -69,14 +69,24 @@ if (typeof AdminPanel !== 'undefined') {
     AdminPanel.prototype.saveInstagramReel = async function() {
         const reelUrl = document.getElementById('instagramReelUrl')?.value.trim();
         const reelTitle = document.getElementById('instagramReelTitle')?.value.trim();
+        const reelTechInput = document.getElementById('instagramReelTechnologies')?.value.trim();
 
         if (!reelUrl) {
             this.showNotification('Please enter an Instagram reel URL', 'error');
             return;
         }
 
+        // Parse technologies from comma-separated string
+        const technologies = reelTechInput 
+            ? reelTechInput.split(',').map(t => t.trim()).filter(t => t)
+            : [];
+
         try {
-            const reelData = { reelUrl, title: reelTitle };
+            const reelData = { 
+                reelUrl, 
+                title: reelTitle,
+                technologies: technologies
+            };
             const url = this.currentReelId ? `/api/reels/${this.currentReelId}` : '/api/reels';
             const method = this.currentReelId ? 'PUT' : 'POST';
             
@@ -157,6 +167,12 @@ if (typeof AdminPanel !== 'undefined') {
             submitBtnText.textContent = 'Update Reel';
             document.getElementById('instagramReelUrl').value = reel.reelUrl;
             document.getElementById('instagramReelTitle').value = reel.title || '';
+            
+            // Load technologies as comma-separated string
+            const techInput = document.getElementById('instagramReelTechnologies');
+            if (techInput && reel.technologies && reel.technologies.length > 0) {
+                techInput.value = reel.technologies.join(', ');
+            }
         } else {
             modalTitle.textContent = 'Add Instagram Reel';
             submitBtnText.textContent = 'Save Reel';
