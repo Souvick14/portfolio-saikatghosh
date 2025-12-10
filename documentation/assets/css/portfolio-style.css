@@ -718,6 +718,7 @@ p {
     transition: transform var(--transition-slow);
     transform-style: preserve-3d;
     cursor: pointer;
+    min-width: 300px;
     max-width: 300px;
     margin: 0 auto;
 }
