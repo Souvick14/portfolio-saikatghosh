@@ -333,6 +333,19 @@
                             </div>
 
                             <div class="form-group">
+                                <label for="reelVideoFile">Video Preview (Optional)</label>
+                                <input type="file" id="reelVideoFile" accept="video/mp4,video/mov,video/webm,video/avi">
+                                <small style="color: var(--text-muted); font-size: 0.875rem;">
+                                    Upload a preview video (max 50MB). This will play on the card. Supported: MP4, MOV, WEBM, AVI
+                                </small>
+                                <div id="reelVideoPreview" style="margin-top: 0.5rem; display: none;">
+                                    <small style="color: var(--primary-cyan);">
+                                        <i class="fas fa-video"></i> <span id="reelVideoName"></span>
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label for="instagramReelTechnologies">Technologies Used (Optional)</label>
                                 <input type="text" id="instagramReelTechnologies" 
                                        placeholder="e.g., Adobe Premiere Pro, After Effects, DaVinci Resolve">
@@ -707,5 +720,27 @@
     <script src="assets/js/admin-blog.js"></script>
     <script src="assets/js/admin-icon-upload.js"></script>
     <script src="assets/js/admin-image-upload.js"></script>
+    
+    <!-- Video file preview handler -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoInput = document.getElementById('reelVideoFile');
+            if (videoInput) {
+                videoInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    const preview = document.getElementById('reelVideoPreview');
+                    const nameSpan = document.getElementById('reelVideoName');
+                    
+                    if (file) {
+                        preview.style.display = 'block';
+                        nameSpan.textContent = file.name;
+                    } else {
+                        preview.style.display = 'none';
+                        nameSpan.textContent = '';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

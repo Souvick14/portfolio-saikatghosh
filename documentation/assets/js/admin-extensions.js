@@ -103,6 +103,7 @@ if (typeof AdminPanel !== 'undefined') {
         let reelUrl = document.getElementById('instagramReelUrl')?.value.trim();
         const reelTitle = document.getElementById('instagramReelTitle')?.value.trim();
         const reelTechInput = document.getElementById('instagramReelTechnologies')?.value.trim();
+        const videoFileInput = document.getElementById('reelVideoFile');
 
         if (!reelUrl) {
             this.showNotification('Please enter a reel URL or video link', 'error');
@@ -115,7 +116,6 @@ if (typeof AdminPanel !== 'undefined') {
         
         if (originalUrl !== reelUrl) {
             console.log('🔄 Converted Google Drive URL:', originalUrl, '→', reelUrl);
-            this.showNotification('Google Drive link detected and converted!', 'success');
         }
 
         // Parse technologies from comma-separated string
@@ -124,18 +124,24 @@ if (typeof AdminPanel !== 'undefined') {
             : [];
 
         try {
-            const reelData = { 
-                reelUrl, 
-                title: reelTitle,
-                technologies: technologies
-            };
+            // Create FormData for file upload
+            const formData = new FormData();
+            formData.append('reelUrl', reelUrl);
+            formData.append('title', reelTitle);
+            formData.append('technologies', JSON.stringify(technologies));
+
+            // Add video file if selected
+            if (videoFileInput && videoFileInput.files && videoFileInput.files[0]) {
+                formData.append('videoFile', videoFileInput.files[0]);
+            }
+
             const url = this.currentReelId ? `/api/reels/${this.currentReelId}` : '/api/reels';
             const method = this.currentReelId ? 'PUT' : 'POST';
             
             const response = await fetch(url, {
                 method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(reelData)
+                body: formData
+                // Don't set Content-Type header - browser will set it with boundary
             });
 
             if (!response.ok) throw new Error('Failed to save Instagram reel');

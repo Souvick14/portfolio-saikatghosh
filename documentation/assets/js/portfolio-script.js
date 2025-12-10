@@ -408,63 +408,77 @@ class InstagramReelsCarousel {
         const slide = document.createElement('div');
         slide.className = 'instagram-carousel-slide';
         
-        // Detect platform from URL
-        let platform = 'video';
-        let platformIcon = 'fas fa-play-circle';
-        let platformColor = '#8b5cf6';
-        
-        if (reel.reelUrl.includes('instagram.com')) {
-            platform = 'Instagram';
-            platformIcon = 'fab fa-instagram';
-            platformColor = '#E4405F';
-        } else if (reel.reelUrl.includes('youtube.com') || reel.reelUrl.includes('youtu.be')) {
-            platform = 'YouTube';
-            platformIcon = 'fab fa-youtube';
-            platformColor = '#FF0000';
-        } else if (reel.reelUrl.includes('drive.google.com')) {
-            platform = 'Google Drive';
-            platformIcon = 'fab fa-google-drive';
-            platformColor = '#4285F4';
-        } else if (reel.reelUrl.includes('vimeo.com')) {
-            platform = 'Vimeo';
-            platformIcon = 'fab fa-vimeo-v';
-            platformColor = '#1AB7EA';
-        }
-        
         // Create flip card structure
         const flipCardInner = document.createElement('div');
         flipCardInner.className = 'reel-flip-card-inner';
         
-        // Front face - Platform card with link button
+        // Front face - Video or Link Card
         const frontFace = document.createElement('div');
         frontFace.className = 'reel-card-front';
         
-        const displayTitle = reel.title || `${platform} Reel`;
-        
-        frontFace.innerHTML = `
-            <div class="reel-link-card">
-                <div class="reel-platform-badge" style="color: ${platformColor}">
-                    <i class="${platformIcon}"></i>
-                    <span>${platform}</span>
-                </div>
-                <div class="reel-content">
-                    <h3 class="reel-title">${displayTitle}</h3>
-                    <button class="watch-now-btn" data-url="${reel.reelUrl}">
-                        <i class="fas fa-external-link-alt"></i>
-                        <span>Watch Now</span>
-                    </button>
+        // Check if video was uploaded
+        if (reel.videoUrl) {
+            // Show uploaded video
+            frontFace.innerHTML = `
+                <div class="reel-video-container">
+                    <video 
+                        class="reel-video-player"
+                        autoplay 
+                        loop 
+                        muted 
+                        playsinline
+                        preload="metadata">
+                        <source src="${reel.videoUrl}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
                 <button class="flip-button" aria-label="Show technologies">
                     <i class="fas fa-info-circle"></i>
                 </button>
-            </div>
-        `;
+            `;
+        } else {
+            // Show link card (no video uploaded)
+            let platform = 'video';
+            let platformIcon = 'fas fa-play-circle';
+            let platformColor = '#8b5cf6';
+            
+            if (reel.reelUrl.includes('instagram.com')) {
+                platform = 'Instagram';
+                platformIcon = 'fab fa-instagram';
+                platformColor = '#E4405F';
+            } else if (reel.reelUrl.includes('youtube.com') || reel.reelUrl.includes('youtu.be')) {
+                platform = 'YouTube';
+                platformIcon = 'fab fa-youtube';
+                platformColor = '#FF0000';
+            } else if (reel.reelUrl.includes('drive.google.com')) {
+                platform = 'Google Drive';
+                platformIcon = 'fab fa-google-drive';
+                platformColor = '#4285F4';
+            }
+            
+            const displayTitle = reel.title || `${platform} Reel`;
+            
+            frontFace.innerHTML = `
+                <div class="reel-link-card">
+                    <div class="reel-platform-badge" style="color: ${platformColor}">
+                        <i class="${platformIcon}"></i>
+                        <span>${platform}</span>
+                    </div>
+                    <div class="reel-content">
+                        <h3 class="reel-title">${displayTitle}</h3>
+                    </div>
+                    <button class="flip-button" aria-label="Show technologies">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                </div>
+            `;
+        }
         
         // Back face - Technologies used
         const backFace = document.createElement('div');
         backFace.className = 'reel-card-back';
         
-        const technologies = reel.technologies && reel.technologies.length > 0 
+        const technologies = reel.technologies &&reel.technologies.length > 0 
             ? reel.technologies 
             : ['Adobe Premiere Pro', 'After Effects'];
         
@@ -482,14 +496,18 @@ class InstagramReelsCarousel {
         flipCardInner.appendChild(backFace);
         slide.appendChild(flipCardInner);
         
-        // Add "Watch Now" button click listener to open link
-        const watchBtn = frontFace.querySelector('.watch-now-btn');
-        if (watchBtn) {
-            watchBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                window.open(reel.reelUrl, '_blank');
-            });
-        }
+        // Add "Visit Reel" button below the card
+        const visitButton = document.createElement('button');
+        visitButton.className = 'visit-reel-btn';
+        visitButton.innerHTML = `
+            <i class="fas fa-external-link-alt"></i>
+            <span>Visit Reel</span>
+        `;
+        visitButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.open(reel.reelUrl, '_blank');
+        });
+        slide.appendChild(visitButton);
         
         // Add flip button click listener (front to back)
         const flipButton = frontFace.querySelector('.flip-button');

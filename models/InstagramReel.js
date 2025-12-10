@@ -11,6 +11,12 @@ const instagramReelSchema = new mongoose.Schema({
         trim: true
         // Removed Instagram-only validation to support Google Drive, direct videos, etc.
     },
+    videoUrl: {
+        type: String,
+        trim: true,
+        default: ''
+        // Cloudinary video URL for uploaded preview videos
+    },
     reelId: {
         type: String,
         trim: true
