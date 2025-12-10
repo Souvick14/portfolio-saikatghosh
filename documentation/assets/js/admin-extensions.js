@@ -55,14 +55,27 @@ if (typeof AdminPanel !== 'undefined') {
                 </div>
             </div>
             <div class="reel-actions">
-                <button class="btn-edit" onclick="adminPanel.editInstagramReel('${reel._id}')">
+                <button class="btn-edit" data-reel-id="${reel._id}">
                     <i class="fas fa-edit"></i> Edit
                 </button>
-                <button class="btn-delete" onclick="adminPanel.deleteInstagramReel('${reel._id}')">
+                <button class="btn-delete" data-reel-id="${reel._id}">
                     <i class="fas fa-trash"></i> Delete
                 </button>
             </div>
         `;
+        
+        // Add event listeners
+        const editBtn = div.querySelector('.btn-edit');
+        const deleteBtn = div.querySelector('.btn-delete');
+        
+        if (editBtn) {
+            editBtn.addEventListener('click', () => this.editInstagramReel(reel._id));
+        }
+        
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', () => this.deleteInstagramReel(reel._id));
+        }
+        
         return div;
     };
 
