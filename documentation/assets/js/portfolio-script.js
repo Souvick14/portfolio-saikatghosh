@@ -412,28 +412,65 @@ class InstagramReelsCarousel {
         const flipCardInner = document.createElement('div');
         flipCardInner.className = 'reel-flip-card-inner';
         
-        // Front face - Instagram video iframe
+        // Front face - Video or Instagram embed
         const frontFace = document.createElement('div');
         frontFace.className = 'reel-card-front';
         
-        // Extract reel ID from URL
-        const reelId = this.extractReelId(reel.reelUrl);
+        // Detect URL type
+        const isInstagram = reel.reelUrl.includes('instagram.com');
+        const isDirectVideo = reel.reelUrl.match(/\.(mp4|webm|ogg|mov)$/i) || 
+                              reel.reelUrl.includes('drive.google.com') ||
+                              reel.reelUrl.includes('vimeo.com') ||
+                              reel.reelUrl.includes('dropbox.com');
         
-        frontFace.innerHTML = `
-            <div class="instagram-video-container">
-                <iframe 
-                    src="https://www.instagram.com/p/${reelId}/embed" 
-                    frameborder="0" 
-                    scrolling="no" 
-                    allowfullscreen
-                    allow="autoplay; encrypted-media"
-                    class="instagram-video-iframe">
-                </iframe>
-            </div>
-            <button class="flip-button" aria-label="Show technologies">
-                <i class="fas fa-info-circle"></i>
-            </button>
-        `;
+        if (isInstagram) {
+            // Instagram iframe embed
+            const reelId = this.extractReelId(reel.reelUrl);
+            frontFace.innerHTML = `
+                <div class="instagram-video-container">
+                    <iframe 
+                        src="https://www.instagram.com/p/${reelId}/embed" 
+                        frameborder="0" 
+                        scrolling="no" 
+                        allowfullscreen
+                        allow="autoplay; encrypted-media"
+                        class="instagram-video-iframe">
+                    </iframe>
+                </div>
+                <button class="flip-button" aria-label="Show technologies">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            `;
+        } else {
+            // Direct video URL with autoplay
+            let videoSrc = reel.reelUrl;
+            
+            // Convert Google Drive links to direct download format
+            if (reel.reelUrl.includes('drive.google.com')) {
+                const fileIdMatch = reel.reelUrl.match(/[-\w]{25,}/);
+                if (fileIdMatch) {
+                    videoSrc = `https://drive.google.com/uc?export=download&id=${fileIdMatch[0]}`;
+                }
+            }
+            
+            frontFace.innerHTML = `
+                <div class="instagram-video-container">
+                    <video 
+                        class="direct-video-player"
+                        autoplay 
+                        loop 
+                        muted 
+                        playsinline
+                        preload="metadata">
+                        <source src="${videoSrc}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <button class="flip-button" aria-label="Show technologies">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            `;
+        }
         
         // Back face - Technologies used
         const backFace = document.createElement('div');
