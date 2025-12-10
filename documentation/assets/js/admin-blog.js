@@ -269,7 +269,7 @@ if (typeof AdminPanel !== 'undefined') {
     window.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             if (window.adminPanel) {
-                adminPanel.setupBlogEvents();
+                window.adminPanel.setupBlogEvents();
             }
         }, 150);
     });

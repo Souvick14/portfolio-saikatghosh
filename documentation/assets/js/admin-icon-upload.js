@@ -170,7 +170,7 @@ if (typeof AdminPanel !== 'undefined') {
     window.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             if (window.adminPanel) {
-                adminPanel.setupIconTypeToggle();
+                window.adminPanel.setupIconTypeToggle();
             }
         }, 200);
     });
