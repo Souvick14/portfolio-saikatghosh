@@ -66,14 +66,56 @@ if (typeof AdminPanel !== 'undefined') {
         return div;
     };
 
+    AdminPanel.prototype.convertGoogleDriveUrl = function(url) {
+        // Convert Google Drive sharing link to direct embed link
+        // From: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+        // To: https://drive.google.com/uc?export=download&id=FILE_ID
+        
+        if (!url) return url;
+        
+        // Check if it's a Google Drive link
+        if (url.includes('drive.google.com')) {
+            // Extract file ID from various Google Drive URL formats
+            let fileId = null;
+            
+            // Format 1: https://drive.google.com/file/d/FILE_ID/view
+            const match1 = url.match(/\/file\/d\/([^\/]+)/);
+            if (match1) {
+                fileId = match1[1];
+            }
+            
+            // Format 2: https://drive.google.com/open?id=FILE_ID
+            const match2 = url.match(/[?&]id=([^&]+)/);
+            if (match2) {
+                fileId = match2[1];
+            }
+            
+            if (fileId) {
+                // Return embeddable direct link
+                return `https://drive.google.com/uc?export=download&id=${fileId}`;
+            }
+        }
+        
+        return url;
+    };
+
     AdminPanel.prototype.saveInstagramReel = async function() {
-        const reelUrl = document.getElementById('instagramReelUrl')?.value.trim();
+        let reelUrl = document.getElementById('instagramReelUrl')?.value.trim();
         const reelTitle = document.getElementById('instagramReelTitle')?.value.trim();
         const reelTechInput = document.getElementById('instagramReelTechnologies')?.value.trim();
 
         if (!reelUrl) {
-            this.showNotification('Please enter an Instagram reel URL', 'error');
+            this.showNotification('Please enter a reel URL or video link', 'error');
             return;
+        }
+
+        // Automatically convert Google Drive links
+        const originalUrl = reelUrl;
+        reelUrl = this.convertGoogleDriveUrl(reelUrl);
+        
+        if (originalUrl !== reelUrl) {
+            console.log('🔄 Converted Google Drive URL:', originalUrl, '→', reelUrl);
+            this.showNotification('Google Drive link detected and converted!', 'success');
         }
 
         // Parse technologies from comma-separated string
@@ -99,6 +141,7 @@ if (typeof AdminPanel !== 'undefined') {
             if (!response.ok) throw new Error('Failed to save Instagram reel');
 
             this.showNotification(this.currentReelId ? 'Reel updated!' : 'Reel added!');
+            this.closeInstagramReelModal();
             this.loadInstagramReels();
         } catch (error) {
             console.error('Error saving Instagram reel:', error);
