@@ -407,7 +407,6 @@ class InstagramReelsCarousel {
     async createReelSlide(reel) {
         const slide = document.createElement('div');
         slide.className = 'instagram-carousel-slide';
-```
         
         // Create flip card structure
         const flipCardInner = document.createElement('div');
