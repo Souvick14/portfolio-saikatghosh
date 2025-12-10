@@ -1,19 +1,53 @@
-// ============================================
-// Blog API Routes
-// ============================================
-
 const express = require('express');
 const router = express.Router();
 const Blog = require('../models/Blog');
 const mongoose = require('mongoose');
 const multer = require('multer');
-const { uploadToCloudinary } = require('../config/cloudinary');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-// Configure multer for memory storage
-const upload = multer({ 
-    storage: multer.memoryStorage(),
-    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
-});
+// Configure Cloudinary only if credentials are provided
+let cloudinaryConfigured = false;
+if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET
+    });
+    cloudinaryConfigured = true;
+    console.log('✅ Cloudinary configured for blog image uploads');
+} else {
+    console.warn('⚠️  Cloudinary credentials not found. Blog image uploads will be disabled.');
+}
+
+// Configure Multer with Cloudinary storage (or memory storage as fallback)
+let storage;
+let upload;
+
+if (cloudinaryConfigured) {
+    storage = new CloudinaryStorage({
+        cloudinary: cloudinary,
+        params: {
+            folder: 'portfolio/blogs',
+            allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+            transformation: [{ width: 1200, height: 630, crop: 'limit' }],
+            public_id: (req, file) => {
+                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                return `blog-${uniqueSuffix}`;
+            }
+        }
+    });
+    upload = multer({
+        storage: storage,
+        limits: { fileSize: 5 * 1024 * 1024 }
+    });
+} else {
+    // Fallback: use memory storage (images won't be saved)
+    upload = multer({
+        storage: multer.memoryStorage(),
+        limits: { fileSize: 5 * 1024 * 1024 }
+    });
+}
 
 // GET all blogs
 router.get('/', async (req, res) => {
@@ -63,14 +97,9 @@ router.post('/', upload.single('coverImage'), async (req, res) => {
             published: req.body.published !== 'false'
         };
 
-        // Handle cover image upload
-        if (req.file) {
-            try {
-                const result = await uploadToCloudinary(req.file.buffer, 'blogs');
-                blogData.coverImage = result.secure_url;
-            } catch (uploadError) {
-                console.warn('Image upload failed, using default:', uploadError.message);
-            }
+        // If file was uploaded to Cloudinary, save the URL
+        if (req.file && req.file.path) {
+            blogData.coverImage = req.file.path; // Cloudinary URL
         }
 
         const blog = new Blog(blogData);
@@ -97,13 +126,8 @@ router.put('/:id', upload.single('coverImage'), async (req, res) => {
         };
 
         // Handle new cover image upload
-        if (req.file) {
-            try {
-                const result = await uploadToCloudinary(req.file.buffer, 'blogs');
-                updateData.coverImage = result.secure_url;
-            } catch (uploadError) {
-                console.warn('Image upload failed:', uploadError.message);
-            }
+        if (req.file && req.file.path) {
+            updateData.coverImage = req.file.path; // Cloudinary URL
         }
 
         const blog = await Blog.findByIdAndUpdate(
