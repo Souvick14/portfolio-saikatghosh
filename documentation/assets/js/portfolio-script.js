@@ -444,9 +444,12 @@ class InstagramReelsCarousel {
             : ['Adobe Premiere Pro', 'After Effects']; // Default fallback
         
         backFace.innerHTML = `
-            <h3>🎬 Technologies Used</h3>
+            <button class="flip-back-button" aria-label="Flip back to video">
+                <i class="fas fa-undo"></i>
+            </button>
+            <h3><i class="fas fa-tools"></i> Technologies Used</h3>
             <ul class="reel-tech-list">
-                ${technologies.map(tech => `<li>${tech}</li>`).join('')}
+                ${technologies.map(tech => `<li><i class="fas fa-check-circle" style="color: var(--primary-cyan); margin-right: 0.5rem;"></i>${tech}</li>`).join('')}
             </ul>
         `;
         
@@ -454,12 +457,21 @@ class InstagramReelsCarousel {
         flipCardInner.appendChild(backFace);
         slide.appendChild(flipCardInner);
         
-        // Add flip button click listener
+        // Add flip button click listener (front to back)
         const flipButton = frontFace.querySelector('.flip-button');
         if (flipButton) {
             flipButton.addEventListener('click', (e) => {
                 e.stopPropagation();
-                flipCardInner.classList.toggle('flipped');
+                flipCardInner.classList.add('flipped');
+            });
+        }
+        
+        // Add flip-back button click listener (back to front)
+        const flipBackButton = backFace.querySelector('.flip-back-button');
+        if (flipBackButton) {
+            flipBackButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                flipCardInner.classList.remove('flipped');
             });
         }
         
