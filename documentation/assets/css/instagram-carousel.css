@@ -128,6 +128,11 @@
     align-items: center;
     justify-content: center;
 }
+.reel-card-front:hover {
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+    background-image: linear-gradient(to right to top,rgba(0, 0, 0, 0.4),rgba(3, 34, 148, 0.4));
+
+}
 
 .reel-card-back {
     transform: rotateY(180deg);
