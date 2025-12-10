@@ -985,6 +985,9 @@ window.addEventListener('load', function () {
     // Start loading screen
     const loader = new LoadingScreen();
     loader.start();
+    
+    // Initialize SkillsManager immediately (don't wait for loading screen)
+    skillsManager = new SkillsManager();
 });
 
 // ============================================
