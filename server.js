@@ -74,6 +74,7 @@ const connectDB = async () => {
 // Import routes
 const skillsRoutes = require('./routes/skills');
 const reelsRoutes = require('./routes/reels');
+const youtubeRoutes = require('./routes/youtube');
 const commercialRoutes = require('./routes/commercial');
 const contactRoutes = require('./routes/contact');
 const aboutRoutes = require('./routes/about');
@@ -81,6 +82,7 @@ const aboutRoutes = require('./routes/about');
 // Use routes
 app.use('/api/skills', skillsRoutes);
 app.use('/api/reels', reelsRoutes);
+app.use('/api/youtube', youtubeRoutes);
 app.use('/api/commercial', commercialRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/about', aboutRoutes);
@@ -102,6 +104,7 @@ app.get('/api', (req, res) => {
         endpoints: {
             skills: '/api/skills',
             reels: '/api/reels',
+            youtube: '/api/youtube',
             commercial: '/api/commercial',
             contact: '/api/contact',
             about: '/api/about',

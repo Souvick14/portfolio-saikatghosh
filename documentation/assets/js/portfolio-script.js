@@ -330,6 +330,7 @@ class CarouselController {
 
 // ============================================
 // Instagram Reels Carousel Controller
+// Horizontal Scrolling Card Layout
 // ============================================
 class InstagramReelsCarousel {
     constructor(containerId) {
@@ -340,8 +341,6 @@ class InstagramReelsCarousel {
         this.dotsContainer = document.getElementById('instagramReelsDots');
         this.currentIndex = 0;
         this.slides = [];
-        this.autoPlayInterval = null;
-        this.isPlaying = false;
         
         // Navigation buttons
         const arrows = this.container.querySelectorAll('.carousel-arrow');
@@ -354,8 +353,7 @@ class InstagramReelsCarousel {
     async init() {
         await this.loadInstagramReels();
         this.setupNavigation();
-        this.startAutoPlay();
-        this.setupSwipeGestures();
+        this.setupScrollSync();
     }
     
     async loadInstagramReels() {
@@ -406,9 +404,6 @@ class InstagramReelsCarousel {
         const slide = document.createElement('div');
         slide.className = 'instagram-carousel-slide';
         
-        // Extract Instagram reel ID from URL
-        const reelId = this.extractReelId(reel.reelUrl);
-        
         slide.innerHTML = `
             <div class="instagram-embed-wrapper">
                 <blockquote class="instagram-media" 
@@ -449,11 +444,28 @@ class InstagramReelsCarousel {
     
     setupNavigation() {
         if (this.prevBtn) {
-            this.prevBtn.addEventListener('click', () => this.prev());
+            this.prevBtn.addEventListener('click', () => this.scrollPrev());
         }
         if (this.nextBtn) {
-            this.nextBtn.addEventListener('click', () => this.next());
+            this.nextBtn.addEventListener('click', () => this.scrollNext());
         }
+    }
+    
+    setupScrollSync() {
+        // Update dots and navigation on scroll
+        if (this.wrapper) {
+            this.wrapper.addEventListener('scroll', () => {
+                this.updateCurrentIndex();
+                this.updateNavigation();
+            });
+        }
+    }
+    
+    updateCurrentIndex() {
+        const scrollLeft = this.wrapper.scrollLeft;
+        const cardWidth = this.slides[0]?.offsetWidth || 300;
+        const gap = 24; // 1.5rem gap
+        this.currentIndex = Math.round(scrollLeft / (cardWidth + gap));
     }
     
     createDots() {
@@ -464,7 +476,7 @@ class InstagramReelsCarousel {
             const dot = document.createElement('button');
             dot.className = 'carousel-dot';
             if (index === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => this.goToSlide(index));
+            dot.addEventListener('click', () => this.scrollToIndex(index));
             this.dotsContainer.appendChild(dot);
         });
     }
@@ -476,82 +488,37 @@ class InstagramReelsCarousel {
             dot.classList.toggle('active', index === this.currentIndex);
         });
         
-        // Update arrows (disabled for looping carousel)
+        // Update arrows
         if (this.prevBtn) {
-            this.prevBtn.disabled = false;
+            this.prevBtn.disabled = this.currentIndex === 0;
         }
         if (this.nextBtn) {
-            this.nextBtn.disabled = false;
+            this.nextBtn.disabled = this.currentIndex >= this.slides.length - 1;
         }
     }
     
-    goToSlide(index) {
+    scrollToIndex(index) {
         if (index < 0 || index >= this.slides.length) return;
         
-        this.currentIndex = index;
-        const offset = -index * 100;
-        this.wrapper.style.transform = `translateX(${offset}%)`;
-        this.updateNavigation();
-    }
-    
-    next() {
-        const nextIndex = (this.currentIndex + 1) % this.slides.length;
-        this.goToSlide(nextIndex);
-    }
-    
-    prev() {
-        const prevIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
-        this.goToSlide(prevIndex);
-    }
-    
-    startAutoPlay() {
-        this.stopAutoPlay();
-        this.isPlaying = true;
+        const cardWidth = this.slides[0].offsetWidth;
+        const gap = 24; // 1.5rem gap
+        const scrollPosition = index * (cardWidth + gap);
         
-        this.autoPlayInterval = setInterval(() => {
-            this.next();
-        }, CONFIG.carousel.intervalDuration);
-    }
-    
-    stopAutoPlay() {
-        if (this.autoPlayInterval) {
-            clearInterval(this.autoPlayInterval);
-            this.autoPlayInterval = null;
-        }
-        this.isPlaying = false;
-    }
-    
-    setupSwipeGestures() {
-        let startX = 0;
-        let currentX = 0;
-        let isDragging = false;
-        
-        this.container.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-            isDragging = true;
+        this.wrapper.scrollTo({
+            left: scrollPosition,
+            behavior: 'smooth'
         });
-        
-        this.container.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-            currentX = e.touches[0].clientX;
-        });
-        
-        this.container.addEventListener('touchend', () => {
-            if (!isDragging) return;
-            
-            const diff = startX - currentX;
-            const threshold = 50;
-            
-            if (Math.abs(diff) > threshold) {
-                if (diff > 0) {
-                    this.next();
-                } else {
-                    this.prev();
-                }
-            }
-            
-            isDragging = false;
-        });
+    }
+    
+    scrollNext() {
+        const maxIndex = this.slides.length - 1;
+        const nextIndex = Math.min(this.currentIndex + 1, maxIndex);
+        this.scrollToIndex(nextIndex);
+    }
+    
+    scrollPrev() {
+        const prevIndex = Math.max(this.currentIndex - 1, 0);
+        this.scrollToIndex(prevIndex);
     }
     
     showEmpty() {
@@ -572,6 +539,7 @@ class InstagramReelsCarousel {
         `;
     }
 }
+
 
 // ============================================
 // Skills Section with Flip Cards
@@ -799,6 +767,111 @@ class SkillsManager {
 }
 
 // ============================================
+// YouTube Video Section
+// ============================================
+class YouTubeVideoSection {
+    constructor() {
+        this.gridContainer = document.getElementById('youtubeGrid');
+        this.emptyState = document.getElementById('youtubeEmpty');
+        this.videos = [];
+        this.init();
+    }
+
+    async init() {
+        await this.loadVideos();
+        this.renderVideos();
+    }
+
+    async loadVideos() {
+        try {
+            // Fetch videos from backend API
+            const response = await fetch('/api/youtube');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            this.videos = await response.json();
+            
+            // Handle empty array or fallback data structure from API
+            if (!Array.isArray(this.videos)) {
+                if (this.videos.data) {
+                    this.videos = this.videos.data;
+                } else {
+                    this.videos = [];
+                }
+            }
+        } catch (error) {
+            console.error('Error loading YouTube videos from API:', error);
+            // Fallback to empty array if API fails
+            this.videos = [];
+        }
+    }
+
+    renderVideos() {
+        if (!this.gridContainer) return;
+
+        // Clear loading state
+        this.gridContainer.innerHTML = '';
+
+        // Check if videos exist
+        if (!this.videos || this.videos.length === 0) {
+            if (this.emptyState) {
+                this.emptyState.style.display = 'block';
+            }
+            return;
+        }
+
+        // Hide empty state
+        if (this.emptyState) {
+            this.emptyState.style.display = 'none';
+        }
+
+        // Render each video card
+        this.videos.forEach((video, index) => {
+            const card = this.createVideoCard(video, index);
+            this.gridContainer.appendChild(card);
+        });
+    }
+
+    createVideoCard(video, index) {
+        const card = document.createElement('div');
+        card.className = 'youtube-video-card animate-on-scroll';
+        card.style.animationDelay = `${index * 0.1}s`;
+        
+        // Generate thumbnail URL from video ID
+        const thumbnailUrl = video.thumbnailUrl || `https://img.youtube.com/vi/${video.videoId}/maxresdefault.jpg`;
+        
+        card.innerHTML = `
+            <div class="youtube-thumbnail-wrapper">
+                <img src="${thumbnailUrl}" alt="${video.title}" class="youtube-thumbnail" 
+                     onerror="this.src='https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg'">
+                <div class="youtube-play-button">
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+            <div class="youtube-video-info">
+                ${video.category ? `<span class="youtube-category">${video.category}</span>` : ''}
+                <h3 class="youtube-video-title">${video.title}</h3>
+                ${video.description ? `<p class="youtube-video-description">${video.description}</p>` : ''}
+            </div>
+        `;
+        
+        // Make card clickable to open YouTube video
+        card.addEventListener('click', () => {
+            window.open(`https://www.youtube.com/watch?v=${video.videoId}`, '_blank');
+        });
+        
+        return card;
+    }
+
+    // Public method to refresh videos (called from admin panel)
+    refresh() {
+        this.loadVideos().then(() => {
+            this.renderVideos();
+        });
+    }
+}
+
+// ============================================
 // Navigation
 // ============================================
 document.addEventListener('DOMContentLoaded', function () {
@@ -885,13 +958,16 @@ document.addEventListener('DOMContentLoaded', function () {
 let carousels = {};
 let skillsManager;
 let instagramReelsCarousel;
+let youtubeVideoSection;
 
 function initializeCarousels() {
     // Initialize Instagram Reels Carousel
     instagramReelsCarousel = new InstagramReelsCarousel('instagramReelsCarousel');
     
+    // Initialize YouTube Video Section
+    youtubeVideoSection = new YouTubeVideoSection();
+    
     // Initialize other carousels
-    carousels.reels = new CarouselController('reelsCarousel', 'reels');
     carousels.blogs = new CarouselController('blogsCarousel', 'blogs');
     carousels.commercial = new CarouselController('commercialCarousel', 'commercial');
     

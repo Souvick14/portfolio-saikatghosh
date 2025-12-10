@@ -121,6 +121,35 @@ class DataManager {
                     revenue: '$10K'
                 }
             ],
+            youtube: [
+                {
+                    id: 1,
+                    videoId: 'dQw4w9WgXcQ',
+                    title: 'Complete Beginner\'s Guide to Video Editing',
+                    description: 'Learn the fundamentals of video editing from scratch with this comprehensive tutorial',
+                    category: 'tutorial',
+                    thumbnailUrl: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+                    order: 1
+                },
+                {
+                    id: 2,
+                    videoId: 'jNQXACUZKU',
+                    title: 'Behind the Scenes: My Creative Process',
+                    description: 'Take a look at how I approach video projects from concept to final export',
+                    category: 'vlog',
+                    thumbnailUrl: 'https://img.youtube.com/vi/jNQXACUZKU/maxresdefault.jpg',
+                    order: 2
+                },
+                {
+                    id: 3,
+                    videoId: '3JZ_D3ELwOQ',
+                    title: 'Advanced Color Grading Techniques',
+                    description: 'Master professional color grading workflows to make your videos cinematic',
+                    category: 'tutorial',
+                    thumbnailUrl: 'https://img.youtube.com/vi/3JZ_D3ELwOQ/maxresdefault.jpg',
+                    order: 3
+                }
+            ],
             skills: [
                 {
                     id: 1,

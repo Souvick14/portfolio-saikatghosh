@@ -29,6 +29,7 @@
     <link rel="stylesheet" type="text/css" href="assets/css/portfolio-style.css">
     <link rel="stylesheet" type="text/css" href="assets/css/carousel.css">
     <link rel="stylesheet" type="text/css" href="assets/css/instagram-carousel.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/youtube-section.css">
 </head>
 
 <body>
@@ -60,7 +61,8 @@
 
             <ul class="nav-menu" id="navMenu">
                 <li><a href="#home" class="nav-link active">Home</a></li>
-                <li><a href="#reels" class="nav-link">Reels</a></li>
+                <li><a href="#instagram-reels" class="nav-link">Instagram</a></li>
+                <li><a href="#youtube" class="nav-link">YouTube</a></li>
                 <li><a href="#blogs" class="nav-link">Blogs</a></li>
                 <li><a href="#commercial" class="nav-link">Commercial</a></li>
                 <li><a href="#skills" class="nav-link">Skills</a></li>
@@ -100,7 +102,7 @@
     <section class="section carousel-section" id="instagram-reels">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Latest Reels</h2>
+                <h2 class="section-title">Instagram Reels</h2>
                 <p class="section-description">
                     Fresh viral content straight from Instagram
                 </p>
@@ -129,35 +131,28 @@
         </div>
     </section>
 
-    <!-- Reels Section -->
-    <section class="section carousel-section" id="reels">
+    <!-- YouTube Videos Section -->
+    <section class="section youtube-section" id="youtube">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Latest Reels</h2>
+                <h2 class="section-title">YouTube Videos</h2>
                 <p class="section-description">
-                    Viral short-form content that captivates and engages
+                    Long-form content, tutorials, and creative storytelling
                 </p>
             </div>
 
-            <div class="carousel-container" id="reelsCarousel" data-carousel="reels">
-                <div class="carousel-wrapper" id="reelsWrapper">
-                    <!-- Reel slides will be loaded dynamically -->
-                    <div class="carousel-slide loading">
-                        <div class="carousel-loader"></div>
-                    </div>
+            <div class="youtube-grid" id="youtubeGrid">
+                <!-- YouTube videos will be loaded dynamically -->
+                <div class="youtube-loading">
+                    <div class="loader"></div>
+                    <p>Loading videos...</p>
                 </div>
+            </div>
 
-                <div class="carousel-nav">
-                    <div class="carousel-arrows">
-                        <button class="carousel-arrow prev-arrow" data-target="reels">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <button class="carousel-arrow next-arrow" data-target="reels">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                    <div class="carousel-dots" id="reelsDots"></div>
-                </div>
+            <!-- Empty state message -->
+            <div class="youtube-empty" id="youtubeEmpty" style="display: none;">
+                <i class="fab fa-youtube"></i>
+                <p>No YouTube videos added yet. Use the admin panel to add your latest videos!</p>
             </div>
         </div>
     </section>
