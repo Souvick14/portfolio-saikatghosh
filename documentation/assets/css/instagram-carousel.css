@@ -8,6 +8,9 @@
     width: 100%;
     overflow: visible;
     padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 .instagram-carousel-wrapper {
@@ -27,7 +30,7 @@
     animation-play-state: paused;
 }
 
-/* Infinite scroll animation */
+/* Infinite scroll animation (left to right) */
 @keyframes infiniteScroll {
     0% {
         transform: translateX(0);
@@ -35,6 +38,17 @@
 
     100% {
         transform: translateX(-50%);
+    }
+}
+
+/* Reverse infinite scroll animation (right to left) */
+@keyframes infiniteScrollReverse {
+    0% {
+        transform: translateX(-50%);
+    }
+
+    100% {
+        transform: translateX(0);
     }
 }
 
@@ -414,6 +428,7 @@
     }
 }
 
+
 @media (max-width: 480px) {
     .instagram-carousel-slide {
         min-width: 220px;
@@ -423,5 +438,51 @@
     .instagram-embed-wrapper iframe {
         height: 400px !important;
         min-height: 400px !important;
+    }
+}
+
+/* Show More Button */
+.show-more-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.show-more-btn {
+    padding: 1rem 3rem;
+    background: linear-gradient(135deg, var(--primary-purple), var(--primary-cyan));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+.show-more-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+}
+
+.show-more-btn i {
+    font-size: 1.2rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(5px);
     }
 }

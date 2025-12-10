@@ -431,29 +431,92 @@ class InstagramReelsCarousel {
                 return;
             }
             
-            this.wrapper.innerHTML = '';
+            this.allReels = reels;
+            this.displayedReels = reels.length > 40 ? reels.slice(0, 40) : reels;
             
-            // Duplicate reels for infinite scroll
-            const duplicatedReels = [...reels, ...reels];
+            await this.renderReels(this.displayedReels);
             
-            // Load each reel using Instagram oEmbed API
-            for (const reel of duplicatedReels) {
-                const slide = await this.createReelSlide(reel);
-                this.wrapper.appendChild(slide);
+            // Show "Show More" button if more than 40 cards
+            if (reels.length > 40) {
+                this.showMoreButton();
             }
-            
-            // Load Instagram embed script
-            this.loadInstagramEmbedScript();
-            
-            this.slides = this.wrapper.querySelectorAll('.instagram-carousel-slide');
-            // Remove navigation since we have infinite scroll
-            // this.createDots();
-            // this.updateNavigation();
             
         } catch (error) {
             console.error('Error loading Instagram reels from API:', error);
             this.showError();
         }
+    }
+    
+    async renderReels(reels) {
+        this.container.innerHTML = ''; // Clear container
+        
+        const CARDS_PER_ROW = 15;
+        const rows = [];
+        
+        // Split reels into rows of 15
+        for (let i = 0; i < reels.length; i += CARDS_PER_ROW) {
+            rows.push(reels.slice(i, i + CARDS_PER_ROW));
+        }
+        
+        // Create each row
+        for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+            const rowReels = rows[rowIndex];
+            const isReverse = rowIndex % 2 === 1; // Alternate direction
+            
+            await this.createCarouselRow(rowReels, rowIndex, isReverse);
+        }
+    }
+    
+    async createCarouselRow(reels, rowIndex, isReverse) {
+        const rowWrapper = document.createElement('div');
+        rowWrapper.className = 'instagram-carousel-wrapper';
+        rowWrapper.dataset.rowIndex = rowIndex;
+        
+        // Check if animation needed (cards exceed viewport)
+        const needsAnimation = reels.length > 4; // Approximate: 4 cards fit in viewport
+        
+        // Duplicate reels for infinite scroll ONLY if animation needed
+        const displayReels = needsAnimation ? [...reels, ...reels] : reels;
+        
+        // Create slides
+        for (const reel of displayReels) {
+            const slide = await this.createReelSlide(reel);
+            rowWrapper.appendChild(slide);
+        }
+        
+        // Apply animation if needed
+        if (needsAnimation) {
+            if (isReverse) {
+                rowWrapper.style.animation = 'infiniteScrollReverse 30s linear infinite';
+            } else {
+                rowWrapper.style.animation = 'infiniteScroll 30s linear infinite';
+            }
+        } else {
+            rowWrapper.style.animation = 'none';
+            rowWrapper.style.justifyContent = 'center'; // Center when not scrolling
+        }
+        
+        this.container.appendChild(rowWrapper);
+    }
+    
+    showMoreButton() {
+        const showMoreContainer = document.createElement('div');
+        showMoreContainer.className = 'show-more-container';
+        showMoreContainer.innerHTML = `
+            <button class="show-more-btn">
+                <i class="fas fa-chevron-down"></i>
+                <span>Show More Reels</span>
+            </button>
+        `;
+        
+        const button = showMoreContainer.querySelector('.show-more-btn');
+        button.addEventListener('click', () => {
+            this.displayedReels = this.allReels;
+            this.renderReels(this.allReels);
+            showMoreContainer.remove();
+        });
+        
+        this.container.appendChild(showMoreContainer);
     }
     
     async createReelSlide(reel) {
