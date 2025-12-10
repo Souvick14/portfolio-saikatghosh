@@ -101,7 +101,26 @@ if (typeof AdminPanel !== 'undefined') {
             formData.append('backgroundImage', fileInput.files[0]);
         }
 
-        // Validate
+        // Validate icon/iconImage
+        const iconTypeRadio = document.querySelector('input[name="iconType"]:checked');
+        const iconType = iconTypeRadio ? iconTypeRadio.value : 'upload';
+        
+        if (iconType === 'upload') {
+            // If Upload PNG is selected, require a file
+            const iconImageInput = document.getElementById('skillIconImage');
+            if (!iconImageInput || !iconImageInput.files || !iconImageInput.files[0]) {
+                this.showNotification('Please upload a PNG logo or switch to Font Awesome icon', 'error');
+                return;
+            }
+        } else {
+            // If Font Awesome is selected, require icon value
+            if (!formData.get('icon')) {
+                this.showNotification('Please enter a Font Awesome icon class', 'error');
+                return;
+            }
+        }
+
+        // Validate required fields
         if (!formData.get('name') || !formData.get('category') || !formData.get('description')) {
             this.showNotification('Please fill in required fields', 'error');
             return;
