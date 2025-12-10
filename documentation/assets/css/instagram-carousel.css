@@ -92,6 +92,8 @@
     transform: translateY(-50%);
     pointer-events: none;
     z-index: 10;
+    background: transparent;
+    /* No blur bar */
 }
 
 .carousel-arrows {
