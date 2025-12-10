@@ -764,6 +764,15 @@ p {
     scrollbar-width: none;
     /* Hides the scrollbar */
 }
+.skill-card-back::-webkit-scrollbar {
+    display: none;
+    /* Hides the scrollbar */
+}
+
+.skill-card-back {
+    scrollbar-width: none;
+    /* Hides the scrollbar */
+}
 
 /* Front Face */
 .skill-card-front {
@@ -996,7 +1005,7 @@ p {
 }
 
 .skill-back-description {
-
+    overflow-y: scroll;
     font-size: 0.95rem;
     color: var(--text-secondary);
     line-height: 1.6;
