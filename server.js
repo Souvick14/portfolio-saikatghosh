@@ -52,6 +52,7 @@ const connectDB = async () => {
     try {
         if (!process.env.MONGODB_URI) {
             console.warn('⚠️  MongoDB URI not configured. Running in development mode with mock data.');
+            app.locals.mongoConnected = false;
             return;
         }
 
@@ -60,10 +61,13 @@ const connectDB = async () => {
             useUnifiedTopology: true
         });
         
+        // CRITICAL: Set flag so GET routes return data!
+        app.locals.mongoConnected = true;
         console.log('✅ MongoDB connected successfully');
     } catch (error) {
         console.error('❌ MongoDB connection error:', error.message);
         console.log('⚠️  Continuing without database. API will use fallback data.');
+        app.locals.mongoConnected = false;
     }
 };
 
