@@ -67,9 +67,9 @@ if (typeof AdminPanel !== 'undefined') {
     };
 
     AdminPanel.prototype.convertGoogleDriveUrl = function(url) {
-        // Convert Google Drive sharing link to embeddable preview link
+        // Convert Google Drive sharing link to direct download link
         // From: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
-        // To: https://drive.google.com/file/d/FILE_ID/preview
+        // To: https://drive.google.com/uc?export=download&id=FILE_ID
         
         if (!url) return url;
         
@@ -78,8 +78,8 @@ if (typeof AdminPanel !== 'undefined') {
             // Extract file ID from various Google Drive URL formats
             let fileId = null;
             
-            // Format 1: https://drive.google.com/file/d/FILE_ID/view
-            const match1 = url.match(/\/file\/d\/([^\/]+)/);
+            // Format 1: https://drive.google.com/file/d/FILE_ID/view or /preview
+            const match1 = url.match(/\/file\/d\/([^\/\?]+)/);
             if (match1) {
                 fileId = match1[1];
             }
@@ -91,8 +91,8 @@ if (typeof AdminPanel !== 'undefined') {
             }
             
             if (fileId) {
-                // Return preview link for video streaming
-                return `https://drive.google.com/file/d/${fileId}/preview`;
+                // Return direct download URL that works with video tag
+                return `https://drive.google.com/uc?export=download&id=${fileId}`;
             }
         }
         

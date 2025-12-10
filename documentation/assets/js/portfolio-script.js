@@ -442,22 +442,30 @@ class InstagramReelsCarousel {
                 </button>
             `;
         } else {
-            // Direct video URL with autoplay
+            // Direct video URL or Google Drive
             let videoSrc = reel.reelUrl;
+            let isGoogleDrive = reel.reelUrl.includes('drive.google.com');
             
             // Convert Google Drive links to direct download format
-            if (reel.reelUrl.includes('drive.google.com')) {
-                const fileIdMatch = reel.reelUrl.match(/[-\w]{25,}/);
+            if (isGoogleDrive) {
+                const fileIdMatch = reel.reelUrl.match(/\/file\/d\/([^\/\?]+)/);
                 if (fileIdMatch) {
-                    videoSrc = `https://drive.google.com/uc?export=download&id=${fileIdMatch[0]}`;
+                    videoSrc = `https://drive.google.com/uc?export=download&id=${fileIdMatch[1]}`;
+                } else {
+                    // Try to extract file ID from other formats
+                    const idMatch = reel.reelUrl.match(/[?&]id=([^&]+)/);
+                    if (idMatch) {
+                        videoSrc = `https://drive.google.com/uc?export=download&id=${idMatch[1]}`;
+                    }
                 }
             }
             
+            // Use HTML5 video tag for all direct videos (including Google Drive)
             frontFace.innerHTML = `
                 <div class="instagram-video-container">
                     <video 
                         class="direct-video-player"
-                        autoplay 
+                        controls
                         loop 
                         muted 
                         playsinline
