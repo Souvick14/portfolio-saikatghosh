@@ -358,9 +358,7 @@ class InstagramReelsCarousel {
     setupDragScroll() {
         if (!this.wrapper) return;
         
-        // Disable infinite scroll animation for drag functionality
-        this.wrapper.style.animation = 'none';
-        this.wrapper.style.overflowX = 'scroll';
+        // Keep drag functionality but don't disable animation
         this.wrapper.style.cursor = 'grab';
         
         // Mouse events for drag scroll
@@ -369,16 +367,19 @@ class InstagramReelsCarousel {
             this.startX = e.pageX - this.wrapper.offsetLeft;
             this.scrollLeft = this.wrapper.scrollLeft;
             this.wrapper.style.cursor = 'grabbing';
+            this.wrapper.style.animationPlayState = 'paused'; // Pause animation while dragging
         });
         
         this.wrapper.addEventListener('mouseleave', () => {
             this.isDragging = false;
             this.wrapper.style.cursor = 'grab';
+            this.wrapper.style.animationPlayState = 'running'; // Resume animation
         });
         
         this.wrapper.addEventListener('mouseup', () => {
             this.isDragging = false;
             this.wrapper.style.cursor = 'grab';
+            this.wrapper.style.animationPlayState = 'running'; // Resume animation
         });
         
         this.wrapper.addEventListener('mousemove', (e) => {
@@ -393,12 +394,17 @@ class InstagramReelsCarousel {
         this.wrapper.addEventListener('touchstart', (e) => {
             this.startX = e.touches[0].pageX - this.wrapper.offsetLeft;
             this.scrollLeft = this.wrapper.scrollLeft;
+            this.wrapper.style.animationPlayState = 'paused';
         });
         
         this.wrapper.addEventListener('touchmove', (e) => {
             const x = e.touches[0].pageX - this.wrapper.offsetLeft;
             const walk = (x - this.startX) * 2;
             this.wrapper.scrollLeft = this.scrollLeft - walk;
+        });
+        
+        this.wrapper.addEventListener('touchend', () => {
+            this.wrapper.style.animationPlayState = 'running';
         });
     }
     
@@ -478,6 +484,10 @@ class InstagramReelsCarousel {
                         Your browser does not support the video tag.
                     </video>
                 </div>
+                <button class="visit-reel-btn" data-url="${reel.reelUrl}">
+                    <i class="fas fa-external-link-alt"></i>
+                    <span>Visit Reel</span>
+                </button>
                 <button class="flip-button" aria-label="Show technologies">
                     <i class="fas fa-info-circle"></i>
                 </button>
@@ -513,6 +523,10 @@ class InstagramReelsCarousel {
                     <div class="reel-content">
                         <h3 class="reel-title">${displayTitle}</h3>
                     </div>
+                    <button class="visit-reel-btn" data-url="${reel.reelUrl}">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span>Visit Reel</span>
+                    </button>
                     <button class="flip-button" aria-label="Show technologies">
                         <i class="fas fa-info-circle"></i>
                     </button>
@@ -542,18 +556,14 @@ class InstagramReelsCarousel {
         flipCardInner.appendChild(backFace);
         slide.appendChild(flipCardInner);
         
-        // Add "Visit Reel" button below the card
-        const visitButton = document.createElement('button');
-        visitButton.className = 'visit-reel-btn';
-        visitButton.innerHTML = `
-            <i class="fas fa-external-link-alt"></i>
-            <span>Visit Reel</span>
-        `;
-        visitButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            window.open(reel.reelUrl, '_blank');
-        });
-        slide.appendChild(visitButton);
+        // Add "Visit Reel" button click listener
+        const visitBtn = frontFace.querySelector('.visit-reel-btn');
+        if (visitBtn) {
+            visitBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.open(reel.reelUrl, '_blank');
+            });
+        }
         
         // Add flip button click listener (front to back)
         const flipButton = frontFace.querySelector('.flip-button');

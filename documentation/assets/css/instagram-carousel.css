@@ -280,29 +280,49 @@
     object-fit: cover;
 }
 
-/* Visit Reel Button (below card) */
+/* Visit Reel Button (inside card, hover only) */
 .visit-reel-btn {
-    width: calc(100% - 2rem);
-    margin: 1rem 1rem 0;
-    padding: 0.875rem 1.5rem;
-    background: linear-gradient(135deg, var(--primary-purple), var(--primary-cyan));
+    position: absolute;
+    bottom: 3.5rem;
+    /* Above flip button */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.75rem 1.5rem;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
     color: white;
     border: none;
-    border-radius: 12px;
-    font-size: 1rem;
+    border-radius: 25px;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    opacity: 0;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    pointer-events: none;
+    z-index: 15;
+}
+
+.instagram-carousel-slide:hover .visit-reel-btn {
+    opacity: 1;
+    pointer-events: all;
 }
 
 .visit-reel-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(139, 92, 246, 0.5);
+    background: rgba(139, 92, 246, 0.9);
+    transform: translateX(-50%) translateY(-2px);
+}
+
+/* Prevent vertical scroll on carousel */
+.instagram-carousel-container {
+    overflow-y: hidden !important;
+}
+
+.instagram-carousel-wrapper {
+    overflow-y: hidden !important;
 }
 
 /* Instagram video container */
