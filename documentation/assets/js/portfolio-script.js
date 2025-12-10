@@ -668,7 +668,7 @@ class SkillsManager {
                     </div>
                     
                     <div class="flip-hint">
-                        <span>Click to see projects</span>
+                        <span>Hover to see projects</span>
                         <i class="fas fa-arrow-right"></i>
                     </div>
                 </div>
@@ -696,7 +696,7 @@ class SkillsManager {
                         </div>
                         
                         <div class="flip-back-hint">
-                            <i class="fas fa-arrow-left"></i> Click to flip back
+                            <i class="fas fa-arrow-left"></i> Mouseleave to flip back
                         </div>
                     </div>
                 </div>
