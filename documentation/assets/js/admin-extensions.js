@@ -110,9 +110,117 @@ if (typeof AdminPanel !== 'undefined') {
         }
     };
 
+    // Event listeners for Instagram Reels
+    AdminPanel.prototype.setupInstagramReelsEvents = function() {
+        const addReelBtn = document.getElementById('addInstagramReelBtn');
+        if (addReelBtn) {
+            addReelBtn.addEventListener('click', () => this.openInstagramReelModal());
+        }
+
+        const closeReelModal = document.getElementById('closeInstagramReelModal');
+        if (closeReelModal) {
+            closeReelModal.addEventListener('click', () => this.closeInstagramReelModal());
+        }
+
+        const cancelReelBtn = document.getElementById('cancelInstagramReelBtn');
+        if (cancelReelBtn) {
+            cancelReelBtn.addEventListener('click', () => this.closeInstagramReelModal());
+        }
+
+        const reelForm = document.getElementById('instagramReelForm');
+        if (reelForm) {
+            reelForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.saveInstagramReel();
+            });
+        }
+
+        const refreshReelsBtn = document.getElementById('refreshInstagramReelsBtn');
+        if (refreshReelsBtn) {
+            refreshReelsBtn.addEventListener('click', () => this.loadInstagramReels());
+        }
+
+        const previewReelBtn = document.getElementById('previewInstagramReelBtn');
+        if (previewReelBtn) {
+            previewReelBtn.addEventListener('click', () => this.previewInstagramReel());
+        }
+    };
+
+    AdminPanel.prototype.openInstagramReelModal = function(reel = null) {
+        this.currentReelId = reel ? reel._id : null;
+        const modal = document.getElementById('instagramReelModal');
+        const modalTitle = document.getElementById('instagramReelModalTitle');
+        const submitBtnText = document.getElementById('submitInstagramReelBtnText');
+
+        if (reel) {
+            modalTitle.textContent = 'Edit Instagram Reel';
+            submitBtnText.textContent = 'Update Reel';
+            document.getElementById('instagramReelUrl').value = reel.reelUrl;
+            document.getElementById('instagramReelTitle').value = reel.title || '';
+        } else {
+            modalTitle.textContent = 'Add Instagram Reel';
+            submitBtnText.textContent = 'Save Reel';
+            document.getElementById('instagramReelForm').reset();
+        }
+
+        modal.classList.add('active');
+    };
+
+    AdminPanel.prototype.closeInstagramReelModal = function() {
+        document.getElementById('instagramReelModal').classList.remove('active');
+        this.currentReelId = null;
+    };
+
+    AdminPanel.prototype.editInstagramReel = async function(reelId) {
+        try {
+            const response = await fetch(`/api/reels/${reelId}`);
+            const reel = await response.json();
+            if (reel) {
+                this.openInstagramReelModal(reel);
+            }
+        } catch (error) {
+            console.error('Error loading reel:', error);
+            this.showNotification('Failed to load reel', 'error');
+        }
+    };
+
+    AdminPanel.prototype.previewInstagramReel = function() {
+        const url = document.getElementById('instagramReelUrl').value.trim();
+        const previewContainer = document.getElementById('instagramReelPreview');
+        
+        if (!url) {
+            this.showNotification('Please enter a URL first', 'error');
+            return;
+        }
+
+        previewContainer.innerHTML = `<p style="color: var(--text-muted); text-align: center;">Loading preview...</p>`;
+
+        // Create Instagram embed preview
+        setTimeout(() => {
+            previewContainer.innerHTML = `
+                <blockquote class="instagram-media" 
+                            data-instgrm-permalink="${url}" 
+                            data-instgrm-version="14"
+                            style="background:#FFF; border:0; border-radius:3px; max-width:400px; margin: 0 auto;">
+                </blockquote>
+            `;
+            
+            // Load Instagram embed script if not already loaded
+            if (!window.instgrm) {
+                const script = document.createElement('script');
+                script.async = true;
+                script.src = '//www.instagram.com/embed.js';
+                document.body.appendChild(script);
+            } else {
+                window.instgrm.Embeds.process();
+            }
+        }, 500);
+    };
+
     // =========================
     // Commercial Work Management  
     // =========================
+
     
     AdminPanel.prototype.loadCommercialWork = async function() {
         const commercialList = document.getElementById('commercialWorkList');
@@ -335,7 +443,7 @@ if (typeof AdminPanel !== 'undefined') {
         originalSwitchTab.call(this, tab);
         
         // Load data for the specific tab
-        if (tab === 'instagramReels') {
+        if (tab === 'instagram-reels') {
             this.loadInstagramReels();
         } else if (tab === 'commercial') {
             this.loadCommercialWork();
@@ -343,6 +451,35 @@ if (typeof AdminPanel !== 'undefined') {
             this.loadContactSettings();
         } else if (tab === 'about') {
             this.loadAboutSection();
+        }
+    };
+    
+    // Initialize event listeners after DOMContentLoaded
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            if (window.adminPanel) {
+                adminPanel.setupInstagramReelsEvents();
+                adminPanel.setupContactAboutEvents();
+            }
+        }, 100);
+    });
+    
+    // Event listeners for Contact and About forms
+    AdminPanel.prototype.setupContactAboutEvents = function() {
+        const contactForm = document.getElementById('contactSettingsForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.saveContactSettings();
+            });
+        }
+
+        const aboutForm = document.getElementById('aboutSectionForm');
+        if (aboutForm) {
+            aboutForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.saveAboutSection();
+            });
         }
     };
     
