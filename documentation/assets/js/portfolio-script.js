@@ -407,29 +407,33 @@ class InstagramReelsCarousel {
     async createReelSlide(reel) {
         const slide = document.createElement('div');
         slide.className = 'instagram-carousel-slide';
+```
         
         // Create flip card structure
         const flipCardInner = document.createElement('div');
         flipCardInner.className = 'reel-flip-card-inner';
         
-        // Front face - Instagram embed
+        // Front face - Instagram video iframe
         const frontFace = document.createElement('div');
         frontFace.className = 'reel-card-front';
+        
+        // Extract reel ID from URL
+        const reelId = this.extractReelId(reel.reelUrl);
+        
         frontFace.innerHTML = `
-            <div class="instagram-embed-wrapper">
-                <blockquote class="instagram-media" 
-                            data-instgrm-permalink="${reel.reelUrl}" 
-                            data-instgrm-version="14"
-                            style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);">
-                    <div style="padding:16px;">
-                        <p style="margin:8px 0 0 0; padding:0 4px; text-align:center;">
-                            <a href="${reel.reelUrl}" 
-                               style="color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;" 
-                               target="_blank">Loading Instagram Reel...</a>
-                        </p>
-                    </div>
-                </blockquote>
+            <div class="instagram-video-container">
+                <iframe 
+                    src="https://www.instagram.com/p/${reelId}/embed" 
+                    frameborder="0" 
+                    scrolling="no" 
+                    allowfullscreen
+                    allow="autoplay; encrypted-media"
+                    class="instagram-video-iframe">
+                </iframe>
             </div>
+            <button class="flip-button" aria-label="Show technologies">
+                <i class="fas fa-info-circle"></i>
+            </button>
         `;
         
         // Back face - Technologies used
@@ -451,11 +455,24 @@ class InstagramReelsCarousel {
         flipCardInner.appendChild(backFace);
         slide.appendChild(flipCardInner);
         
+        // Add flip button click listener
+        const flipButton = frontFace.querySelector('.flip-button');
+        if (flipButton) {
+            flipButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                flipCardInner.classList.toggle('flipped');
+            });
+        }
+        
         return slide;
     }
     
     extractReelId(url) {
-        const match = url.match(/reel\/([A-Za-z0-9_-]+)/);
+        // Handle both /reel/ and /p/ formats
+        let match = url.match(/reel\/([A-Za-z0-9_-]+)/);
+        if (!match) {
+            match = url.match(/\/p\/([A-Za-z0-9_-]+)/);
+        }
         return match ? match[1] : null;
     }
     
