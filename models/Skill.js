@@ -12,8 +12,12 @@ const skillSchema = new mongoose.Schema({
     },
     icon: {
         type: String,
-        required: [true, 'Skill icon is required'],
+        required: false,  // Made optional since we now support PNG uploads
         default: 'fas fa-code'
+    },
+    iconImage: {
+        type: String,  // URL to uploaded PNG/SVG icon
+        default: ''
     },
     category: {
         type: String,

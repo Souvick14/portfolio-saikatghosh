@@ -81,11 +81,14 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST new skill (with Cloudinary image upload)
-router.post('/', upload.single('backgroundImage'), async (req, res) => {
+router.post('/', upload.fields([
+    { name: 'backgroundImage', maxCount: 1 },
+    { name: 'iconImage', maxCount: 1 }
+]), async (req, res) => {
     try {
         const skillData = {
             name: req.body.name,
-            icon: req.body.icon,
+            icon: req.body.icon || 'fas fa-code',
             category: req.body.category,
             proficiency: parseInt(req.body.proficiency),
             description: req.body.description,
@@ -93,9 +96,14 @@ router.post('/', upload.single('backgroundImage'), async (req, res) => {
             order: req.body.order ? parseInt(req.body.order) : 0
         };
 
-        // If file was uploaded to Cloudinary, save the URL
-        if (req.file) {
-            skillData.backgroundImage = req.file.path; // Cloudinary URL
+        // If background image was uploaded to Cloudinary, save the URL
+        if (req.files && req.files.backgroundImage && req.files.backgroundImage[0]) {
+            skillData.backgroundImage = req.files.backgroundImage[0].path;
+        }
+
+        // If icon image was uploaded to Cloudinary, save the URL
+        if (req.files && req.files.iconImage && req.files.iconImage[0]) {
+            skillData.iconImage = req.files.iconImage[0].path;
         }
 
         const skill = new Skill(skillData);
@@ -105,12 +113,20 @@ router.post('/', upload.single('backgroundImage'), async (req, res) => {
     } catch (error) {
         console.error('Error creating skill:', error);
         
-        // If Cloudinary upload succeeded but skill creation failed, delete the image
-        if (req.file && req.file.filename) {
-            try {
-                await cloudinary.uploader.destroy(`portfolio/skills/${req.file.filename}`);
-            } catch (deleteError) {
-                console.error('Error deleting orphaned image:', deleteError);
+        // If Cloudinary upload succeeded but skill creation failed, clean up uploaded images
+        if (req.files) {
+            const filesToDelete = [];
+            if (req.files.backgroundImage) filesToDelete.push(req.files.backgroundImage[0]);
+            if (req.files.iconImage) filesToDelete.push(req.files.iconImage[0]);
+            
+            for (const file of filesToDelete) {
+                try {
+                    if (file.filename) {
+                        await cloudinary.uploader.destroy(`portfolio/skills/${file.filename}`);
+                    }
+                } catch (deleteError) {
+                    console.error('Error deleting orphaned image:', deleteError);
+                }
             }
         }
         
@@ -119,7 +135,10 @@ router.post('/', upload.single('backgroundImage'), async (req, res) => {
 });
 
 // PUT update skill (with Cloudinary image upload)
-router.put('/:id', upload.single('backgroundImage'), async (req, res) => {
+router.put('/:id', upload.fields([
+    { name: 'backgroundImage', maxCount: 1 },
+    { name: 'iconImage', maxCount: 1 }
+]), async (req, res) => {
     try {
         const skill = await Skill.findById(req.params.id);
         
@@ -136,22 +155,32 @@ router.put('/:id', upload.single('backgroundImage'), async (req, res) => {
         skill.projects = req.body.projects ? JSON.parse(req.body.projects) : skill.projects;
         skill.order = req.body.order !== undefined ? parseInt(req.body.order) : skill.order;
 
-        // Handle image update
-        if (req.file) {
-            // Delete old Cloudinary image if it exists
+        // Handle background image update
+        if (req.files && req.files.backgroundImage && req.files.backgroundImage[0]) {
+            // Delete old image if exists
             if (skill.backgroundImage) {
                 try {
-                    // Extract public_id from Cloudinary URL
                     const publicId = extractPublicId(skill.backgroundImage);
-                    if (publicId) {
-                        await cloudinary.uploader.destroy(publicId);
-                    }
+                    if (publicId) await cloudinary.uploader.destroy(publicId);
                 } catch (deleteError) {
-                    console.error('Error deleting old image:', deleteError);
+                    console.error('Error deleting old background image:', deleteError);
                 }
             }
-            
-            skill.backgroundImage = req.file.path; // New Cloudinary URL
+            skill.backgroundImage = req.files.backgroundImage[0].path;
+        }
+
+        // Handle icon image update
+        if (req.files && req.files.iconImage && req.files.iconImage[0]) {
+            // Delete old icon image if exists
+            if (skill.iconImage) {
+                try {
+                    const publicId = extractPublicId(skill.iconImage);
+                    if (publicId) await cloudinary.uploader.destroy(publicId);
+                } catch (deleteError) {
+                    console.error('Error deleting old icon image:', deleteError);
+                }
+            }
+            skill.iconImage = req.files.iconImage[0].path;
         }
 
         const updatedSkill = await skill.save();
@@ -159,12 +188,20 @@ router.put('/:id', upload.single('backgroundImage'), async (req, res) => {
     } catch (error) {
         console.error('Error updating skill:', error);
         
-        // If Cloudinary upload succeeded but update failed, delete the new image
-        if (req.file && req.file.filename) {
-            try {
-                await cloudinary.uploader.destroy(`portfolio/skills/${req.file.filename}`);
-            } catch (deleteError) {
-                console.error('Error deleting orphaned image:', deleteError);
+        // Cleanup uploaded images if update failed
+        if (req.files) {
+            const filesToDelete = [];
+            if (req.files.backgroundImage) filesToDelete.push(req.files.backgroundImage[0]);
+            if (req.files.iconImage) filesToDelete.push(req.files.iconImage[0]);
+            
+            for (const file of filesToDelete) {
+                try {
+                    if (file.filename) {
+                        await cloudinary.uploader.destroy(`portfolio/skills/${file.filename}`);
+                    }
+                } catch (deleteError) {
+                    console.error('Error deleting orphaned image:', deleteError);
+                }
             }
         }
         
