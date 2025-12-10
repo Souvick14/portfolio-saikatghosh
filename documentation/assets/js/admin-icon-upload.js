@@ -101,9 +101,9 @@ if (typeof AdminPanel !== 'undefined') {
             formData.append('backgroundImage', fileInput.files[0]);
         }
 
-        // Validate icon/iconImage
-        const iconTypeRadio = document.querySelector('input[name="iconType"]:checked');
-        const iconType = iconTypeRadio ? iconTypeRadio.value : 'upload';
+        // Validate icon/iconImage (reuse iconTypeRadio from line 66)
+        // iconType already determined above, just validate it
+        
         
         if (iconType === 'upload') {
             // If Upload PNG is selected, require a file
