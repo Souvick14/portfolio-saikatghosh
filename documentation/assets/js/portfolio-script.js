@@ -632,7 +632,10 @@ class SkillsManager {
                 <div class="skill-card-front" ${frontBackgroundStyle ? `style="${frontBackgroundStyle}"` : ''}>
                     <div class="skill-icon-wrapper">
                         <div class="skill-icon">
-                            <i class="${skill.icon}"></i>
+                            ${skill.iconImage && skill.iconImage.trim() !== '' 
+                                ? `<img src="${skill.iconImage}" alt="${skill.name}" style="width: 100%; height: 100%; object-fit: contain;">`
+                                : `<i class="${skill.icon}"></i>`
+                            }
                         </div>
                     </div>
                     <div class="skill-category">${skill.category}</div>
