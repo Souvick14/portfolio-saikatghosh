@@ -52,8 +52,7 @@ if (typeof AdminPanel !== 'undefined') {
         }
     };
 
-    // Update saveSkill to handle icon image
-    const originalSaveSkill = AdminPanel.prototype.saveSkill;
+    // Override saveSkill to handle icon image
     AdminPanel.prototype.saveSkill = async function() {
         const formData = new FormData();
 
@@ -64,13 +63,16 @@ if (typeof AdminPanel !== 'undefined') {
         formData.append('description', document.getElementById('skillDescription').value.trim());
         
         // Check which icon type is selected
-        const iconType = document.querySelector('input[name="iconType"]:checked').value;
+        const iconTypeRadio = document.querySelector('input[name="iconType"]:checked');
+        const iconType = iconTypeRadio ? iconTypeRadio.value : 'fontawesome';
         
         if (iconType === 'fontawesome') {
             // Use Font Awesome icon
             const icon = document.getElementById('skillIcon').value.trim();
             if (icon) {
                 formData.append('icon', icon);
+            } else {
+                formData.append('icon', 'fas fa-code'); // Default fallback
             }
         } else {
             // Use uploaded icon image
@@ -120,7 +122,8 @@ if (typeof AdminPanel !== 'undefined') {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to save skill');
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to save skill');
             }
 
             this.showNotification(this.currentSkillId ? 'Skill updated successfully!' : 'Skill added successfully!');
@@ -128,7 +131,7 @@ if (typeof AdminPanel !== 'undefined') {
             this.loadSkills();
         } catch (error) {
             console.error('Error saving skill:', error);
-            this.showNotification('Failed to save skill. Please try again.', 'error');
+            this.showNotification('Failed to save skill: ' + error.message, 'error');
         }
     };
 
