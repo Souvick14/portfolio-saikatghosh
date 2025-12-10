@@ -727,6 +727,10 @@ p {
     transform: rotateY(180deg);
 }
 
+.skill-flip-card:hover {
+    transform: translateY(-10px);
+}
+
 .skill-card-inner {
     position: relative;
     width: 100%;
