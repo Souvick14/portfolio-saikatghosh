@@ -942,6 +942,7 @@ p {
     overflow-y: scroll;
     transform: rotateY(180deg);
     display: flex;
+        border: 1px solid blue;
     flex-direction: column;
     justify-content: space-between;
     background: linear-gradient(135deg, var(--bg-card) 0%, #1f1f3a 100%);
