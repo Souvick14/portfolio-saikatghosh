@@ -7,14 +7,9 @@ const mongoose = require('mongoose');
 const instagramReelSchema = new mongoose.Schema({
     reelUrl: {
         type: String,
-        required: [true, 'Instagram reel URL is required'],
-        trim: true,
-        validate: {
-            validator: function(v) {
-                return /^https?:\/\/(www\.)?instagram\.com\/reel\/[A-Za-z0-9_-]+\/?/.test(v);
-            },
-            message: 'Please provide a valid Instagram reel URL'
-        }
+        required: [true, 'Video URL is required'],
+        trim: true
+        // Removed Instagram-only validation to support Google Drive, direct videos, etc.
     },
     reelId: {
         type: String,
@@ -27,8 +22,7 @@ const instagramReelSchema = new mongoose.Schema({
     },
     technologies: {
         type: [String],
-        default: [],
-        trim: true
+        default: []
     },
     order: {
         type: Number,

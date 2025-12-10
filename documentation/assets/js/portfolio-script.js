@@ -408,77 +408,57 @@ class InstagramReelsCarousel {
         const slide = document.createElement('div');
         slide.className = 'instagram-carousel-slide';
         
+        // Detect platform from URL
+        let platform = 'video';
+        let platformIcon = 'fas fa-play-circle';
+        let platformColor = '#8b5cf6';
+        
+        if (reel.reelUrl.includes('instagram.com')) {
+            platform = 'Instagram';
+            platformIcon = 'fab fa-instagram';
+            platformColor = '#E4405F';
+        } else if (reel.reelUrl.includes('youtube.com') || reel.reelUrl.includes('youtu.be')) {
+            platform = 'YouTube';
+            platformIcon = 'fab fa-youtube';
+            platformColor = '#FF0000';
+        } else if (reel.reelUrl.includes('drive.google.com')) {
+            platform = 'Google Drive';
+            platformIcon = 'fab fa-google-drive';
+            platformColor = '#4285F4';
+        } else if (reel.reelUrl.includes('vimeo.com')) {
+            platform = 'Vimeo';
+            platformIcon = 'fab fa-vimeo-v';
+            platformColor = '#1AB7EA';
+        }
+        
         // Create flip card structure
         const flipCardInner = document.createElement('div');
         flipCardInner.className = 'reel-flip-card-inner';
         
-        // Front face - Video or Instagram embed
+        // Front face - Platform card with link button
         const frontFace = document.createElement('div');
         frontFace.className = 'reel-card-front';
         
-        // Detect URL type
-        const isInstagram = reel.reelUrl.includes('instagram.com');
-        const isDirectVideo = reel.reelUrl.match(/\.(mp4|webm|ogg|mov)$/i) || 
-                              reel.reelUrl.includes('drive.google.com') ||
-                              reel.reelUrl.includes('vimeo.com') ||
-                              reel.reelUrl.includes('dropbox.com');
+        const displayTitle = reel.title || `${platform} Reel`;
         
-        if (isInstagram) {
-            // Instagram iframe embed
-            const reelId = this.extractReelId(reel.reelUrl);
-            frontFace.innerHTML = `
-                <div class="instagram-video-container">
-                    <iframe 
-                        src="https://www.instagram.com/p/${reelId}/embed" 
-                        frameborder="0" 
-                        scrolling="no" 
-                        allowfullscreen
-                        allow="autoplay; encrypted-media"
-                        class="instagram-video-iframe">
-                    </iframe>
+        frontFace.innerHTML = `
+            <div class="reel-link-card">
+                <div class="reel-platform-badge" style="color: ${platformColor}">
+                    <i class="${platformIcon}"></i>
+                    <span>${platform}</span>
+                </div>
+                <div class="reel-content">
+                    <h3 class="reel-title">${displayTitle}</h3>
+                    <button class="watch-now-btn" data-url="${reel.reelUrl}">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span>Watch Now</span>
+                    </button>
                 </div>
                 <button class="flip-button" aria-label="Show technologies">
                     <i class="fas fa-info-circle"></i>
                 </button>
-            `;
-        } else {
-            // Direct video URL or Google Drive
-            let videoSrc = reel.reelUrl;
-            let isGoogleDrive = reel.reelUrl.includes('drive.google.com');
-            
-            // Convert Google Drive links to direct download format
-            if (isGoogleDrive) {
-                const fileIdMatch = reel.reelUrl.match(/\/file\/d\/([^\/\?]+)/);
-                if (fileIdMatch) {
-                    videoSrc = `https://drive.google.com/uc?export=download&id=${fileIdMatch[1]}`;
-                } else {
-                    // Try to extract file ID from other formats
-                    const idMatch = reel.reelUrl.match(/[?&]id=([^&]+)/);
-                    if (idMatch) {
-                        videoSrc = `https://drive.google.com/uc?export=download&id=${idMatch[1]}`;
-                    }
-                }
-            }
-            
-            // Use HTML5 video tag for all direct videos (including Google Drive)
-            frontFace.innerHTML = `
-                <div class="instagram-video-container">
-                    <video 
-                        class="direct-video-player"
-                        controls
-                        loop 
-                        muted 
-                        playsinline
-                        preload="metadata">
-                        <source src="${videoSrc}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-                <button class="flip-button" aria-label="Show technologies">
-                    <i class="fas fa-info-circle"></i>
-                </button>
-            `;
-        }
+            </div>
+        `;
         
         // Back face - Technologies used
         const backFace = document.createElement('div');
@@ -486,10 +466,10 @@ class InstagramReelsCarousel {
         
         const technologies = reel.technologies && reel.technologies.length > 0 
             ? reel.technologies 
-            : ['Adobe Premiere Pro', 'After Effects']; // Default fallback
+            : ['Adobe Premiere Pro', 'After Effects'];
         
         backFace.innerHTML = `
-            <button class="flip-back-button" aria-label="Flip back to video">
+            <button class="flip-back-button" aria-label="Flip back">
                 <i class="fas fa-undo"></i>
             </button>
             <h3><i class="fas fa-tools"></i> Technologies Used</h3>
@@ -501,6 +481,15 @@ class InstagramReelsCarousel {
         flipCardInner.appendChild(frontFace);
         flipCardInner.appendChild(backFace);
         slide.appendChild(flipCardInner);
+        
+        // Add "Watch Now" button click listener to open link
+        const watchBtn = frontFace.querySelector('.watch-now-btn');
+        if (watchBtn) {
+            watchBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.open(reel.reelUrl, '_blank');
+            });
+        }
         
         // Add flip button click listener (front to back)
         const flipButton = frontFace.querySelector('.flip-button');
