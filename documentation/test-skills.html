@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills Test - Cache Busted</title>
+    <style>
+        body {
+            background: #0a0a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+        .test-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 2px solid #8b5cf6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        h1 { color: #8b5cf6; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background: #10b981; }
+        .error { background: #ef4444; }
+        .skill-card {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid #8b5cf6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Skills Loading Test</h1>
+    
+    <div class="test-card">
+        <h2>Test Results:</h2>
+        <div id="results"></div>
+    </div>
+
+    <div class="test-card">
+        <h2>Skills from API:</h2>
+        <div id="skillsContainer"></div>
+    </div>
+
+    <script>
+        const results = document.getElementById('results');
+        const skillsContainer = document.getElementById('skillsContainer');
+
+        function log(message, isError = false) {
+            const div = document.createElement('div');
+            div.className = 'status ' + (isError ? 'error' : 'success');
+            div.textContent = message;
+            results.appendChild(div);
+        }
+
+        // Test 1: Check API
+        log('Testing API...');
+        fetch('/api/skills')
+            .then(r => {
+                log(`✅ API responded with status: ${r.status}`);
+                return r.json();
+            })
+            .then(skills => {
+                log(`✅ API returned ${skills.length} skills`);
+                console.log('Skills data:', skills);
+                
+                if (skills.length === 0) {
+                    log('⚠️ No skills in database!', true);
+                    skillsContainer.innerHTML = '<p>Database is empty. Add skills via admin panel.</p>';
+                } else {
+                    // Render skills
+                    skills.forEach(skill => {
+                        const card = document.createElement('div');
+                        card.className = 'skill-card';
+                        card.innerHTML = `
+                            <h3>${skill.name}</h3>
+                            <p><strong>Category:</strong> ${skill.category}</p>
+                            <p><strong>Proficiency:</strong> ${skill.proficiency}%</p>
+                            <p><strong>Description:</strong> ${skill.description}</p>
+                            <p><strong>Icon:</strong> ${skill.icon}</p>
+                            <p><strong>Icon Image:</strong> ${skill.iconImage || 'None'}</p>
+                            <p><strong>Projects:</strong> ${skill.projects.length} projects</p>
+                        `;
+                        skillsContainer.appendChild(card);
+                    });
+                    log(`✅ Rendered ${skills.length} skill cards!`);
+                }
+            })
+            .catch(err => {
+                log(`❌ API Error: ${err.message}`, true);
+                console.error(err);
+            });
+    </script>
+</body>
+</html>

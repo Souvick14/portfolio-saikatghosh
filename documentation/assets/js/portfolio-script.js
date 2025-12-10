@@ -626,6 +626,13 @@ class SkillsManager {
             frontBackgroundStyle = `background-image: linear-gradient(45deg, #000537cc, #010012dd), url('${skill.backgroundImage}');`;
         }
         
+        // Determine if skill has background image for BACK card
+        const hasBackgroundImage = skill.backgroundImage && skill.backgroundImage.trim() !== '';
+        let backgroundImageStyle = '';
+        if (hasBackgroundImage) {
+            backgroundImageStyle = `background-image: linear-gradient(45deg, #000537ee, #010012ee), url('${skill.backgroundImage}'); background-size: cover; background-position: center;`;
+        }
+        
         card.innerHTML = `
             <div class="skill-card-inner">
                 <!-- Front Face -->
