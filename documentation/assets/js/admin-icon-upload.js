@@ -120,8 +120,20 @@ if (typeof AdminPanel !== 'undefined') {
             }
         }
 
+        
         // Validate required fields
+        console.log('🔍 Validation Debug:');
+        console.log('  name:', formData.get('name'));
+        console.log('  category:', formData.get('category'));
+        console.log('  description:', formData.get('description'));
+        console.log('  projects length:', projects.length);
+        
         if (!formData.get('name') || !formData.get('category') || !formData.get('description')) {
+            console.error('❌ Validation failed - missing:', 
+                !formData.get('name') ? 'name' : '',
+                !formData.get('category') ? 'category' : '',
+                !formData.get('description') ? 'description' : ''
+            );
             this.showNotification('Please fill in required fields', 'error');
             return;
         }
