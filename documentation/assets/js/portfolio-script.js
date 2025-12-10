@@ -465,10 +465,20 @@ class InstagramReelsCarousel {
             const script = document.createElement('script');
             script.async = true;
             script.src = '//www.instagram.com/embed.js';
+            script.onload = () => {
+                // Process embeds after script loads with delay
+                setTimeout(() => {
+                    if (window.instgrm) {
+                        window.instgrm.Embeds.process();
+                    }
+                }, 1000);
+            };
             document.body.appendChild(script);
         } else if (window.instgrm) {
-            // If script is already loaded, process embeds
-            window.instgrm.Embeds.process();
+            // If script is already loaded, process embeds with delay
+            setTimeout(() => {
+                window.instgrm.Embeds.process();
+            }, 1000);
         }
     }
     
