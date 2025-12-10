@@ -342,18 +342,64 @@ class InstagramReelsCarousel {
         this.currentIndex = 0;
         this.slides = [];
         
-        // Navigation buttons
-        const arrows = this.container.querySelectorAll('.carousel-arrow');
-        this.prevBtn = Array.from(arrows).find(btn => btn.classList.contains('prev-arrow'));
-        this.nextBtn = Array.from(arrows).find(btn => btn.classList.contains('next-arrow'));
+        // Drag scroll variables
+        this.isDragging = false;
+        this.startX = 0;
+        this.scrollLeft = 0;
         
         this.init();
     }
     
     async init() {
         await this.loadInstagramReels();
-        this.setupNavigation();
-        this.setupScrollSync();
+        this.setupDragScroll();
+    }
+    
+    setupDragScroll() {
+        if (!this.wrapper) return;
+        
+        // Disable infinite scroll animation for drag functionality
+        this.wrapper.style.animation = 'none';
+        this.wrapper.style.overflowX = 'scroll';
+        this.wrapper.style.cursor = 'grab';
+        
+        // Mouse events for drag scroll
+        this.wrapper.addEventListener('mousedown', (e) => {
+            this.isDragging = true;
+            this.startX = e.pageX - this.wrapper.offsetLeft;
+            this.scrollLeft = this.wrapper.scrollLeft;
+            this.wrapper.style.cursor = 'grabbing';
+        });
+        
+        this.wrapper.addEventListener('mouseleave', () => {
+            this.isDragging = false;
+            this.wrapper.style.cursor = 'grab';
+        });
+        
+        this.wrapper.addEventListener('mouseup', () => {
+            this.isDragging = false;
+            this.wrapper.style.cursor = 'grab';
+        });
+        
+        this.wrapper.addEventListener('mousemove', (e) => {
+            if (!this.isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - this.wrapper.offsetLeft;
+            const walk = (x - this.startX) * 2; // Scroll speed multiplier
+            this.wrapper.scrollLeft = this.scrollLeft - walk;
+        });
+        
+        // Touch events for mobile drag scroll
+        this.wrapper.addEventListener('touchstart', (e) => {
+            this.startX = e.touches[0].pageX - this.wrapper.offsetLeft;
+            this.scrollLeft = this.wrapper.scrollLeft;
+        });
+        
+        this.wrapper.addEventListener('touchmove', (e) => {
+            const x = e.touches[0].pageX - this.wrapper.offsetLeft;
+            const walk = (x - this.startX) * 2;
+            this.wrapper.scrollLeft = this.scrollLeft - walk;
+        });
     }
     
     async loadInstagramReels() {
