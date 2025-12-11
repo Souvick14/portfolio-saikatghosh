@@ -6,29 +6,49 @@
     'use strict';
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Wait for adminPanel to be initialized
+        console.log('🔧 Client Work: DOM Content Loaded');
+        
+        // Try immediate setup
+        setupClientWorkEvents();
+        
+        // Also try with delay as fallback
         setTimeout(function() {
+            console.log('🔧 Client Work: Retry setup after 100ms');
             setupClientWorkEvents();
         }, 100);
+        
+        // Final retry after 500ms
+        setTimeout(function() {
+            console.log('🔧 Client Work: Final retry setup after 500ms');
+            setupClientWorkEvents();
+        }, 500);
     });
 
     function setupClientWorkEvents() {
-        if (!window.adminPanel) {
-            console.warn('AdminPanel not initialized yet');
-            return;
-        }
-
+        console.log('🔧 Setting up Client Work events...');
+        
         // Add Client Work button
         const addClientWorkBtn = document.getElementById('addClientWorkBtn');
         if (addClientWorkBtn) {
+            console.log('✅ Found addClientWorkBtn, attaching listener');
+            // Remove any existing listeners
+            addClientWorkBtn.onclick = null;
             addClientWorkBtn.addEventListener('click', openClientWorkModal);
+        } else {
+            console.warn('❌ addClientWorkBtn not found');
         }
+
 
         // Refresh button
         const refreshClientWorkBtn = document.getElementById('refreshClientWorkBtn');
         if (refreshClientWorkBtn) {
+            console.log('✅ Found refreshClientWorkBtn');
             refreshClientWorkBtn.addEventListener('click', () => {
-                window.adminPanel.loadClientWork();
+                if (window.adminPanel && window.adminPanel.loadClientWork) {
+                    window.adminPanel.loadClientWork();
+                } else {
+                    console.error('AdminPanel.loadClientWork not available');
+                }
             });
         }
 
@@ -83,24 +103,47 @@
     }
 
     function openClientWorkModal() {
+        console.log('🎬 Opening Client Work Modal...');
+        
         const modal = document.getElementById('clientWorkModal');
         const form = document.getElementById('clientWorkForm');
+        
+        if (!modal) {
+            console.error('❌ clientWorkModal not found!');
+            return;
+        }
+        
+        if (!form) {
+            console.error('❌ clientWorkForm not found!');
+            return;
+        }
+        
+        console.log('✅ Modal and form found');
         
         // Reset form
         form.reset();
         document.getElementById('clientWorkId').value = '';
-        window.adminPanel.currentClientWorkId = null;
+        
+        // Reset currentClientWorkId on adminPanel if available
+        if (window.adminPanel) {
+            window.adminPanel.currentClientWorkId = null;
+        }
         
         // Clear logo previews
-        document.getElementById('logoPreviewsContainer').style.display = 'none';
-        document.getElementById('logoPreviews').innerHTML = '';
+        const previewContainer = document.getElementById('logoPreviewsContainer');
+        const previews = document.getElementById('logoPreviews');
+        if (previewContainer) previewContainer.style.display = 'none';
+        if (previews) previews.innerHTML = '';
         
         // Update modal title
-        document.getElementById('clientWorkModalTitle').textContent = 'Add Client\'s Work';
-        document.getElementById('submitClientWorkBtnText').textContent = 'Save Client\'s Work';
+        const modalTitle = document.getElementById('clientWorkModalTitle');
+        const submitBtnText = document.getElementById('submitClientWorkBtnText');
+        if (modalTitle) modalTitle.textContent = 'Add Client\'s Work';
+        if (submitBtnText) submitBtnText.textContent = 'Save Client\'s Work';
         
         // Show modal
         modal.classList.add('show');
+        console.log('✅ Modal shown with class "show"');
     }
 
     function closeModal() {
