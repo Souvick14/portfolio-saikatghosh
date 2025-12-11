@@ -298,53 +298,59 @@ if (typeof AdminPanel !== 'undefined') {
     // =========================
     // Commercial Work Management  
     // =========================
+    // Client's Work Management
+    // =========================
 
     
-    AdminPanel.prototype.loadCommercialWork = async function() {
-        const commercialList = document.getElementById('commercialWorkList');
+    AdminPanel.prototype.loadClientWork = async function() {
+        const clientWorkList = document.getElementById('clientWorkList');
         
-        if (!commercialList) return;
+        if (!clientWorkList) return;
         
-        commercialList.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 3rem;">Loading commercial work...</p>';
+        clientWorkList.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 3rem;">Loading client work...</p>';
 
         try {
-            const response = await fetch('/api/commercial');
+            const response = await fetch('/api/client-work');
             const works = await response.json();
             
-            commercialList.innerHTML = '';
+            clientWorkList.innerHTML = '';
 
             if (!works || works.length === 0) {
-                commercialList.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 3rem;">No commercial work added yet.</p>';
+                clientWorkList.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 3rem;">No client work added yet.</p>';
                 return;
             }
 
             works.forEach(work => {
-                const workElement = this.createCommercialWorkElement(work);
-                commercialList.appendChild(workElement);
+                const workElement = this.createClientWorkElement(work);
+                clientWorkList.appendChild(workElement);
             });
         } catch (error) {
-            console.error('Error loading commercial work:', error);
-            commercialList.innerHTML = '<p style="text-align: center; color: var(--error); padding: 3rem;">Failed to load commercial work.</p>';
+            console.error('Error loading client work:', error);
+            clientWorkList.innerHTML = '<p style="text-align: center; color: var(--error); padding: 3rem;">Failed to load client work.</p>';
         }
     };
 
-    AdminPanel.prototype.createCommercialWorkElement = function(work) {
+    AdminPanel.prototype.createClientWorkElement = function(work) {
         const div = document.createElement('div');
         div.className = 'commercial-item';
+        
+        // Show logo count if available
+        const logoCount = work.technologyLogos ? work.technologyLogos.length : 0;
+        
         div.innerHTML = `
             <div class="commercial-info">
                 <i class="fab fa-youtube"></i>
                 <div>
                     <h4>${work.title}</h4>
-                    <small>${work.brand}</small>
+                    <small>${work.brand} ${logoCount > 0 ? `• ${logoCount} tech ${logoCount === 1 ? 'logo' : 'logos'}` : ''}</small>
                     <p>${work.description}</p>
                 </div>
             </div>
             <div class="commercial-actions">
-                <button class="btn-edit" onclick="adminPanel.editCommercialWork('${work._id}')">
+                <button class="btn-edit" onclick="adminPanel.editClientWork('${work._id}')">
                     <i class="fas fa-edit"></i> Edit
                 </button>
-                <button class="btn-delete" onclick="adminPanel.deleteCommercialWork('${work._id}')">
+                <button class="btn-delete" onclick="adminPanel.deleteClientWork('${work._id}')">
                     <i class="fas fa-trash"></i> Delete
                 </button>
             </div>
@@ -352,48 +358,109 @@ if (typeof AdminPanel !== 'undefined') {
         return div;
     };
 
-    AdminPanel.prototype.saveCommercialWork = async function() {
-        const workData = {
-            youtubeUrl: document.getElementById('commercialYoutubeUrl')?.value.trim(),
-            brand: document.getElementById('commercialBrand')?.value.trim(),
-            title: document.getElementById('commercialTitle')?.value.trim(),
-            description: document.getElementById('commercialDescription')?.value.trim(),
-            engagement: document.getElementById('commercialEngagement')?.value.trim() || '',
-            revenue: document.getElementById('commercialRevenue')?.value.trim() || ''
-        };
-
-        if (!workData.youtubeUrl || !workData.brand || !workData.title || !workData.description) {
+    AdminPanel.prototype.saveClientWork = async function() {
+        const form = document.getElementById('clientWorkForm');
+        const formData = new FormData();
+        
+        // Get form values
+        const youtubeUrl = document.getElementById('clientWorkYoutubeUrl')?.value.trim();
+        const brand = document.getElementById('clientWorkBrand')?.value.trim();
+        const title = document.getElementById('clientWorkTitle')?.value.trim();
+        const description = document.getElementById('clientWorkDescription')?.value.trim();
+        const engagement = document.getElementById('clientWorkEngagement')?.value.trim() || '';
+        const revenue = document.getElementById('clientWorkRevenue')?.value.trim() || '';
+        
+        // Get technology logos
+        const logoFiles = document.getElementById('clientWorkLogos')?.files;
+        
+        // Validation
+        if (!youtubeUrl || !brand || !title || !description) {
             this.showNotification('Please fill in all required fields', 'error');
             return;
         }
+        
+        if (!logoFiles || logoFiles.length === 0) {
+            this.showNotification('Please upload at least 1 technology logo', 'error');
+            return;
+        }
+        
+        if (logoFiles.length > 10) {
+            this.showNotification('Maximum 10 technology logos allowed', 'error');
+            return;
+        }
+        
+        // Append text fields
+        formData.append('youtubeUrl', youtubeUrl);
+        formData.append('brand', brand);
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('engagement', engagement);
+        formData.append('revenue', revenue);
+        
+        // Append logo files
+        for (let i = 0; i < logoFiles.length; i++) {
+            formData.append('technologyLogos', logoFiles[i]);
+        }
 
         try {
-            const url = this.currentCommercialId ? `/api/commercial/${this.currentCommercialId}` : '/api/commercial';
-            const method = this.currentCommercialId ? 'PUT' : 'POST';
+            const url = this.currentClientWorkId ? `/api/client-work/${this.currentClientWorkId}` : '/api/client-work';
+            const method = this.currentClientWorkId ? 'PUT' : 'POST';
             
             const response = await fetch(url, {
                 method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(workData)
+                body: formData // FormData, no Content-Type header needed
             });
 
-            if (!response.ok) throw new Error('Failed to save commercial work');
+            if (!response.ok) throw new Error('Failed to save client work');
 
-            this.showNotification(this.currentCommercialId ? 'Work updated!' : 'Work added!');
-            this.loadCommercialWork();
+            this.showNotification(this.currentClientWorkId ? 'Client work updated!' : 'Client work added!');
+            this.loadClientWork();
+            
+            // Close modal and reset form
+            document.getElementById('clientWorkModal').classList.remove('show');
+            form.reset();
+            document.getElementById('logoPreviewsContainer').style.display = 'none';
+            document.getElementById('logoPreviews').innerHTML = '';
+            
         } catch (error) {
-            console.error('Error saving commercial work:', error);
-            this.showNotification('Failed to save work', 'error');
+            console.error('Error saving client work:', error);
+            this.showNotification('Failed to save client work', 'error');
         }
     };
 
-    AdminPanel.prototype.deleteCommercialWork = async function(workId) {
-        if (confirm('Delete this commercial work?')) {
+    AdminPanel.prototype.editClientWork = async function(workId) {
+        // Load work data and populate form
+        try {
+            const response = await fetch(`/api/client-work/${workId}`);
+            const work = await response.json();
+            
+            document.getElementById('clientWorkId').value = work._id;
+            document.getElementById('clientWorkYoutubeUrl').value = work.youtubeUrl;
+            document.getElementById('clientWorkBrand').value = work.brand;
+            document.getElementById('clientWorkTitle').value = work.title;
+            document.getElementById('clientWorkDescription').value = work.description;
+            document.getElementById('clientWorkEngagement').value = work.engagement || '';
+            document.getElementById('clientWorkRevenue').value = work.revenue || '';
+            
+            this.currentClientWorkId = work._id;
+            
+            document.getElementById('clientWorkModalTitle').textContent = 'Edit Client\'s Work';
+            document.getElementById('submitClientWorkBtnText').textContent = 'Update Client\'s Work';
+            document.getElementById('clientWorkModal').classList.add('show');
+            
+        } catch (error) {
+            console.error('Error loading client work:', error);
+            this.showNotification('Failed to load client work', 'error');
+        }
+    };
+
+    AdminPanel.prototype.deleteClientWork = async function(workId) {
+        if (confirm('Delete this client work? This action cannot be undone.')) {
             try {
-                const response = await fetch(`/api/commercial/${workId}`, { method: 'DELETE' });
+                const response = await fetch(`/api/client-work/${workId}`, { method: 'DELETE' });
                 if (!response.ok) throw new Error('Failed to delete');
-                this.loadCommercialWork();
-                this.showNotification('Work deleted!');
+                this.loadClientWork();
+                this.showNotification('Client work deleted!');
             } catch (error) {
                 console.error('Error deleting work:', error);
                 this.showNotification('Failed to delete work', 'error');

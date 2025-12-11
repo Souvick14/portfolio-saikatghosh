@@ -198,7 +198,7 @@ class AdminPanel {
             skills: 'Skills Management',
             reels: 'Reels Management',
             blogs: 'Blogs Management',
-            commercial: 'Commercial Work Management'
+            clientsWork: 'Client\'s Work Management'
         };
         document.getElementById('pageTitle').textContent = titles[tab];
     }
