@@ -352,61 +352,10 @@ class InstagramReelsCarousel {
     
     async init() {
         await this.loadInstagramReels();
-        this.setupDragScroll();
+        // Drag scroll functionality now handled per-row in createCarouselRow
     }
     
-    setupDragScroll() {
-        if (!this.wrapper) return;
-        
-        // Keep drag functionality but don't disable animation
-        this.wrapper.style.cursor = 'grab';
-        
-        // Mouse events for drag scroll
-        this.wrapper.addEventListener('mousedown', (e) => {
-            this.isDragging = true;
-            this.startX = e.pageX - this.wrapper.offsetLeft;
-            this.scrollLeft = this.wrapper.scrollLeft;
-            this.wrapper.style.cursor = 'grabbing';
-            this.wrapper.style.animationPlayState = 'paused'; // Pause animation while dragging
-        });
-        
-        this.wrapper.addEventListener('mouseleave', () => {
-            this.isDragging = false;
-            this.wrapper.style.cursor = 'grab';
-            this.wrapper.style.animationPlayState = 'running'; // Resume animation
-        });
-        
-        this.wrapper.addEventListener('mouseup', () => {
-            this.isDragging = false;
-            this.wrapper.style.cursor = 'grab';
-            this.wrapper.style.animationPlayState = 'running'; // Resume animation
-        });
-        
-        this.wrapper.addEventListener('mousemove', (e) => {
-            if (!this.isDragging) return;
-            e.preventDefault();
-            const x = e.pageX - this.wrapper.offsetLeft;
-            const walk = (x - this.startX) * 2; // Scroll speed multiplier
-            this.wrapper.scrollLeft = this.scrollLeft - walk;
-        });
-        
-        // Touch events for mobile drag scroll
-        this.wrapper.addEventListener('touchstart', (e) => {
-            this.startX = e.touches[0].pageX - this.wrapper.offsetLeft;
-            this.scrollLeft = this.wrapper.scrollLeft;
-            this.wrapper.style.animationPlayState = 'paused';
-        });
-        
-        this.wrapper.addEventListener('touchmove', (e) => {
-            const x = e.touches[0].pageX - this.wrapper.offsetLeft;
-            const walk = (x - this.startX) * 2;
-            this.wrapper.scrollLeft = this.scrollLeft - walk;
-        });
-        
-        this.wrapper.addEventListener('touchend', () => {
-            this.wrapper.style.animationPlayState = 'running';
-        });
-    }
+
     
     async loadInstagramReels() {
         try {
@@ -472,29 +421,133 @@ class InstagramReelsCarousel {
         rowWrapper.className = 'instagram-carousel-wrapper';
         rowWrapper.dataset.rowIndex = rowIndex;
         
-        // Check if animation needed (cards exceed viewport)
-        const needsAnimation = reels.length > 4; // Approximate: 4 cards fit in viewport
+        // Variables for drag scrolling
+        let isDragging = false;
+        let startX;
+        let scrollStartPos = 0;
+        let animationId;
         
-        // Duplicate reels for infinite scroll ONLY if animation needed
-        const displayReels = needsAnimation ? [...reels, ...reels] : reels;
+        // Create slides - duplicate reels for seamless infinite loop
+        const duplicateCount = 3; // Create 3 copies for smooth infinite effect
+        const allReels = [];
+        for (let i = 0; i < duplicateCount; i++) {
+            allReels.push(...reels);
+        }
         
-        // Create slides
-        for (const reel of displayReels) {
+        for (const reel of allReels) {
             const slide = await this.createReelSlide(reel);
             rowWrapper.appendChild(slide);
         }
         
-        // Apply animation if needed
-        if (needsAnimation) {
-            if (isReverse) {
-                rowWrapper.style.animation = 'infiniteScrollReverse 30s linear infinite';
-            } else {
-                rowWrapper.style.animation = 'infiniteScroll 30s linear infinite';
+        // Seamless infinite scroll animation
+        let position = 0;
+        const speed = isReverse ? 50 : -50; // pixels per second (negative = left, positive = right)
+        let isAnimating = true;
+        let lastTime = performance.now();
+        
+        const animate = (currentTime) => {
+            if (!isAnimating) {
+                animationId = requestAnimationFrame(animate);
+                return;
             }
-        } else {
-            rowWrapper.style.animation = 'none';
-            rowWrapper.style.justifyContent = 'center'; // Center when not scrolling
-        }
+            
+            const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
+            lastTime = currentTime;
+            
+            position += speed * deltaTime;
+            
+            // Calculate the width of one set of reels
+            const slideWidth = 320 + 24; // card width + gap
+            const singleSetWidth = reels.length * slideWidth;
+            
+            // Reset position for seamless loop
+            if (speed < 0 && position <= -singleSetWidth) {
+                position += singleSetWidth;
+            } else if (speed > 0 && position >= singleSetWidth) {
+                position -= singleSetWidth;
+            }
+            
+            rowWrapper.style.transform = `translateX(${position}px)`;
+            animationId = requestAnimationFrame(animate);
+        };
+        
+        // Start animation
+        animationId = requestAnimationFrame(animate);
+        
+        // Hover to pause
+        rowWrapper.addEventListener('mouseenter', () => {
+            isAnimating = false;
+            rowWrapper.classList.add('paused');
+        });
+        
+        rowWrapper.addEventListener('mouseleave', () => {
+            if (!isDragging) {
+                isAnimating = true;
+                lastTime = performance.now(); // Reset time to prevent jump
+                rowWrapper.classList.remove('paused');
+            }
+        });
+        
+        // Drag to scroll functionality
+        const startDragging = (clientX) => {
+            isDragging = true;
+            isAnimating = false;
+            startX = clientX;
+            scrollStartPos = position;
+            rowWrapper.classList.add('dragging');
+        };
+        
+        const whileDragging = (clientX) => {
+            if (!isDragging) return;
+            const diff = clientX - startX;
+            position = scrollStartPos + diff;
+        };
+        
+        const stopDragging = () => {
+            isDragging = false;
+            rowWrapper.classList.remove('dragging');
+            
+            // Resume animation after a short delay
+            setTimeout(() => {
+                if (!rowWrapper.matches(':hover')) {
+                    isAnimating = true;
+                    lastTime = performance.now();
+                    rowWrapper.classList.remove('paused');
+                }
+            }, 100);
+        };
+        
+        // Mouse events
+        rowWrapper.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            startDragging(e.clientX);
+        });
+        
+        rowWrapper.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                e.preventDefault();
+                whileDragging(e.clientX);
+            }
+        });
+        
+        rowWrapper.addEventListener('mouseup', stopDragging);
+        rowWrapper.addEventListener('mouseleave', () => {
+            if (isDragging) stopDragging();
+        });
+        
+        // Touch events for mobile
+        rowWrapper.addEventListener('touchstart', (e) => {
+            startDragging(e.touches[0].clientX);
+        });
+        
+        rowWrapper.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                e.preventDefault();
+                whileDragging(e.touches[0].clientX);
+            }
+        });
+        
+        rowWrapper.addEventListener('touchend', stopDragging);
         
         this.container.appendChild(rowWrapper);
     }
