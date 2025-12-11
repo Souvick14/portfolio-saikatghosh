@@ -1111,26 +1111,29 @@ p {
 
 .about-image-wrapper {
     position: relative;
+        display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .about-image {
     width: 100%;
     max-width: 400px;
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+
     position: relative;
     z-index: 1;
 }
 
 .about-image-bg {
     position: absolute;
-    top: -20px;
-    left: -20px;
-    right: 20px;
-    bottom: 20px;
+
+    bottom: 0px;
     background: var(--gradient-primary);
     border-radius: var(--radius-lg);
     z-index: 0;
+    width: 100%;
+    height: 50%;
 }
 
 .about-text h3 {
