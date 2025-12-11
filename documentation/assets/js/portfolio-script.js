@@ -1145,7 +1145,7 @@ class YouTubeVideoSection {
         card.innerHTML = `
             <div class="youtube-thumbnail-wrapper">
                 <iframe 
-                    src="https://www.youtube.com/embed/${video.videoId}?autoplay=1&mute=1&loop=1&playlist=${video.videoId}&controls=1&modestbranding=1&rel=0" 
+                    src="https://www.youtube.com/embed/${video.videoId}?autoplay=0&mute=1&loop=1&playlist=${video.videoId}&controls=1&modestbranding=1&rel=0" 
                     class="youtube-thumbnail" 
                     frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
