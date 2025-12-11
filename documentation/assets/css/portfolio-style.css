@@ -1463,6 +1463,9 @@ p {
 }
 #personal{
     font-family: telma;
+        font-style: italic;
+    /* font-palette: revert-layer; */
+    font-weight: 100;
 }
 @font-face {
     font-family: telma;
