@@ -1,0 +1,171 @@
+// ============================================
+// Client's Work - Frontend Display
+// ============================================
+
+(function() {
+    'use strict';
+
+    let allClientWorks = [];
+    let currentlyDisplayed = 0;
+    const ITEMS_PER_PAGE = 8; // 2 rows × 4 columns
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadClientsWork();
+        setupLoadMoreButton();
+    });
+
+    async function loadClientsWork() {
+        const grid = document.getElementById('clientsWorkGrid');
+        
+        if (!grid) return;
+
+        try {
+            const response = await fetch('/api/client-work');
+            
+            if (!response.ok) {
+                throw new Error('Failed to load client work');
+            }
+
+            allClientWorks = await response.json();
+            
+            // Clear loading state
+            grid.innerHTML = '';
+
+            if (!allClientWorks || allClientWorks.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem;">
+                        <i class="fas fa-briefcase" style="font-size: 4rem; color: var(--primary-purple); opacity: 0.3; margin-bottom: 1rem;"></i>
+                        <p style="color: var(--text-secondary); font-size: 1.125rem;">No client work available yet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Display first page (8 items)
+            displayNextPage();
+            
+            console.log(`✅ Loaded ${allClientWorks.length} client work items`);
+
+        } catch (error) {
+            console.error('Error loading client work:', error);
+            grid.innerHTML = `
+                <div class="error-state" style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: var(--error); opacity: 0.5; margin-bottom: 1rem;"></i>
+                    <p style="color: var(--error);">Failed to load client work</p>
+                </div>
+            `;
+        }
+    }
+
+    function displayNextPage() {
+        const grid = document.getElementById('clientsWorkGrid');
+        const loadMoreContainer = document.getElementById('clientsWorkLoadMoreContainer');
+        
+        // Calculate how many items to show
+        const endIndex = Math.min(currentlyDisplayed + ITEMS_PER_PAGE, allClientWorks.length);
+        const itemsToShow = allClientWorks.slice(currentlyDisplayed, endIndex);
+        
+        // Render cards
+        itemsToShow.forEach(work => {
+            const card = createClientWorkCard(work);
+            grid.appendChild(card);
+        });
+        
+        currentlyDisplayed = endIndex;
+        
+        // Show/hide Load More button
+        if (currentlyDisplayed < allClientWorks.length) {
+            loadMoreContainer.style.display = 'block';
+        } else {
+            loadMoreContainer.style.display = 'none';
+        }
+    }
+
+    function createClientWorkCard(work) {
+        const card = document.createElement('div');
+        card.className = 'client-work-card';
+        
+        // Extract YouTube video ID
+        let videoId = extractYouTubeId(work.youtubeUrl);
+        
+        // Create technology logos HTML
+        const logosHTML = work.technologyLogos && work.technologyLogos.length > 0 
+            ? `
+                <div class="tech-logos">
+                    ${work.technologyLogos.map(logo => `
+                        <img src="${logo}" alt="Technology logo" class="tech-logo">
+                    `).join('')}
+                </div>
+            `
+            : '';
+        
+        card.innerHTML = `
+            <div class="client-work-video">
+                ${videoId ? `
+                    <iframe 
+                        src="https://www.youtube.com/embed/${videoId}" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen
+                        loading="lazy"
+                    ></iframe>
+                ` : `
+                    <div class="video-placeholder">
+                        <i class="fab fa-youtube"></i>
+                        <p>Video unavailable</p>
+                    </div>
+                `}
+            </div>
+            <div class="client-work-info">
+                <div class="client-work-header">
+                    <span class="client-brand">${work.brand}</span>
+                    ${work.engagement ? `<span class="engagement-badge">${work.engagement}</span>` : ''}
+                </div>
+                <h3 class="client-work-title">${work.title}</h3>
+                <p class="client-work-description">${work.description}</p>
+                ${logosHTML}
+                ${work.revenue ? `<p class="revenue-info"><i class="fas fa-dollar-sign"></i> ${work.revenue}</p>` : ''}
+            </div>
+        `;
+        
+        return card;
+    }
+
+    function extractYouTubeId(url) {
+        if (!url) return null;
+        
+        // youtu.be/VIDEO_ID
+        let match = url.match(/youtu\.be\/([A-Za-z0-9_-]+)/);
+        if (match) return match[1];
+        
+        // youtube.com/watch?v=VIDEO_ID
+        match = url.match(/[?&]v=([A-Za-z0-9_-]+)/);
+        if (match) return match[1];
+        
+        // youtube.com/embed/VIDEO_ID
+        match = url.match(/embed\/([A-Za-z0-9_-]+)/);
+        if (match) return match[1];
+        
+        return null;
+    }
+
+    function setupLoadMoreButton() {
+        const loadMoreBtn = document.getElementById('clientsWorkLoadMore');
+        
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', () => {
+                displayNextPage();
+                
+                // Smooth scroll to first new item
+                const grid = document.getElementById('clientsWorkGrid');
+                const cards = grid.querySelectorAll('.client-work-card');
+                const firstNewCard = cards[currentlyDisplayed - ITEMS_PER_PAGE];
+                
+                if (firstNewCard) {
+                    firstNewCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+        }
+    }
+
+})();
