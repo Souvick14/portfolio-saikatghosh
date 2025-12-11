@@ -60,6 +60,7 @@
     function displayNextPage() {
         const grid = document.getElementById('clientsWorkGrid');
         const loadMoreContainer = document.getElementById('clientsWorkLoadMoreContainer');
+        const loadMoreBtn = document.getElementById('clientsWorkLoadMore');
         
         // Calculate how many items to show
         const endIndex = Math.min(currentlyDisplayed + ITEMS_PER_PAGE, allClientWorks.length);
@@ -73,11 +74,43 @@
         
         currentlyDisplayed = endIndex;
         
-        // Show/hide Load More button
+        // Update button state
         if (currentlyDisplayed < allClientWorks.length) {
+            // Show Load More button
+            loadMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Load More Projects';
+            loadMoreBtn.onclick = displayNextPage;
+            loadMoreContainer.style.display = 'block';
+        } else if (currentlyDisplayed > ITEMS_PER_PAGE) {
+            // Show Less button when all items shown and more than initial amount
+            loadMoreBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Show Less';
+            loadMoreBtn.onclick = showLess;
             loadMoreContainer.style.display = 'block';
         } else {
+            // Hide button if showing exactly initial amount or less
             loadMoreContainer.style.display = 'none';
+        }
+    }
+
+    function showLess() {
+        const grid = document.getElementById('clientsWorkGrid');
+        const loadMoreBtn = document.getElementById('clientsWorkLoadMore');
+        
+        // Remove excess cards
+        const cards = grid.querySelectorAll('.client-work-card');
+        for (let i = cards.length - 1; i >= ITEMS_PER_PAGE; i--) {
+            cards[i].remove();
+        }
+        
+        currentlyDisplayed = ITEMS_PER_PAGE;
+        
+        // Update button to Load More
+        loadMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Load More Projects';
+        loadMoreBtn.onclick = displayNextPage;
+        
+        // Scroll to section top
+        const section = document.getElementById('clients-work');
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }
 
@@ -150,22 +183,8 @@
     }
 
     function setupLoadMoreButton() {
-        const loadMoreBtn = document.getElementById('clientsWorkLoadMore');
-        
-        if (loadMoreBtn) {
-            loadMoreBtn.addEventListener('click', () => {
-                displayNextPage();
-                
-                // Smooth scroll to first new item
-                const grid = document.getElementById('clientsWorkGrid');
-                const cards = grid.querySelectorAll('.client-work-card');
-                const firstNewCard = cards[currentlyDisplayed - ITEMS_PER_PAGE];
-                
-                if (firstNewCard) {
-                    firstNewCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }
-            });
-        }
+        // Button click handler is set dynamically by displayNextPage/showLess
+        // This function is kept for potential future setup needs
     }
 
 })();

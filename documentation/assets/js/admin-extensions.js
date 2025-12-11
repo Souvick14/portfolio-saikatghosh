@@ -455,18 +455,27 @@ if (typeof AdminPanel !== 'undefined') {
     };
 
     AdminPanel.prototype.deleteClientWork = async function(workId) {
-        if (confirm('Delete this client work? This action cannot be undone.')) {
-            try {
-                const response = await fetch(`/api/client-work/${workId}`, { method: 'DELETE' });
-                if (!response.ok) throw new Error('Failed to delete');
+        if (!confirm('Are you sure you want to delete this client work?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/client-work/${workId}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                this.showNotification('Client work deleted successfully!', 'success');
                 this.loadClientWork();
-                this.showNotification('Client work deleted!');
-            } catch (error) {
-                console.error('Error deleting work:', error);
-                this.showNotification('Failed to delete work', 'error');
+            } else {
+                throw new Error('Failed to delete');
             }
+        } catch (error) {
+            console.error('Error deleting client work:', error);
+            this.showNotification('Failed to delete client work. Please try again.', 'error');
         }
     };
+
 
     // ====================
     // Contact Settings

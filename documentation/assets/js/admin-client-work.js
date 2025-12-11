@@ -5,26 +5,29 @@
 (function() {
     'use strict';
 
+    let isSetup = false; // Guard flag to prevent multiple setups
+
     document.addEventListener('DOMContentLoaded', function() {
         console.log('🔧 Client Work: DOM Content Loaded');
         
         // Try immediate setup
         setupClientWorkEvents();
         
-        // Also try with delay as fallback
+        // Also try with delay as fallback only if first attempt failed
         setTimeout(function() {
-            console.log('🔧 Client Work: Retry setup after 100ms');
-            setupClientWorkEvents();
-        }, 100);
-        
-        // Final retry after 500ms
-        setTimeout(function() {
-            console.log('🔧 Client Work: Final retry setup after 500ms');
-            setupClientWorkEvents();
+            if (!isSetup) {
+                console.log('🔧 Client Work: Retry setup after 500ms');
+                setupClientWorkEvents();
+            }
         }, 500);
     });
 
     function setupClientWorkEvents() {
+        if (isSetup) {
+            console.log('⏭️ Client Work already set up, skipping');
+            return;
+        }
+        
         console.log('🔧 Setting up Client Work events...');
         
         // Add Client Work button
@@ -64,9 +67,10 @@
             cancelClientWorkBtn.addEventListener('click', closeModal);
         }
 
-        // Form submit
+        // Form submit - ONLY ADD ONCE
         const clientWorkForm = document.getElementById('clientWorkForm');
         if (clientWorkForm) {
+            console.log('✅ Attaching form submit listener');
             clientWorkForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 window.adminPanel.saveClientWork();
@@ -100,6 +104,10 @@
                 }, 50);
             });
         }
+        
+        // Mark as set up
+        isSetup = true;
+        console.log('✅ Client Work setup complete');
     }
 
     function openClientWorkModal() {
