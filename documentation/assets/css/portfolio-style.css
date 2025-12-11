@@ -765,6 +765,7 @@ p {
     scrollbar-width: none;
     /* Hides the scrollbar */
 }
+
 .skill-card-back::-webkit-scrollbar {
     display: none;
     /* Hides the scrollbar */
@@ -942,7 +943,7 @@ p {
     overflow-y: scroll;
     transform: rotateY(180deg);
     display: flex;
-        border: 1px solid blue;
+    border: 1px solid blue;
     flex-direction: column;
     justify-content: space-between;
     background: linear-gradient(135deg, var(--bg-card) 0%, #1f1f3a 100%);
@@ -1111,7 +1112,7 @@ p {
 
 .about-image-wrapper {
     position: relative;
-        display: flex;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -1461,17 +1462,20 @@ p {
 .hidden {
     display: none;
 }
-#personal{
+
+#personal {
     font-family: telma;
-        font-style: italic;
+    font-style: italic;
 
     font-weight: 100;
 }
-#motion-designer{
-        -webkit-text-fill-color: transparent;
+
+#motion-designer {
+    -webkit-text-fill-color: transparent;
     background-clip: text;
-    background-image: url(/documentation/assets/images/jr-korpa-9XngoIpxcEo-unsplash.jpg);
+    background-image: url(../images/jr-korpa-9XngoIpxcEo-unsplash.jpg);
 }
+
 @font-face {
     font-family: telma;
     src: url(/documentation/assets/fonts/Telma-Regular.woff2);
