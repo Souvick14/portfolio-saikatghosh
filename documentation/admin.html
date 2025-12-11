@@ -79,9 +79,9 @@
                     <i class="fas fa-blog"></i>
                     <span>Blogs</span>
                 </a>
-                <a href="#" class="nav-item" data-tab="commercial">
+                <a href="#" class="nav-item" data-tab="clientsWork">
                     <i class="fas fa-briefcase"></i>
-                    <span>Commercial</span>
+                    <span>Client's Work</span>
                 </a>
                 <a href="#" class="nav-item" data-tab="contact">
                     <i class="fas fa-envelope"></i>
@@ -572,94 +572,113 @@
                 </div>
             </section>
 
-            <section class="content-section" id="commercialTab">
+            <section class="content-section" id="clientsWorkTab">
                 <div class="section-actions">
-                    <button class="btn-primary" id="addCommercialBtn">
-                        <i class="fas fa-plus"></i> Add Commercial Work
+                    <button class="btn-primary" id="addClientWorkBtn">
+                        <i class="fas fa-plus"></i> Add Client's Work
                     </button>
-                    <button class="btn-secondary" id="refreshCommercialBtn">
+                    <button class="btn-secondary" id="refreshClientWorkBtn">
                         <i class="fas fa-sync"></i> Refresh
                     </button>
                 </div>
 
-                <!-- Commercial Work List -->
-                <div class="commercial-list" id="commercialList">
-                    <!-- Commercial items will be loaded here -->
+                <!-- Client Work List -->
+                <div class="commercial-list" id="clientWorkList">
+                    <!-- Client work items will be loaded here -->
                 </div>
 
-                <!-- Commercial Work Form Modal -->
-                <div class="modal" id="commercialModal">
+                <!-- Client Work Form Modal -->
+                <div class="modal" id="clientWorkModal">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 id="commercialModalTitle">Add Commercial Work</h2>
-                            <button class="modal-close" id="closeCommercialModal">
+                            <h2 id="clientWorkModalTitle">Add Client's Work</h2>
+                            <button class="modal-close" id="closeClientWorkModal">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
                         
-                        <form id="commercialForm" class="skill-form">
-                            <input type="hidden" id="commercialId">
+                        <form id="clientWorkForm" class="skill-form" novalidate>
+                            <input type="hidden" id="clientWorkId">
                             
                             <div class="form-group">
-                                <label for="commercialYoutubeUrl">YouTube Video URL *</label>
-                                <input type="url" id="commercialYoutubeUrl" required 
+                                <label for="clientWorkYoutubeUrl">YouTube Video URL *</label>
+                                <input type="url" id="clientWorkYoutubeUrl" required 
                                        placeholder="https://www.youtube.com/watch?v=VIDEO_ID">
                                 <small style="color: var(--text-muted);">
-                                    Paste the full YouTube video URL
+                                    Paste the full YouTube video URL for the iframe embed
                                 </small>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="commercialBrand">Brand/Client Name *</label>
-                                    <input type="text" id="commercialBrand" required 
+                                    <label for="clientWorkBrand">Brand/Client Name *</label>
+                                    <input type="text" id="clientWorkBrand" required 
                                            placeholder="e.g., TechCo">
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="commercialTitle">Project Title *</label>
-                                    <input type="text" id="commercialTitle" required 
+                                    <label for="clientWorkTitle">Project Title *</label>
+                                    <input type="text" id="clientWorkTitle" required 
                                            placeholder="e.g., Product Launch Campaign">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="commercialDescription">Description *</label>
-                                <textarea id="commercialDescription" required rows="4" 
-                                          placeholder="Describe the commercial work, your role, and key achievements..."></textarea>
+                                <label for="clientWorkDescription">Description *</label>
+                                <textarea id="clientWorkDescription" required rows="4" 
+                                          placeholder="Describe the project, your role, and key achievements..."></textarea>
+                            </div>
+
+                            <!-- Technology Logos Upload -->
+                            <div class="form-group">
+                                <label>Technology Logos * (1-10 images)</label>
+                                <input type="file" id="clientWorkLogos" accept="image/jpeg,image/jpg,image/png,image/svg+xml,image/webp" multiple>
+                                <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">
+                                    Upload technology/software logos used in this project (min 1, max 10 images, 2MB each)
+                                </small>
+                                
+                                <!-- Logo Previews -->
+                                <div id="logoPreviewsContainer" style="margin-top: 1rem; display: none;">
+                                    <div id="logoPreviews" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem;">
+                                        <!-- Previews will be added here -->
+                                    </div>
+                                    <button type="button" class="btn-secondary btn-small" id="clearLogosBtn" style="margin-top: 0.5rem;">
+                                        <i class="fas fa-times"></i> Clear All Logos
+                                    </button>
+                                </div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="commercialEngagement">Engagement Rate (Optional)</label>
-                                    <input type="text" id="commercialEngagement" 
+                                    <label for="clientWorkEngagement">Engagement Rate (Optional)</label>
+                                    <input type="text" id="clientWorkEngagement" 
                                            placeholder="e.g., 8.2%">
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="commercialRevenue">Revenue/Budget (Optional)</label>
-                                    <input type="text" id="commercialRevenue" 
+                                    <label for="clientWorkRevenue">Revenue/Budget (Optional)</label>
+                                    <input type="text" id="clientWorkRevenue" 
                                            placeholder="e.g., $15K">
                                 </div>
                             </div>
 
-                            <!-- YouTube Metadata Preview -->
+                            <!-- Video Preview -->
                             <div class="form-group">
                                 <label>Video Preview</label>
-                                <div class="youtube-preview" id="commercialYoutubePreview">
+                                <div class="youtube-preview" id="clientWorkYoutubePreview">
                                     <p style="color: var(--text-muted); text-align: center;">
-                                        Enter a YouTube URL to load video metadata
+                                        Enter a YouTube URL to preview the video
                                     </p>
                                 </div>
-                                <button type="button" class="btn-secondary btn-small" id="loadYoutubeMetadataBtn">
-                                    <i class="fab fa-youtube"></i> Load Video Data
+                                <button type="button" class="btn-secondary btn-small" id="previewClientWorkVideoBtn">
+                                    <i class="fab fa-youtube"></i> Preview Video
                                 </button>
                             </div>
 
                             <div class="modal-actions">
-                                <button type="button" class="btn-secondary" id="cancelCommercialBtn">Cancel</button>
+                                <button type="button" class="btn-secondary" id="cancelClientWorkBtn">Cancel</button>
                                 <button type="submit" class="btn-primary">
-                                    <i class="fas fa-save"></i> <span id="submitCommercialBtnText">Save Commercial Work</span>
+                                    <i class="fas fa-save"></i> <span id="submitClientWorkBtnText">Save Client's Work</span>
                                 </button>
                             </div>
                         </form>
