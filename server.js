@@ -80,7 +80,7 @@ const skillsRoutes = require('./routes/skills');
 const reelsRoutes = require('./routes/reels');
 const youtubeRoutes = require('./routes/youtube');
 const blogsRoutes = require('./routes/blogs');
-const commercialRoutes = require('./routes/commercial');
+const clientWorkRoutes = require('./routes/client-work');
 const contactRoutes = require('./routes/contact');
 const aboutRoutes = require('./routes/about');
 
@@ -89,7 +89,7 @@ app.use('/api/skills', skillsRoutes);
 app.use('/api/reels', reelsRoutes);
 app.use('/api/youtube', youtubeRoutes);
 app.use('/api/blogs', blogsRoutes);
-app.use('/api/commercial', commercialRoutes);
+app.use('/api/client-work', clientWorkRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/about', aboutRoutes);
 
@@ -112,7 +112,7 @@ app.get('/api', (req, res) => {
             reels: '/api/reels',
             youtube: '/api/youtube',
             blogs: '/api/blogs',
-            commercial: '/api/commercial',
+            clientWork: '/api/client-work',
             contact: '/api/contact',
             about: '/api/about',
             health: '/api/health'

@@ -1470,13 +1470,13 @@ p {
     font-weight: 100;
 }
 
-#motion-designer {
+/* #motion-designer {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     background-image: url(../images/jr-korpa-9XngoIpxcEo-unsplash.jpg);
     -webkit-text-stroke: 1.5px white;
     text-stroke: 1.5px white;
-}
+} */
 
 @font-face {
     font-family: telma;
