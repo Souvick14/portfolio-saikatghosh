@@ -378,10 +378,100 @@
                 </div>
             </section>
 
-            <!-- Placeholder for other tabs -->
+            <!-- YouTube Videos Tab -->
             <section class="content-section" id="reelsTab">
-                <h2>Reels Management</h2>
-                <p>Reels are currently managed automatically via YouTube API.</p>
+                <div class="section-actions">
+                    <button class="btn-primary" id="addYouTubeVideoBtn">
+                        <i class="fab fa-youtube"></i> Add YouTube Video
+                    </button>
+                    <button class="btn-secondary" id="refreshYouTubeVideosBtn">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </div>
+
+                <!-- YouTube Videos List -->
+                <div class="reels-list" id="youtubeVideosList">
+                    <!-- Videos will be loaded here -->
+                </div>
+
+                <!-- YouTube Video Form Modal -->
+                <div class="modal" id="youtubeVideoModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 id="youtubeVideoModalTitle">Add YouTube Video</h2>
+                            <button class="modal-close" id="closeYoutubeVideoModal">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <form id="youtubeVideoForm" class="skill-form">
+                            <input type="hidden" id="youtubeVideoId">
+                            
+                            <div class="form-group">
+                                <label for="youtubeVideoUrl">YouTube Video URL *</label>
+                                <input type="url" id="youtubeVideoUrl" required
+                                       placeholder="https://www.youtube.com/watch?v=VIDEO_ID">
+                                <small style="color: var(--text-muted); margin-top: 0.5rem; display: block;">
+                                    Paste the full YouTube video URL. The video ID will be extracted automatically.
+                                </small>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="youtubeVideoTitle">Title *</label>
+                                    <input type="text" id="youtubeVideoTitle" required 
+                                           placeholder="e.g., Behind the Scenes: FilmProject">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="youtubeVideoCategory">Category</label>
+                                    <select id="youtubeVideoCategory">
+                                        <option value="other">Other</option>
+                                        <option value="shorts">Shorts</option>
+                                        <option value="long-form">Long-form</option>
+                                        <option value="tutorial">Tutorial</option>
+                                        <option value="vlog">Vlog</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="youtubeVideoDescription">Description (Optional)</label>
+                                <textarea id="youtubeVideoDescription" rows="3" 
+                                          placeholder="Brief description of the video content..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="youtubeVideoOrder">Display Order</label>
+                                <input type="number" id="youtubeVideoOrder" 
+                                       placeholder="0" min="0" value="0">
+                                <small style="color: var(--text-muted);">
+                                    Lower numbers appear first
+                                </small>
+                            </div>
+
+                            <!-- Video Preview -->
+                            <div class="form-group">
+                                <label>Video Preview</label>
+                                <div class="youtube-preview" id="youtubeVideoPreview">
+                                    <p style="color: var(--text-muted); text-align: center;">
+                                        Enter a YouTube URL to preview the video
+                                    </p>
+                                </div>
+                                <button type="button" class="btn-secondary btn-small" id="previewYoutubeVideoBtn">
+                                    <i class="fab fa-youtube"></i> Preview Video
+                                </button>
+                            </div>
+
+                            <div class="modal-actions">
+                                <button type="button" class="btn-secondary" id="cancelYoutubeVideoBtn">Cancel</button>
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-save"></i> <span id="submitYoutubeVideoBtnText">Save Video</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </section>
 
             <section class="content-section" id="blogsTab">
@@ -754,6 +844,7 @@
     <script src="assets/js/admin-blog.js"></script>
     <script src="assets/js/admin-icon-upload.js"></script>
     <script src="assets/js/admin-image-upload.js"></script>
+    <script src="assets/js/admin-youtube.js"></script>
     
     <!-- Video file preview handler -->
     <script>
