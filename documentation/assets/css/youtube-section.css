@@ -9,7 +9,7 @@
 
 .youtube-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(5vw, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
 }
