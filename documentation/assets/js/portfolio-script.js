@@ -1139,7 +1139,7 @@ class YouTubeVideoSection {
 
     createVideoCard(video, index) {
         const card = document.createElement('div');
-        card.className = 'youtube-video-card animate-on-scroll';
+        card.className = 'youtube-video-card';
         card.style.animationDelay = `${index * 0.1}s`;
         
         // Generate thumbnail URL from video ID
