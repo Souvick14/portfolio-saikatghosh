@@ -1142,16 +1142,15 @@ class YouTubeVideoSection {
         card.className = 'youtube-video-card';
         card.style.animationDelay = `${index * 0.1}s`;
         
-        // Generate thumbnail URL from video ID
-        const thumbnailUrl = video.thumbnailUrl || `https://img.youtube.com/vi/${video.videoId}/maxresdefault.jpg`;
-        
         card.innerHTML = `
             <div class="youtube-thumbnail-wrapper">
-                <img src="${thumbnailUrl}" alt="${video.title}" class="youtube-thumbnail" 
-                     onerror="this.src='https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg'">
-                <div class="youtube-play-button">
-                    <i class="fab fa-youtube"></i>
-                </div>
+                <iframe 
+                    src="https://www.youtube.com/embed/${video.videoId}?autoplay=1&mute=1&loop=1&playlist=${video.videoId}&controls=1&modestbranding=1&rel=0" 
+                    class="youtube-thumbnail" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
             </div>
             <div class="youtube-video-info">
                 ${video.category ? `<span class="youtube-category">${video.category}</span>` : ''}
@@ -1159,11 +1158,6 @@ class YouTubeVideoSection {
                 ${video.description ? `<p class="youtube-video-description">${video.description}</p>` : ''}
             </div>
         `;
-        
-        // Make card clickable to open YouTube video
-        card.addEventListener('click', () => {
-            window.open(`https://www.youtube.com/watch?v=${video.videoId}`, '_blank');
-        });
         
         return card;
     }
