@@ -7,25 +7,26 @@ const router = express.Router();
 const AboutSection = require('../models/AboutSection');
 const mongoose = require('mongoose');
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-// Configure multer for profile image upload
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        const uploadDir = path.join(__dirname, '../uploads/profile-images');
-        
-        // Create directory if it doesn't exist
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
-        
-        cb(null, uploadDir);
-    },
-    filename: function(req, file, cb) {
-        // Create unique filename: profile-timestamp.ext
-        const uniqueName = 'profile-' + Date.now() + path.extname(file.originalname);
-        cb(null, uniqueName);
+// Configure Cloudinary (if credentials are provided)
+if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET
+    });
+    console.log('✅ Cloudinary configured for About section');
+}
+
+// Configure multer for Cloudinary upload
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'portfolio/about',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+        transformation: [{ width: 500, height: 625, crop: 'limit' }]
     }
 });
 
@@ -37,7 +38,7 @@ const upload = multer({
     fileFilter: function(req, file, cb) {
         // Accept images only
         const allowedTypes = /jpeg|jpg|png|gif|webp/;
-        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const extname = allowedTypes.test(file.originalname.toLowerCase());
         const mimetype = allowedTypes.test(file.mimetype);
         
         if (mimetype && extname) {
@@ -112,11 +113,10 @@ router.put('/', upload.single('profileImageFile'), async (req, res) => {
 
         // Handle profile image
         if (req.file) {
-            // File was uploaded
-            const fileUrl = `/uploads/profile-images/${req.file.filename}`;
-            updateData.profileImage = fileUrl;
+            // Cloudinary file was uploaded - use the secure URL
+            updateData.profileImage = req.file.path; // Cloudinary URL
             
-            console.log('✅ Profile image uploaded:', fileUrl);
+            console.log('✅ Profile image uploaded to Cloudinary:', req.file.path);
         } else if (req.body.profileImage) {
             // URL was provided
             updateData.profileImage = req.body.profileImage;
