@@ -6,6 +6,47 @@ const express = require('express');
 const router = express.Router();
 const AboutSection = require('../models/AboutSection');
 const mongoose = require('mongoose');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+// Configure multer for profile image upload
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        const uploadDir = path.join(__dirname, '../uploads/profile-images');
+        
+        // Create directory if it doesn't exist
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        
+        cb(null, uploadDir);
+    },
+    filename: function(req, file, cb) {
+        // Create unique filename: profile-timestamp.ext
+        const uniqueName = 'profile-' + Date.now() + path.extname(file.originalname);
+        cb(null, uniqueName);
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB max  
+    },
+    fileFilter: function(req, file, cb) {
+        // Accept images only
+        const allowedTypes = /jpeg|jpg|png|gif|webp/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = allowedTypes.test(file.mimetype);
+        
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb(new Error('Only image files are allowed (JPEG, PNG, GIF, WebP)'));
+        }
+    }
+});
 
 // GET about section
 router.get('/', async (req, res) => {
@@ -60,16 +101,38 @@ When I'm not editing, you'll find me exploring new visual styles, experimenting 
     }
 });
 
-// PUT update about section
-router.put('/', async (req, res) => {
+// PUT update about section (with optional file upload)
+router.put('/', upload.single('profileImageFile'), async (req, res) => {
     try {
+        const updateData = {
+            heading: req.body.heading,
+            content: req.body.content,
+            statistics: JSON.parse(req.body.statistics || '{}')
+        };
+
+        // Handle profile image
+        if (req.file) {
+            // File was uploaded
+            const fileUrl = `/uploads/profile-images/${req.file.filename}`;
+            updateData.profileImage = fileUrl;
+            
+            console.log('✅ Profile image uploaded:', fileUrl);
+        } else if (req.body.profileImage) {
+            // URL was provided
+            updateData.profileImage = req.body.profileImage;
+            
+            console.log('✅ Profile image URL saved:', req.body.profileImage);
+        }
+
         const about = await AboutSection.findByIdAndUpdate(
             'about-section',
-            req.body,
+            updateData,
             { new: true, upsert: true, runValidators: true }
         );
+        
         res.json(about);
     } catch (error) {
+        console.error('Error updating about section:', error);
         res.status(400).json({ error: error.message });
     }
 });
