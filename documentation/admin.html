@@ -574,7 +574,20 @@
 
             <section class="content-section" id="clientsWorkTab">
                 <div class="section-actions">
-                    <button class="btn-primary" id="addClientWorkBtn">
+                    <button class="btn-primary" id="addClientWorkBtn" onclick="
+                        console.log('Button clicked!');
+                        const modal = document.getElementById('clientWorkModal');
+                        if (modal) {
+                            document.getElementById('clientWorkForm').reset();
+                            document.getElementById('clientWorkId').value = '';
+                            document.getElementById('clientWorkModalTitle').textContent = 'Add Client\\'s Work';
+                            document.getElementById('submitClientWorkBtnText').textContent = 'Save Client\\'s Work';
+                            modal.classList.add('show');
+                            console.log('Modal opened!');
+                        } else {
+                            alert('Modal not found!');
+                        }
+                    ">
                         <i class="fas fa-plus"></i> Add Client's Work
                     </button>
                     <button class="btn-secondary" id="refreshClientWorkBtn">
