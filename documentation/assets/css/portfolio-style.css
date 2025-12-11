@@ -1461,3 +1461,10 @@ p {
 .hidden {
     display: none;
 }
+#personal{
+    font-family: telma;
+}
+@font-face {
+    font-family: telma;
+    src: url(/documentation/assets/fonts/Telma-Regular.woff2);
+}
