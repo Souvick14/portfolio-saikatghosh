@@ -557,20 +557,29 @@ if (typeof AdminPanel !== 'undefined') {
     
     // Event listeners for Contact and About forms
     AdminPanel.prototype.setupContactAboutEvents = function() {
+        console.log('🔧 Setting up Contact and About events...');
+        
         const contactForm = document.getElementById('contactSettingsForm');
         if (contactForm) {
+            console.log('✅ Contact form found, attaching listener');
             contactForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 this.saveContactSettings();
             });
+        } else {
+            console.warn('⚠️ Contact form NOT found');
         }
 
         const aboutForm = document.getElementById('aboutSectionForm');
         if (aboutForm) {
+            console.log('✅ About form found, attaching listener');
             aboutForm.addEventListener('submit', (e) => {
+                console.log('📝 About form submitted!');
                 e.preventDefault();
                 this.saveAboutSection();
             });
+        } else {
+            console.warn('⚠️ About form NOT found');
         }
     };
     
