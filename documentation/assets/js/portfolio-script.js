@@ -87,7 +87,19 @@ class CarouselController {
                 data = await apiHandler.fetchYouTubeVideos('reels');
                 this.renderReels(data);
             } else if (this.category === 'blogs') {
-                data = dataManager.getByCategory('blogs');
+                // Fetch blogs from API
+                try {
+                    const response = await fetch('/api/blogs');
+                    if (response.ok) {
+                        data = await response.json();
+                        if (!Array.isArray(data)) data = data.data || [];
+                    } else {
+                        data = [];
+                    }
+                } catch (error) {
+                    console.error('Error fetching blogs from API:', error);
+                    data = [];
+                }
                 this.renderBlogs(data);
             } else if (this.category === 'commercial') {
                 // Fetch commercial work from API
@@ -133,13 +145,13 @@ class CarouselController {
             slide.className = 'carousel-slide blog-slide';
             slide.innerHTML = `
                 <div class="blog-image">
-                    <img src="${blog.image}" alt="${blog.title}">
+                    <img src="${blog.coverImage}" alt="${blog.title}">
                 </div>
                 <div class="blog-content">
-                    <div class="blog-date">${this.formatDate(blog.date)}</div>
+                    <div class="blog-date">${this.formatDate(blog.publishDate)}</div>
                     <h3 class="blog-title">${blog.title}</h3>
                     <p class="blog-excerpt">${blog.excerpt}</p>
-                    <a href="${blog.link}" class="blog-link">Read More</a>
+                    <a href="#" onclick="return false;" class="blog-link">Read More</a>
                 </div>
             `;
             this.wrapper.appendChild(slide);
