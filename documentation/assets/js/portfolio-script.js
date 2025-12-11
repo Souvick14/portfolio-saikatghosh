@@ -1362,6 +1362,89 @@ function animateCounter(element) {
 }
 
 // ============================================
+// About Section Dynamic Loader
+// ============================================
+async function loadAboutSection() {
+    try {
+        const response = await fetch('/api/about');
+        if (!response.ok) {
+            console.log('About section not found in API, using default content');
+            return;
+        }
+        
+        const aboutData = await response.json();
+        
+        // Update profile image
+        if (aboutData.profileImage) {
+            const aboutImage = document.querySelector('.about-image');
+            if (aboutImage) {
+                aboutImage.src = aboutData.profileImage;
+            }
+        }
+        
+        // Update heading
+        if (aboutData.heading) {
+            const aboutHeading = document.querySelector('.about-text h3');
+            if (aboutHeading) {
+                aboutHeading.textContent = aboutData.heading;
+            }
+        }
+        
+        // Update content (paragraphs)
+        if (aboutData.content) {
+            const aboutTextDiv = document.querySelector('.about-text');
+            if (aboutTextDiv) {
+                // Split content by newlines and create paragraphs
+                const paragraphs = aboutData.content.split('\n\n').filter(p => p.trim());
+                
+                // Find existing h3 to keep it
+                const heading = aboutTextDiv.querySelector('h3');
+                
+                // Clear existing paragraphs but keep heading
+                const existingPs = aboutTextDiv.querySelectorAll('p');
+                existingPs.forEach(p => p.remove());
+                
+                // Insert new paragraphs after heading
+                paragraphs.forEach(text => {
+                    const p = document.createElement('p');
+                    p.textContent = text.trim();
+                    aboutTextDiv.insertBefore(p, aboutTextDiv.querySelector('.stats-grid'));
+                });
+            }
+        }
+        
+        // Update statistics
+        if (aboutData.statistics) {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            if (statNumbers.length >= 3) {
+                if (aboutData.statistics.projects) {
+                    statNumbers[0].setAttribute('data-target', aboutData.statistics.projects);
+                    statNumbers[0].textContent = '0';
+                }
+                if (aboutData.statistics.clients) {
+                    statNumbers[1].setAttribute('data-target', aboutData.statistics.clients);
+                    statNumbers[1].textContent = '0';
+                }
+                if (aboutData.statistics.experience) {
+                    statNumbers[2].setAttribute('data-target', aboutData.statistics.experience);
+                    statNumbers[2].textContent = '0';
+                }
+            }
+        }
+        
+        console.log('✅ About section loaded from API');
+    } catch (error) {
+        console.error('Error loading about section:', error);
+        // Keep default content if API fails
+    }
+}
+
+// Load About section on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadAboutSection();
+});
+
+// ============================================
 // Console Easter Egg
 // ============================================
 console.log('%c🌟 Influencer Portfolio', 'font-size: 24px; font-weight: bold; color: #8b5cf6;');
