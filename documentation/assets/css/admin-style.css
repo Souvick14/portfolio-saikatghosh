@@ -835,3 +835,8 @@ body {
         max-width: 100%;
     }
 }
+.reel-item{
+        padding: 11px;
+    border: 1px solid blue;
+    border-radius: 1rem;
+}

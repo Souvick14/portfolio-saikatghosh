@@ -7,7 +7,6 @@
     position: relative;
     width: 100%;
     overflow: hidden;
-    /* Changed from visible to hidden to contain rows */
     padding: 2rem 0;
     display: flex;
     flex-direction: column;
@@ -17,17 +16,16 @@
 .instagram-carousel-wrapper {
     display: flex;
     gap: 1.5rem;
-    padding: 1rem 0;
-    /* Remove horizontal padding to prevent cut-off */
+    padding: 1rem 2rem;
+    /* Add horizontal padding back to ensure cards are visible */
     scrollbar-width: none;
-    /* Firefox */
     -ms-overflow-style: none;
-    /* IE/Edge */
     will-change: transform;
     flex-shrink: 0;
-    /* Cursor for drag interaction */
     cursor: grab;
     user-select: none;
+    min-width: max-content;
+    /* Start position adjusted in JavaScript */
 }
 
 /* Grabbing cursor when dragging */
@@ -36,11 +34,6 @@
 }
 
 /* Animation pausing is handled by JavaScript */
-
-/* Smooth transition when not dragging */
-.instagram-carousel-wrapper:not(.dragging) {
-    transition: transform 0.1s linear;
-}
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .instagram-carousel-wrapper::-webkit-scrollbar {

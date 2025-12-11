@@ -440,7 +440,14 @@ class InstagramReelsCarousel {
         }
         
         // Seamless infinite scroll animation
-        let position = 0;
+        // Calculate initial position to ensure cards start visible
+        const slideWidth = 320 + 24; // card width + gap  
+        const singleSetWidth = reels.length * slideWidth;
+        
+        // Start from middle set for left-scrolling, start of second set for right-scrolling
+        // This ensures cards are visible from the start
+        let position = isReverse ? 0 : -singleSetWidth;
+        
         const speed = isReverse ? 50 : -50; // pixels per second (negative = left, positive = right)
         let isAnimating = true;
         let lastTime = performance.now();
@@ -456,14 +463,10 @@ class InstagramReelsCarousel {
             
             position += speed * deltaTime;
             
-            // Calculate the width of one set of reels
-            const slideWidth = 320 + 24; // card width + gap
-            const singleSetWidth = reels.length * slideWidth;
-            
             // Reset position for seamless loop
-            if (speed < 0 && position <= -singleSetWidth) {
+            if (speed < 0 && position <=-singleSetWidth * 2) {
                 position += singleSetWidth;
-            } else if (speed > 0 && position >= singleSetWidth) {
+            } else if (speed > 0 && position >= 0) {
                 position -= singleSetWidth;
             }
             
