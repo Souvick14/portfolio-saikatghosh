@@ -120,38 +120,35 @@
         </div>
     </section>
 
-    <!-- Commercial Section -->
-    <section class="section carousel-section" id="commercial">
+
+    <!-- Client's Work Section -->
+    <section class="section" id="clients-work">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Commercial Work</h2>
+                <h2 class="section-title">Client's Work</h2>
                 <p class="section-description">
-                    Brand collaborations and sponsored content that delivers results
+                    Brand collaborations and projects that deliver exceptional results
                 </p>
             </div>
 
-            <div class="carousel-container" id="commercialCarousel" data-carousel="commercial">
-                <div class="carousel-wrapper" id="commercialWrapper">
-                    <!-- Commercial slides will be loaded dynamically -->
-                    <div class="carousel-slide loading">
-                        <div class="carousel-loader"></div>
-                    </div>
+            <!-- Client Work Grid (4 columns) -->
+            <div class="clients-work-grid" id="clientsWorkGrid">
+                <!-- Client work cards will be loaded dynamically -->
+                <div class="loading-state">
+                    <div class="loader"></div>
+                    <p>Loading client work...</p>
                 </div>
+            </div>
 
-                <div class="carousel-nav">
-                    <div class="carousel-arrows">
-                        <button class="carousel-arrow prev-arrow" data-target="commercial">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <button class="carousel-arrow next-arrow" data-target="commercial">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                    <div class="carousel-dots" id="commercialDots"></div>
-                </div>
+            <!-- Load More Button -->
+            <div class="load-more-container" id="clientsWorkLoadMoreContainer" style="text-align: center; margin-top: 3rem; display: none;">
+                <button class="btn-load-more" id="clientsWorkLoadMore">
+                    <i class="fas fa-chevron-down"></i> Load More Projects
+                </button>
             </div>
         </div>
     </section>
+    
     <!-- YouTube Videos Section -->
     <section class="section youtube-section" id="youtube">
         <div class="container">
