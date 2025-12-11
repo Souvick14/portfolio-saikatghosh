@@ -687,9 +687,43 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="aboutProfileImage">Profile Image URL</label>
-                        <input type="url" id="aboutProfileImage" 
-                               placeholder="https://example.com/your-photo.jpg">
+                        <label>Profile Image</label>
+                        
+                        <!-- Option Selection -->
+                        <div style="margin-bottom: 1rem;">
+                            <label style="margin-right: 1.5rem; cursor: pointer;">
+                                <input type="radio" name="profileImageType" value="upload" checked style="margin-right: 0.5rem;">
+                                Upload Image File
+                            </label>
+                            <label style="cursor: pointer;">
+                                <input type="radio" name="profileImageType" value="url" style="margin-right: 0.5rem;">
+                                Use Image URL
+                            </label>
+                        </div>
+
+                        <!-- Upload Section (Default) -->
+                        <div id="profileImageUploadSection">
+                            <input type="file" id="aboutProfileImageFile" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp">
+                            <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">
+                                Upload your profile photo (recommended: 400x500px, max 5MB)
+                            </small>
+                            <div id="profileImagePreviewContainer" style="margin-top: 1rem; display: none;">
+                                <img id="profileImagePreview" src="" alt="Profile Preview" 
+                                     style="max-width: 200px; max-height: 250px; border-radius: 12px; border: 2px solid var(--border-color); object-fit: cover;">
+                                <button type="button" class="btn-secondary btn-small" id="removeProfileImageBtn" style="margin-top: 0.5rem;">
+                                    <i class="fas fa-times"></i> Remove Image
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- URL Section (Hidden by default) -->
+                        <div id="profileImageUrlSection" style="display: none;">
+                            <input type="url" id="aboutProfileImage" 
+                                   placeholder="https://example.com/your-photo.jpg">
+                            <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">
+                                Paste image URL (recommended: 400x500px)
+                            </small>
+                        </div>
                     </div>
 
                     <div class="form-actions">
@@ -738,6 +772,71 @@
                         preview.style.display = 'none';
                         nameSpan.textContent = '';
                     }
+                });
+            }
+
+            // Profile Image Upload/URL toggle handler
+            const profileImageTypeRadios = document.getElementsByName('profileImageType');
+            const uploadSection = document.getElementById('profileImageUploadSection');
+            const urlSection = document.getElementById('profileImageUrlSection');
+            
+            profileImageTypeRadios.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    if (e.target.value === 'upload') {
+                        uploadSection.style.display = 'block';
+                        urlSection.style.display = 'none';
+                    } else {
+                        uploadSection.style.display = 'none';
+                        urlSection.style.display = 'block';
+                    }
+                });
+            });
+
+            // Profile Image File Upload Preview
+            const profileImageFileInput = document.getElementById('aboutProfileImageFile');
+            const profileImagePreview = document.getElementById('profileImagePreview');
+            const profileImagePreviewContainer = document.getElementById('profileImagePreviewContainer');
+            const removeProfileImageBtn = document.getElementById('removeProfileImageBtn');
+
+            if (profileImageFileInput) {
+                profileImageFileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    
+                    if (file) {
+                        // Validate file size (5MB max)
+                        if (file.size > 5 * 1024 * 1024) {
+                            alert('File size must be less than 5MB');
+                            e.target.value = '';
+                            return;
+                        }
+
+                        // Validate file type
+                        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+                        if (!validTypes.includes(file.type)) {
+                            alert('Please select a valid image file (JPEG, PNG, GIF, or WebP)');
+                            e.target.value = '';
+                            return;
+                        }
+
+                        // Show preview
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            profileImagePreview.src = e.target.result;
+                            profileImagePreviewContainer.style.display = 'block';
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        profileImagePreviewContainer.style.display = 'none';
+                    }
+                });
+            }
+
+            // Remove Profile Image
+            if (removeProfileImageBtn) {
+                removeProfileImageBtn.addEventListener('click', () => {
+                    profileImageFileInput.value = '';
+                    profileImagePreview.src = '';
+                    profileImagePreviewContainer.style.display = 'none';
                 });
             }
         });

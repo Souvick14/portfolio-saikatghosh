@@ -483,27 +483,40 @@ if (typeof AdminPanel !== 'undefined') {
     };
 
     AdminPanel.prototype.saveAboutSection = async function() {
-        const aboutData = {
-            heading: document.getElementById('aboutHeading')?.value.trim(),
-            content: document.getElementById('aboutContent')?.value.trim(),
-            statistics: {
-                projects: parseInt(document.getElementById('aboutProjects')?.value) || 0,
-                clients: parseInt(document.getElementById('aboutClients')?.value) || 0,
-                experience: parseInt(document.getElementById('aboutExperience')?.value) || 0
-            },
-            profileImage: document.getElementById('aboutProfileImage')?.value.trim()
-        };
+        const content = document.getElementById('aboutContent')?.value.trim();
 
-        if (!aboutData.content) {
+        if (!content) {
             this.showNotification('About content is required', 'error');
             return;
         }
 
         try {
+            // Determine if user chose file upload or URL
+            const profileImageType = document.querySelector('input[name="profileImageType"]:checked')?.value;
+            const profileImageFile = document.getElementById('aboutProfileImageFile')?.files[0];
+            const profileImageUrl = document.getElementById('aboutProfileImage')?.value.trim();
+
+            // Create FormData for file upload
+            const formData = new FormData();
+            formData.append('heading', document.getElementById('aboutHeading')?.value.trim());
+            formData.append('content', content);
+            formData.append('statistics', JSON.stringify({
+                projects: parseInt(document.getElementById('aboutProjects')?.value) || 0,
+                clients: parseInt(document.getElementById('aboutClients')?.value) || 0,
+                experience: parseInt(document.getElementById('aboutExperience')?.value) || 0
+            }));
+
+            // Add profile image based on selection
+            if (profileImageType === 'upload' && profileImageFile) {
+                formData.append('profileImageFile', profileImageFile);
+            } else if (profileImageType === 'url' && profileImageUrl) {
+                formData.append('profileImage', profileImageUrl);
+            }
+
             const response = await fetch('/api/about', {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(aboutData)
+                body: formData
+                // Don't set Content-Type header - browser will set it with boundary
             });
 
             if (!response.ok) throw new Error('Failed to save about section');
