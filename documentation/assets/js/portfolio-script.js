@@ -1271,6 +1271,8 @@ function initializeCarousels() {
     
     // Initialize YouTube Video Section
     youtubeVideoSection = new YouTubeVideoSection();
+    youtubeVideoSection.init();
+
     
     // Initialize other carousels
     carousels.blogs = new CarouselController('blogsCarousel', 'blogs');
