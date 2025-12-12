@@ -1001,3 +1001,16 @@ body {
     border: 1px solid blue;
     border-radius: 1rem;
 }
+.inputstyler{
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-family: inherit;
+    padding: 0.875rem;
+    background-color: var(--bg-darker);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.1);
+    border-image: initial;
+    border-radius: var(--radius-sm);
+    transition: 0.3s;
+}

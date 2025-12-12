@@ -132,7 +132,7 @@
             <header class="content-header">
                 <h1 id="pageTitle">Skills Management</h1>
                 <a href="index.html" class="btn-view-site" target="_blank">
-                    <i class="fas fa-external-link-alt"></i> View Portfolio
+                    <i class="fas fa-external-link-alt"></i>
                 </a>
             </header>
 
@@ -163,17 +163,17 @@
                         </div>
                         
                         <form id="skillForm" novalidate class="skill-form">
-                            <input type="hidden" id="skillId">
+                            <input type="hidden" id="skillId" class="inputstyler">
                             
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="skillName">Skill Name *</label>
-                                    <input type="text" id="skillName" required placeholder="e.g., Adobe Premiere Pro">
+                                    <input type="text" id="skillName" class="inputstyler" required placeholder="e.g., Adobe Premiere Pro">
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="skillCategory">Category *</label>
-                                    <input type="text" id="skillCategory" required placeholder="e.g., Video Editing">
+                                    <input type="text" id="skillCategory" class="inputstyler" required placeholder="e.g., Video Editing">
                                 </div>
                             </div>
 
@@ -183,18 +183,18 @@
                                 <!-- Icon Type Selection -->
                                 <div style="margin-bottom: 1rem;">
                                     <label style="margin-right: 1.5rem; cursor: pointer;">
-                                        <input type="radio" name="iconType" value="upload" checked style="margin-right: 0.5rem;">
+                                        <input type="radio" name="iconType" value="upload" checked class="inputstyler" style="margin-right: 0.5rem;">
                                         Upload PNG Logo
                                     </label>
                                     <label style="cursor: pointer;">
-                                        <input type="radio" name="iconType" value="fontawesome" style="margin-right: 0.5rem;">
+                                        <input type="radio" name="iconType" value="fontawesome" class="inputstyler" style="margin-right: 0.5rem;">
                                         Use Font Awesome Icon
                                     </label>
                                 </div>
 
                                 <!-- PNG Upload Section -->
                                 <div id="iconUploadSection">
-                                    <input type="file" id="skillIconImage" accept="image/png,image/jpg,image/jpeg,image/svg+xml">
+                                    <input type="file" id="skillIconImage" class="inputstyler" accept="image/png,image/jpg,image/jpeg,image/svg+xml">
                                     <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">
                                         Upload a PNG/JPG/SVG logo for this skill (recommended: 128x128px)
                                     </small>
@@ -210,7 +210,7 @@
                                 <!-- Font Awesome Section (Hidden by default) -->
                                 <div id="iconFontAwesomeSection" style="display: none;">
                                     <div class="icon-picker-container">
-                                        <input type="text" id="skillIcon" placeholder="fas fa-film">
+                                        <input type="text" id="skillIcon" class="inputstyler" placeholder="fas fa-film">
                                         <button type="button" class="btn-icon-picker" id="iconPickerBtn">
                                             <i class="fas fa-icons"></i> Browse Icons
                                         </button>
@@ -225,7 +225,7 @@
                                 <label for="skillProficiency">
                                     Proficiency Level: <span id="proficiencyValue">0</span>%
                                 </label>
-                                <input type="range" id="skillProficiency" min="0" max="100" value="0" class="proficiency-slider">
+                                <input type="range" id="skillProficiency" min="0" max="100" value="0" class="proficiency-slider inputstyler">
                                 <div class="proficiency-indicator">
                                     <div class="proficiency-fill" id="proficiencyFill" style="width: 0%"></div>
                                 </div>
@@ -238,7 +238,7 @@
 
                             <div class="form-group">
                                 <label for="skillBackgroundImage">Background Image (Optional)</label>
-                                <input type="file" id="skillBackgroundImage" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp">
+                                <input type="file" id="skillBackgroundImage" class="inputstyler" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp">
                                 <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">
                                     Upload image for skill card background (max 5MB)
                                 </small>
@@ -254,7 +254,7 @@
                                 <label>Projects / Work Examples</label>
                                 <div id="projectsList">
                                     <div class="project-input-group">
-                                        <input type="text" class="project-input" placeholder="Project description or achievement">
+                                        <input type="text" class="project-input inputstyler" placeholder="Project description or achievement">
                                         <button type="button" class="btn-icon btn-remove-project" style="display: none;">
                                             <i class="fas fa-times"></i>
                                         </button>
@@ -303,7 +303,7 @@
                         </div>
                         
                         <div class="icon-picker-search">
-                            <input type="text" id="iconSearch" placeholder="Search icons...">
+                            <input type="text" class="inputstyler" id="iconSearch" placeholder="Search icons...">
                         </div>
                         
                         <div class="icon-picker-grid" id="iconPickerGrid">
@@ -340,11 +340,11 @@
                         </div>
                         
                         <form id="instagramReelForm" class="skill-form">
-                            <input type="hidden" id="instagramReelId">
+                            <input type="hidden" class="inputstyler" id="instagramReelId">
                             
                             <div class="form-group">
                                 <label for="instagramReelUrl">Reel/Video URL *</label>
-                                <input type="url" id="instagramReelUrl" required
+                                <input type="url" class="inputstyler" id="instagramReelUrl" required
                                        placeholder="e.g., https://www.instagram.com/reel/... or https://drive.google.com/...">
                                 <small style="color: var(--text-muted); font-size: 0.875rem;">
                                     Supports Instagram URLs or direct video links (Google Drive, MP4, Vimeo, etc.). Direct videos will autoplay!
@@ -353,13 +353,13 @@
 
                             <div class="form-group">
                                 <label for="instagramReelTitle">Title (Optional)</label>
-                                <input type="text" id="instagramReelTitle" 
+                                <input type="text" class="inputstyler" id="instagramReelTitle" 
                                        placeholder="e.g., Latest Creative Reel">
                             </div>
 
                             <div class="form-group">
                                 <label for="reelVideoFile">Video Preview (Optional)</label>
-                                <input type="file" id="reelVideoFile" accept="video/mp4,video/mov,video/webm,video/avi">
+                                <input type="file" class="inputstyler" id="reelVideoFile" accept="video/mp4,video/mov,video/webm,video/avi">
                                 <small style="color: var(--text-muted); font-size: 0.875rem;">
                                     Upload a preview video (max 50MB). This will play on the card. Supported: MP4, MOV, WEBM, AVI
                                 </small>
@@ -372,7 +372,7 @@
 
                             <div class="form-group">
                                 <label for="instagramReelTechnologies">Technologies Used (Optional)</label>
-                                <input type="text" id="instagramReelTechnologies" 
+                                <input type="text" class="inputstyler" id="instagramReelTechnologies" 
                                        placeholder="e.g., Adobe Premiere Pro, After Effects, DaVinci Resolve">
                                 <small style="color: var(--text-muted); font-size: 0.875rem;">
                                     Separate multiple technologies with commas. Will be shown on flip card hover.
@@ -430,11 +430,11 @@
                         </div>
                         
                         <form id="youtubeVideoForm" class="skill-form">
-                            <input type="hidden" id="youtubeVideoId">
+                            <input type="hidden" class="inputstyler" id="youtubeVideoId">
                             
                             <div class="form-group">
                                 <label for="youtubeVideoUrl">YouTube Video URL *</label>
-                                <input type="url" id="youtubeVideoUrl" required
+                                <input type="url" class="inputstyler" id="youtubeVideoUrl" required
                                        placeholder="https://www.youtube.com/watch?v=VIDEO_ID">
                                 <small style="color: var(--text-muted); margin-top: 0.5rem; display: block;">
                                     Paste the full YouTube video URL. The video ID will be extracted automatically.
@@ -444,7 +444,7 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="youtubeVideoTitle">Title *</label>
-                                    <input type="text" id="youtubeVideoTitle" required 
+                                    <input type="text" class="inputstyler" id="youtubeVideoTitle" required 
                                            placeholder="e.g., Behind the Scenes: FilmProject">
                                 </div>
                                 
@@ -468,7 +468,7 @@
 
                             <div class="form-group">
                                 <label for="youtubeVideoOrder">Display Order</label>
-                                <input type="number" id="youtubeVideoOrder" 
+                                <input type="number" class="inputstyler" id="youtubeVideoOrder" 
                                        placeholder="0" min="0" value="0">
                                 <small style="color: var(--text-muted);">
                                     Lower numbers appear first
@@ -525,11 +525,11 @@
                         </div>
                         
                         <form id="blogForm" class="skill-form">
-                            <input type="hidden" id="blogId">
+                            <input type="hidden" class="inputstyler" id="blogId">
                             
                             <div class="form-group">
                                 <label for="blogTitle">Title *</label>
-                                <input type="text" id="blogTitle" required 
+                                <input type="text" class="inputstyler" id="blogTitle" required 
                                        placeholder="Enter blog post title">
                             </div>
 
@@ -547,7 +547,7 @@
                                 
                                 <div class="form-group">
                                     <label for="blogAuthor">Author</label>
-                                    <input type="text" id="blogAuthor" 
+                                    <input type="text" id="blogAuthor" class="inputstyler"
                                            placeholder="Author name" value="Admin">
                                 </div>
                             </div>
@@ -555,7 +555,7 @@
                             <div class="form-group">
                                 <label for="blogContent">Content *</label>
                                 <div id="blogContentEditor" style="height: 300px; background: white; border-radius: 8px;"></div>
-                                <input type="hidden" id="blogContent">
+                                <input type="hidden" id="blogContent" class="inputstyler">
                             </div>
 
                             <div class="form-group">
@@ -566,13 +566,13 @@
 
                             <div class="form-group">
                                 <label for="blogTags">Tags (comma-separated)</label>
-                                <input type="text" id="blogTags" 
+                                <input type="text" id="blogTags" class="inputstyler"
                                        placeholder="e.g., video editing, premiere pro, tutorial">
                             </div>
 
                             <div class="form-group">
                                 <label for="blogCoverImage">Cover Image</label>
-                                <input type="file" id="blogCoverImage" 
+                                <input type="file" id="blogCoverImage" class="inputstyler"
                                        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp">
                                 <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">
                                     Upload cover image for blog post (max 5MB)
@@ -581,7 +581,7 @@
 
                             <div class="form-group">
                                 <label>
-                                    <input type="checkbox" id="blogPublished" checked>
+                                    <input type="checkbox" id="blogPublished" class="inputstyler" checked>
                                     Publish immediately
                                 </label>
                             </div>
@@ -636,11 +636,11 @@
                         </div>
                         
                         <form id="clientWorkForm" class="skill-form" novalidate>
-                            <input type="hidden" id="clientWorkId">
+                            <input type="hidden" id="clientWorkId" class="inputstyler">
                             
                             <div class="form-group">
                                 <label for="clientWorkYoutubeUrl">YouTube Video URL *</label>
-                                <input type="url" id="clientWorkYoutubeUrl" required 
+                                <input type="url" id="clientWorkYoutubeUrl" required class="inputstyler"
                                        placeholder="https://www.youtube.com/watch?v=VIDEO_ID">
                                 <small style="color: var(--text-muted);">
                                     Paste the full YouTube video URL for the iframe embed
@@ -650,7 +650,7 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="clientWorkBrand">Brand/Client Name *</label>
-                                    <input type="text" id="clientWorkBrand" required 
+                                    <input type="text" id="clientWorkBrand" required class="inputstyler"
                                            placeholder="e.g., TechCo">
                                 </div>
                                 
@@ -670,7 +670,7 @@
                             <!-- Technology Logos Upload -->
                             <div class="form-group">
                                 <label>Technology Logos * (1-10 images)</label>
-                                <input type="file" id="clientWorkLogos" accept="image/jpeg,image/jpg,image/png,image/svg+xml,image/webp" multiple>
+                                <input type="file" id="clientWorkLogos" class="inputstyler" accept="image/jpeg,image/jpg,image/png,image/svg+xml,image/webp" multiple>
                                 <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">
                                     Upload technology/software logos used in this project (min 1, max 10 images, 2MB each)
                                 </small>
@@ -689,13 +689,13 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="clientWorkEngagement">Engagement Rate (Optional)</label>
-                                    <input type="text" id="clientWorkEngagement" 
+                                    <input type="text" id="clientWorkEngagement" class="inputstyler"
                                            placeholder="e.g., 8.2%">
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="clientWorkRevenue">Revenue/Budget (Optional)</label>
-                                    <input type="text" id="clientWorkRevenue" 
+                                    <input type="text" id="clientWorkRevenue" class="inputstyler"
                                            placeholder="e.g., $15K">
                                 </div>
                             </div>
@@ -734,20 +734,20 @@
                         
                         <div class="form-group">
                             <label for="contactEmail">Email Address *</label>
-                            <input type="email" id="contactEmail" required 
+                            <input type="email" id="contactEmail" required class="inputstyler"
                                    placeholder="your.email@example.com">
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="contactPhone">Phone Number</label>
-                                <input type="tel" id="contactPhone" 
+                                <input type="tel" id="contactPhone" class="inputstyler"
                                        placeholder="+1 (555) 123-4567">
                             </div>
                             
                             <div class="form-group">
                                 <label for="contactLocation">Location</label>
-                                <input type="text" id="contactLocation" 
+                                <input type="text" id="contactLocation" class="inputstyler"
                                        placeholder="Los Angeles, CA">
                             </div>
                         </div>
@@ -758,25 +758,25 @@
                         
                         <div class="form-group">
                             <label for="contactYoutube"><i class="fab fa-youtube"></i> YouTube</label>
-                            <input type="url" id="contactYoutube" 
+                            <input type="url" id="contactYoutube" class="inputstyler"
                                    placeholder="https://youtube.com/@yourchannel">
                         </div>
 
                         <div class="form-group">
                             <label for="contactInstagram"><i class="fab fa-instagram"></i> Instagram</label>
-                            <input type="url" id="contactInstagram" 
+                            <input type="url" id="contactInstagram" class="inputstyler"
                                    placeholder="https://instagram.com/yourusername">
                         </div>
 
                         <div class="form-group">
                             <label for="contactTwitter"><i class="fab fa-twitter"></i> Twitter</label>
-                            <input type="url" id="contactTwitter" 
+                            <input type="url" id="contactTwitter" class="inputstyler"
                                    placeholder="https://twitter.com/yourusername">
                         </div>
 
                         <div class="form-group">
                             <label for="contactLinkedin"><i class="fab fa-linkedin"></i> LinkedIn</label>
-                            <input type="url" id="contactLinkedin" 
+                            <input type="url" id="contactLinkedin" class="inputstyler"
                                    placeholder="https://linkedin.com/in/yourprofile">
                         </div>
                     </div>
@@ -796,7 +796,7 @@
                 <form id="aboutSectionForm" class="settings-form" novalidate>
                     <div class="form-group">
                         <label for="aboutHeading">Section Heading</label>
-                        <input type="text" id="aboutHeading" 
+                        <input type="text" id="aboutHeading" class="inputstyler"
                                placeholder="e.g., Bringing Stories to Life Through Video">
                     </div>
 
@@ -815,19 +815,19 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="aboutProjects">Projects Completed</label>
-                                <input type="number" id="aboutProjects" 
+                                <input type="number" id="aboutProjects" class="inputstyler"
                                        placeholder="150">
                             </div>
                             
                             <div class="form-group">
                                 <label for="aboutClients">Happy Clients</label>
-                                <input type="number" id="aboutClients" 
+                                <input type="number" id="aboutClients" class="inputstyler"
                                        placeholder="50">
                             </div>
                             
                             <div class="form-group">
                                 <label for="aboutExperience">Years Experience</label>
-                                <input type="number" id="aboutExperience" 
+                                <input type="number" id="aboutExperience" class="inputstyler"
                                        placeholder="5">
                             </div>
                         </div>
@@ -839,18 +839,18 @@
                         <!-- Option Selection -->
                         <div style="margin-bottom: 1rem;">
                             <label style="margin-right: 1.5rem; cursor: pointer;">
-                                <input type="radio" name="profileImageType" value="upload" checked style="margin-right: 0.5rem;">
+                                <input type="radio" name="profileImageType" value="upload" class="inputstyler" checked style="margin-right: 0.5rem;">
                                 Upload Image File
                             </label>
                             <label style="cursor: pointer;">
-                                <input type="radio" name="profileImageType" value="url" style="margin-right: 0.5rem;">
+                                <input type="radio" name="profileImageType" value="url" class="inputstyler" style="margin-right: 0.5rem;">
                                 Use Image URL
                             </label>
                         </div>
 
                         <!-- Upload Section (Default) -->
                         <div id="profileImageUploadSection">
-                            <input type="file" id="aboutProfileImageFile" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp">
+                            <input type="file" id="aboutProfileImageFile" class="inputstyler" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp">
                             <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">
                                 Upload your profile photo (recommended: 400x500px, max 5MB)
                             </small>
@@ -865,7 +865,7 @@
 
                         <!-- URL Section (Hidden by default) -->
                         <div id="profileImageUrlSection" style="display: none;">
-                            <input type="url" id="aboutProfileImage" 
+                            <input type="url" id="aboutProfileImage" class="inputstyler"
                                    placeholder="https://example.com/your-photo.jpg">
                             <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">
                                 Paste image URL (recommended: 400x500px)

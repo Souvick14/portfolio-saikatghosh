@@ -99,6 +99,7 @@ class AdminPanel {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
                 const tab = item.getAttribute('data-tab');
+                
                 this.switchTab(tab);
             });
         });
@@ -198,8 +199,17 @@ class AdminPanel {
             skills: 'Skills Management',
             reels: 'Reels Management',
             blogs: 'Blogs Management',
-            clientsWork: 'Client\'s Work Management'
+            clientsWork: 'Client\'s Work Management',
+            ratings: 'Ratings Management',
+            about: 'About Management',
+            contact: 'Contact Management',
+            instagramreels: 'Instagram Reels Management',
+            messages: 'client messages'
+
         };
+        if (tab === 'instagram-reels') {
+            tab = 'instagramreels';
+        }
         document.getElementById('pageTitle').textContent = titles[tab];
     }
 
