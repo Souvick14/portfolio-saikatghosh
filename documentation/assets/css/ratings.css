@@ -95,6 +95,7 @@
    ============================================ */
 
 .rating-submission-container {
+    display: none;
     max-width: 700px;
     margin: 4rem auto 0;
     background: var(--bg-card);
@@ -338,4 +339,28 @@
     .star-rating-input {
         font-size: 1.75rem;
     }
+}
+#ratemyworkcontainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    width: 100%;
+}
+#ratemywork{
+     padding: 0.875rem 1.5rem;
+    border: none;
+    color: aliceblue;
+    padding: 1rem 10vw;
+    background-image: var(--gradient-primary);
+    border-radius: 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    text-decoration: none;
 }

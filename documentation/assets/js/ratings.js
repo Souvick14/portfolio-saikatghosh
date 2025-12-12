@@ -102,6 +102,30 @@
     }
 
     // ============================================
+    // Rating Form Submission button open
+    // ============================================
+
+    let rateMyWorkBtn = document.getElementById('ratemywork');
+    let ratingcheck=true;
+    rateMyWorkBtn.addEventListener('click', function() {
+        if(ratingcheck){
+            rateMyWorkBtn.textContent = "Close";
+            let ratingFormContainer = document.querySelector('.rating-submission-container');
+            ratingFormContainer.style.display = 'block';
+            ratingFormContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            rateMyWorkBtn.style.border="2px solid black";
+            rateMyWorkBtn.style.backgroundImage="transparent";
+            ratingcheck=false;
+        }else{
+            rateMyWorkBtn.textContent = "Rate My work";
+            let ratingFormContainer = document.querySelector('.rating-submission-container');
+            ratingFormContainer.style.display = 'none';
+            rateMyWorkBtn.style.border="none";
+            rateMyWorkBtn.style.backgroundImage="var(--gradient-primary)";
+            ratingcheck=true;
+        }
+    });
+    // ============================================
     // Rating Form Submission
     // ============================================
 
@@ -219,3 +243,4 @@
     }
 
 })();
+
