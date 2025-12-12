@@ -278,6 +278,7 @@ body {
         margin-left: 0;
         margin-top: 60px;
         width: 100%;
+        padding-top: 0;
     }
 
     /* Mobile overlay */
@@ -298,7 +299,11 @@ body {
 
     /* Adjust section padding */
     .content-section {
-        padding: 1.5rem 1rem;
+        padding: 2rem 1rem;
+    }
+
+    .content-section h2:first-child {
+        margin-top: 0;
     }
 
     /* Stack form rows */
