@@ -872,7 +872,7 @@ p {
     width: 120px;
     height: 120px;
     position: relative;
-    margin: 1.5rem auto 0;
+    /* margin: 1.5rem auto 0; */
 }
 
 .proficiency-circle svg {
