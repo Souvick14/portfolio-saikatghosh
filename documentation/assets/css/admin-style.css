@@ -273,6 +273,25 @@ body {
 
 .nav-item i {
     font-size: 1.25rem;
+    min-width: 24px;
+}
+
+/* Navigation Badge */
+.nav-badge {
+    margin-left: auto;
+    background: var(--primary-purple);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    min-width: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover .nav-badge {
+    transform: scale(1.1);
 }
 
 .sidebar-footer {
