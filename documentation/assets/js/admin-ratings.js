@@ -126,17 +126,17 @@ if (typeof AdminPanel !== 'undefined') {
             <p class="rating-admin-description">${rating.description}</p>
             <div class="rating-admin-actions">
                 ${!isApproved ? `
-                    <button class="btn-small btn-primary" onclick="adminPanel.approveRating('${rating._id}')">
+                    <button class="btn-small btn-primary" onclick="window.adminPanel.approveRating('${rating._id}')">
                         <i class="fas fa-check"></i> Approve
                     </button>
-                    <button class="btn-small btn-delete" onclick="adminPanel.deleteRating('${rating._id}')">
+                    <button class="btn-small btn-delete" onclick="window.adminPanel.deleteRating('${rating._id}')">
                         <i class="fas fa-trash"></i> Delete
                     </button>
                 ` : `
-                    <button class="btn-small btn-secondary" onclick="adminPanel.unapproveRating('${rating._id}')">
+                    <button class="btn-small btn-secondary" onclick="window.adminPanel.unapproveRating('${rating._id}')">
                         <i class="fas fa-times"></i> Unapprove
                     </button>
-                    <button class="btn-small btn-delete" onclick="adminPanel.deleteRating('${rating._id}')">
+                    <button class="btn-small btn-delete" onclick="window.adminPanel.deleteRating('${rating._id}')">
                         <i class="fas fa-trash"></i> Delete
                     </button>
                 `}
