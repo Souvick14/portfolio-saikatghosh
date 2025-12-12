@@ -1,0 +1,341 @@
+/* ============================================
+   Ratings Section Styles
+   ============================================ */
+
+/* Ratings Grid */
+.ratings-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
+    margin: 3rem 0;
+}
+
+/* Rating Card - Clean design, no border, no gradient */
+.rating-card {
+    background: var(--bg-card);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rating-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Rating Header */
+.rating-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.rating-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.rating-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+.rating-user-info {
+    flex: 1;
+}
+
+.rating-user-name {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+/* Star Rating Display */
+.rating-stars {
+    font-size: 1.125rem;
+    color: var(--warning);
+}
+
+.stars-filled {
+    color: #fbbf24;
+    /* Yellow/gold for filled stars */
+}
+
+.stars-empty {
+    color: rgba(251, 191, 36, 0.3);
+}
+
+/* Rating Description */
+.rating-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    font-size: 0.9375rem;
+}
+
+.rating-date {
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+}
+
+/* ============================================
+   Rating Submission Form
+   ============================================ */
+
+.rating-submission-container {
+    max-width: 700px;
+    margin: 4rem auto 0;
+    background: var(--bg-card);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.rating-form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.rating-form-header h3 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.rating-form-header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.rating-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.rating-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.rating-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.9375rem;
+}
+
+.rating-form input[type="text"],
+.rating-form input[type="file"],
+.rating-form textarea {
+    width: 100%;
+    padding: 0.875rem;
+    background: var(--bg-darker);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.rating-form input:focus,
+.rating-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-purple);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.rating-form small {
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+}
+
+/* Star Rating Input */
+.star-rating-input {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 2.5rem;
+    margin: 0.5rem 0;
+}
+
+.star-rating-input .star {
+    cursor: pointer;
+    color: rgba(251, 191, 36, 0.3);
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.star-rating-input .star.selected,
+.star-rating-input .star:hover {
+    color: #fbbf24;
+    transform: scale(1.1);
+}
+
+.star-rating-input .star.hover {
+    color: #fbbf24;
+}
+
+/* Form Actions */
+.form-actions {
+    margin-top: 2rem;
+}
+
+.rating-form .btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.form-note {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(59, 130, 246, 0.1);
+    border-left: 3px solid var(--primary-blue);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.form-note i {
+    color: var(--primary-blue);
+    margin-top: 0.125rem;
+}
+
+/* Form Messages */
+.form-message {
+    margin-top: 1.5rem;
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.9375rem;
+    font-weight: 500;
+}
+
+.form-message.success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid var(--success);
+    color: var(--success);
+}
+
+.form-message.error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--error);
+    color: var(--error);
+}
+
+/* Loading & Empty States */
+.ratings-grid .loading-state,
+.ratings-grid .empty-state,
+.ratings-grid .error-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.ratings-grid .loader {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(139, 92, 246, 0.1);
+    border-top-color: var(--primary-purple);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+/* Large Screens (4 columns) */
+@media (max-width: 1400px) {
+    .ratings-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Tablet (3 columns) */
+@media (max-width: 1024px) {
+    .ratings-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+    }
+
+    .rating-submission-container {
+        padding: 2rem;
+    }
+}
+
+/* Mobile Large (2 columns) */
+@media (max-width: 768px) {
+    .ratings-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .rating-form .form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .rating-submission-container {
+        padding: 1.5rem;
+        margin-top: 3rem;
+    }
+
+    .star-rating-input {
+        font-size: 2rem;
+    }
+}
+
+/* Mobile (1 column) */
+@media (max-width: 480px) {
+    .ratings-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rating-card {
+        padding: 1.25rem;
+    }
+
+    .rating-submission-container {
+        padding: 1.25rem;
+    }
+
+    .rating-form-header h3 {
+        font-size: 1.5rem;
+    }
+
+    .star-rating-input {
+        font-size: 1.75rem;
+    }
+}

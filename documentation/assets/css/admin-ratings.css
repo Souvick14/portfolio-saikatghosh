@@ -1,0 +1,156 @@
+/* ============================================
+   Ratings Admin Styles
+   ============================================ */
+
+.ratings-admin-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.ratings-admin-column {
+    background: var(--bg-card);
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admin-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    color: var(--text-primary);
+}
+
+.admin-section-title i {
+    color: var(--primary-purple);
+}
+
+.badge {
+    background: rgba(139, 92, 246, 0.2);
+    color: var(--primary-purple);
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-left: auto;
+}
+
+.badge-success {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--success);
+}
+
+.ratings-admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+/* Rating Admin Card */
+.rating-admin-card {
+    background: var(--bg-darker);
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.rating-admin-card:hover {
+    border-color: var(--primary-purple);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+}
+
+.rating-admin-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.rating-admin-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.rating-admin-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: white;
+}
+
+.rating-admin-info {
+    flex: 1;
+}
+
+.rating-admin-info h4 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+.rating-admin-stars {
+    color: #fbbf24;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.rating-admin-info small {
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+}
+
+.rating-admin-description {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.rating-admin-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.rating-admin-actions .btn-small {
+    flex: 1;
+}
+
+/* Empty Placeholder */
+.empty-placeholder {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--text-muted);
+}
+
+.empty-placeholder i {
+    font-size: 3rem;
+    opacity: 0.3;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.empty-placeholder p {
+    font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .ratings-admin-wrapper {
+        grid-template-columns: 1fr;
+    }
+}

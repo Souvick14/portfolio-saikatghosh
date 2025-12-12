@@ -83,6 +83,7 @@ const blogsRoutes = require('./routes/blogs');
 const clientWorkRoutes = require('./routes/client-work');
 const contactRoutes = require('./routes/contact');
 const aboutRoutes = require('./routes/about');
+const ratingsRoutes = require('./routes/ratings');
 
 // Use routes
 app.use('/api/skills', skillsRoutes);
@@ -92,6 +93,7 @@ app.use('/api/blogs', blogsRoutes);
 app.use('/api/client-work', clientWorkRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/about', aboutRoutes);
+app.use('/api/ratings', ratingsRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -115,6 +117,7 @@ app.get('/api', (req, res) => {
             clientWork: '/api/client-work',
             contact: '/api/contact',
             about: '/api/about',
+            ratings: '/api/ratings',
             health: '/api/health'
         }
     });

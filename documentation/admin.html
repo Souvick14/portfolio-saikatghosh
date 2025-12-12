@@ -14,6 +14,7 @@
     <!-- Admin CSS -->
     <link rel="stylesheet" href="assets/css/admin-style.css">
     <link rel="stylesheet" href="assets/css/admin-additions.css">
+    <link rel="stylesheet" href="assets/css/admin-ratings.css">
 </head>
 <body>
     <!-- Login Screen -->
@@ -82,6 +83,10 @@
                 <a href="#" class="nav-item" data-tab="clientsWork">
                     <i class="fas fa-briefcase"></i>
                     <span>Client's Work</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="ratings">
+                    <i class="fas fa-star"></i>
+                    <span>Ratings</span>
                 </a>
                 <a href="#" class="nav-item" data-tab="contact">
                     <i class="fas fa-envelope"></i>
@@ -858,6 +863,45 @@
                     </div>
                 </form>
             </section>
+
+            <!-- Ratings Section -->
+            <section class="content-section" id="ratingsTab">
+                <div class="section-actions">
+                    <button class="btn-secondary" id="refreshRatingsBtn">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="ratings-admin-wrapper">
+                    <!-- Pending Ratings -->
+                    <div class="ratings-admin-column">
+                        <h3 class="admin-section-title">
+                            <i class="fas fa-clock"></i> Pending Ratings
+                            <span class="badge" id="pendingCount">0</span>
+                        </h3>
+                        <div class="ratings-admin-list" id="pendingRatingsList">
+                            <div class="empty-placeholder">
+                                <i class="fas fa-inbox"></i>
+                                <p>No pending ratings</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Approved Ratings -->
+                    <div class="ratings-admin-column">
+                        <h3 class="admin-section-title">
+                            <i class="fas fa-check-circle"></i> Approved Ratings
+                            <span class="badge badge-success" id="approvedCount">0</span>
+                        </h3>
+                        <div class="ratings-admin-list" id="approvedRatingsList">
+                            <div class="empty-placeholder">
+                                <i class="fas fa-star"></i>
+                                <p>No approved ratings</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -875,6 +919,7 @@
     <script src="assets/js/admin-extensions.js"></script>
     <script src="assets/js/admin-blog.js"></script>
     <script src="assets/js/admin-client-work.js"></script>
+    <script src="assets/js/admin-ratings.js"></script>
     <script src="assets/js/admin-icon-upload.js"></script>
     <script src="assets/js/admin-image-upload.js"></script>
     <script src="assets/js/admin-youtube.js"></script>
