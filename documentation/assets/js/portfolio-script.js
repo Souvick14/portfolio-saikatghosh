@@ -1303,11 +1303,17 @@ window.addEventListener('load', function () {
 // ============================================
 //Contact Form (keeping existing functionality)
 // ============================================
+// Contact Form Submission
+// ============================================
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
-    contactForm.addEventListener('submit', function (e) {
+    contactForm.addEventListener('submit', async function (e) {
         e.preventDefault();
 
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+
+        // Get form data
         const formData = {
             name: document.getElementById('name').value,
             email: document.getElementById('email').value,
@@ -1315,9 +1321,43 @@ if (contactForm) {
             message: document.getElementById('message').value
         };
 
-        console.log('Form submitted:', formData);
-        alert('Thank you for your message! I\'ll get back to you soon.');
-        contactForm.reset();
+        // Disable submit button
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+        try {
+            const response = await fetch('/api/contact/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // Success
+                alert('✅ Message sent successfully! I\'ll get back to you soon.');
+                contactForm.reset();
+            } else {
+                // API error
+                if (response.status === 503) {
+                    // Email not configured
+                    alert('⚠️ Contact form received, but email is not configured yet. Please check server console.');
+                    console.error('Email not configured:', result);
+                } else {
+                    throw new Error(result.error || 'Failed to send message');
+                }
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
+            alert('❌ Failed to send message. Please try again or contact directly via email.');
+        } finally {
+            // Re-enable submit button
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+        }
     });
 }
 
