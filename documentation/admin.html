@@ -20,16 +20,6 @@
 <body>
     <!-- Admin Container -->
     <div class="admin-container" id="adminContainer">
-        <!-- Mobile Header -->
-        <div class="mobile-header">
-            <div class="mobile-logo">Admin Panel</div>
-            <button class="hamburger-btn" id="hamburgerBtn">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-
-        <!-- Mobile Overlay -->
-        <div class="mobile-overlay" id="mobileOverlay"></div>
 
     <!-- Login Screen -->
     <div class="login-container" id="loginContainer">
@@ -70,6 +60,17 @@
 
     <!-- Admin Dashboard -->
     <div class="admin-dashboard" id="adminDashboard" style="display: none;">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <div class="mobile-logo">Admin Panel</div>
+            <button class="hamburger-btn" id="hamburgerBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Overlay -->
+        <div class="mobile-overlay" id="mobileOverlay"></div>
+
         <!-- Sidebar -->
         <aside class="admin-sidebar">
             <div class="sidebar-header">
@@ -993,16 +994,26 @@
             const overlay = document.getElementById('mobileOverlay');
 
             if (hamburgerBtn && sidebar && overlay) {
+                const hamburgerIcon = hamburgerBtn.querySelector('i');
+                
                 // Toggle menu
                 hamburgerBtn.addEventListener('click', () => {
-                    sidebar.classList.toggle('active');
+                    const isActive = sidebar.classList.toggle('active');
                     overlay.classList.toggle('active');
+                    
+                    // Change icon
+                    if (isActive) {
+                        hamburgerIcon.className = 'fas fa-times'; // X icon
+                    } else {
+                        hamburgerIcon.className = 'fas fa-bars'; // Hamburger icon
+                    }
                 });
 
                 // Close menu when clicking overlay
                 overlay.addEventListener('click', () => {
                     sidebar.classList.remove('active');
                     overlay.classList.remove('active');
+                    hamburgerIcon.className = 'fas fa-bars';
                 });
 
                 // Close menu when clicking a nav item
@@ -1012,6 +1023,7 @@
                         if (window.innerWidth <= 768) {
                             sidebar.classList.remove('active');
                             overlay.classList.remove('active');
+                            hamburgerIcon.className = 'fas fa-bars';
                         }
                     });
                 });
