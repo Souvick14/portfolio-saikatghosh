@@ -18,6 +18,19 @@
     <link rel="stylesheet" href="assets/css/admin-messages.css">
 </head>
 <body>
+    <!-- Admin Container -->
+    <div class="admin-container" id="adminContainer">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <div class="mobile-logo">Admin Panel</div>
+            <button class="hamburger-btn" id="hamburgerBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Overlay -->
+        <div class="mobile-overlay" id="mobileOverlay"></div>
+
     <!-- Login Screen -->
     <div class="login-container" id="loginContainer">
         <div class="login-box">
@@ -971,6 +984,40 @@
     <script src="assets/js/admin-icon-upload.js"></script>
     <script src="assets/js/admin-image-upload.js"></script>
     <script src="assets/js/admin-youtube.js"></script>
+    
+    <!-- Mobile Menu Toggle -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const sidebar = document.querySelector('.admin-sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+
+            if (hamburgerBtn && sidebar && overlay) {
+                // Toggle menu
+                hamburgerBtn.addEventListener('click', () => {
+                    sidebar.classList.toggle('active');
+                    overlay.classList.toggle('active');
+                });
+
+                // Close menu when clicking overlay
+                overlay.addEventListener('click', () => {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+
+                // Close menu when clicking a nav item
+                const navItems = sidebar.querySelectorAll('.nav-item');
+                navItems.forEach(item => {
+                    item.addEventListener('click', () => {
+                        if (window.innerWidth <= 768) {
+                            sidebar.classList.remove('active');
+                            overlay.classList.remove('active');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
     
     <!-- Video file preview handler -->
     <script>
