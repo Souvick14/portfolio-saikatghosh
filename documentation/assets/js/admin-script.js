@@ -197,9 +197,9 @@ class AdminPanel {
         // Update title
         const titles = {
             skills: 'Skills Management',
-            reels: 'Reels Management',
+            reels: 'Long form project Management',
             blogs: 'Blogs Management',
-            clientsWork: 'Client\'s Work Management',
+            clientsWork: 'Short form project Management',
             ratings: 'Ratings Management',
             about: 'About Management',
             contact: 'Contact Management',
