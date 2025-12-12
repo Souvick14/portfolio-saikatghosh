@@ -1,0 +1,118 @@
+/* ============================================
+   Messages Admin Styles
+   ============================================ */
+
+.messages-admin-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.messages-admin-column {
+    background: var(--bg-card);
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.messages-admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+/* Message Admin Card */
+.message-admin-card {
+    background: var(--bg-darker);
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.message-admin-card:hover {
+    border-color: var(--primary-purple);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+}
+
+.message-admin-header {
+    margin-bottom: 1rem;
+}
+
+.message-admin-info h4 {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.message-email-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.message-email-link:hover {
+    color: var(--primary-purple);
+    text-decoration: underline;
+}
+
+.message-admin-info small {
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+    display: block;
+}
+
+.message-admin-subject {
+    background: rgba(59, 130, 246, 0.1);
+    padding: 0.75rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+    font-size: 0.9375rem;
+}
+
+.message-admin-subject strong {
+    color: var(--primary-blue);
+}
+
+.message-admin-text {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.message-admin-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.message-admin-actions .btn-small {
+    flex: 1;
+    min-width: 120px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .messages-admin-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .message-admin-actions {
+        flex-direction: column;
+    }
+
+    .message-admin-actions .btn-small {
+        width: 100%;
+    }
+}

@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="assets/css/admin-style.css">
     <link rel="stylesheet" href="assets/css/admin-additions.css">
     <link rel="stylesheet" href="assets/css/admin-ratings.css">
+    <link rel="stylesheet" href="assets/css/admin-messages.css">
 </head>
 <body>
     <!-- Login Screen -->
@@ -88,8 +89,12 @@
                     <i class="fas fa-star"></i>
                     <span>Ratings</span>
                 </a>
-                <a href="#" class="nav-item" data-tab="contact">
+                <a href="#" class="nav-item" data-tab="messages">
                     <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="contact">
+                    <i class="fas fa-cog"></i>
                     <span>Contact Settings</span>
                 </a>
                 <a href="#" class="nav-item" data-tab="about">
@@ -902,6 +907,45 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Messages Section -->
+            <section class="content-section" id="messagesTab">
+                <div class="section-actions">
+                    <button class="btn-secondary" id="refreshMessagesBtn">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="messages-admin-wrapper">
+                    <!-- Unread Messages -->
+                    <div class="messages-admin-column">
+                        <h3 class="admin-section-title">
+                            <i class="fas fa-envelope"></i> Unread Messages
+                            <span class="badge" id="unreadCount">0</span>
+                        </h3>
+                        <div class="messages-admin-list" id="unreadMessagesList">
+                            <div class="empty-placeholder">
+                                <i class="fas fa-inbox"></i>
+                                <p>No unread messages</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Read Messages -->
+                    <div class="messages-admin-column">
+                        <h3 class="admin-section-title">
+                            <i class="fas fa-envelope-open"></i> Read Messages
+                            <span class="badge badge-success" id="readCount">0</span>
+                        </h3>
+                        <div class="messages-admin-list" id="readMessagesList">
+                            <div class="empty-placeholder">
+                                <i class="fas fa-check"></i>
+                                <p>No read messages</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -920,6 +964,7 @@
     <script src="assets/js/admin-blog.js"></script>
     <script src="assets/js/admin-client-work.js"></script>
     <script src="assets/js/admin-ratings.js"></script>
+    <script src="assets/js/admin-messages.js"></script>
     <script src="assets/js/admin-icon-upload.js"></script>
     <script src="assets/js/admin-image-upload.js"></script>
     <script src="assets/js/admin-youtube.js"></script>

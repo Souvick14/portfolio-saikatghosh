@@ -5,8 +5,8 @@
 const express = require('express');
 const router = express.Router();
 const ContactInfo = require('../models/ContactInfo');
+const Message = require('../models/Message');
 const mongoose = require('mongoose');
-const nodemailer = require('nodemailer');
 
 // GET contact info
 router.get('/', async (req, res) => {
@@ -70,8 +70,8 @@ router.put('/', async (req, res) => {
     }
 });
 
-// POST send contact form email
-router.post('/send', async (req, res) => {
+// POST save contact form message to database
+router.post('/messages', async (req, res) => {
     try {
         const { name, email, subject, message } = req.body;
         
@@ -83,56 +83,95 @@ router.post('/send', async (req, res) => {
             });
         }
         
-        // Check if email is configured
-        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-            console.warn('Email not configured. Form data:', { name, email, subject, message });
-            return res.status(503).json({ 
-                error: 'Email service not configured',
-                message: 'Contact form received but email is not set up. Please configure EMAIL_USER and EMAIL_PASS in .env file.'
+        // Create and save message
+        const newMessage = new Message({
+            name: name.trim(),
+            email: email.trim().toLowerCase(),
+            subject: subject.trim(),
+            message: message.trim(),
+            isRead: false
+        });
+        
+        await newMessage.save();
+        
+        res.status(201).json({ 
+            success: true,
+            message: 'Message received successfully! We\'ll get back to you soon.'
+        });
+        
+        console.log(`✅ New message from ${name} (${email})`);
+        
+    } catch (error) {
+        console.error('Error saving message:', error);
+        
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ 
+                error: error.message 
             });
         }
         
-        // Create email transporter
-        const transporter = nodemailer.createTransport({
-            service: process.env.EMAIL_SERVICE || 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            }
-        });
-        
-        // Email options
-        const mailOptions = {
-            from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
-            to: process.env.CONTACT_FORM_TO || process.env.EMAIL_USER,
-            replyTo: email,
-            subject: `Portfolio Contact: ${subject}`,
-            html: `
-                <h2>New Contact Form Submission</h2>
-                <p><strong>Name:</strong> ${name}</p>
-                <p><strong>Email:</strong> ${email}</p>
-                <p><strong>Subject:</strong> ${subject}</p>
-                <hr/>
-                <h3>Message:</h3>
-                <p>${message.replace(/\n/g, '<br>')}</p>
-                <hr/>
-                <p><small>Sent from Portfolio Contact Form</small></p>
-            `
-        };
-        
-        // Send email
-        await transporter.sendMail(mailOptions);
-        
-        res.json({ 
-            success: true,
-            message: 'Email sent successfully'
-        });
-    } catch (error) {
-        console.error('Email send error:', error);
         res.status(500).json({ 
-            error: 'Failed to send email',
-            message: error.message
+            error: 'Failed to save message. Please try again.' 
         });
+    }
+});
+
+// GET all messages (admin only)
+router.get('/messages', async (req, res) => {
+    try {
+        const messages = await Message.find()
+            .sort({ createdAt: -1 }); // Newest first
+
+        res.json(messages);
+    } catch (error) {
+        console.error('Error fetching messages:', error);
+        res.status(500).json({ error: 'Failed to fetch messages' });
+    }
+});
+
+// PUT mark message as read
+router.put('/messages/:id/read', async (req, res) => {
+    try {
+        const message = await Message.findById(req.params.id);
+        
+        if (!message) {
+            return res.status(404).json({ error: 'Message not found' });
+        }
+
+        // Toggle read status
+        message.isRead = !message.isRead;
+        await message.save();
+
+        res.json({
+            message: `Message marked as ${message.isRead ? 'read' : 'unread'}`,
+            data: message
+        });
+
+    } catch (error) {
+        console.error('Error updating message:', error);
+        res.status(500).json({ error: 'Failed to update message' });
+    }
+});
+
+// DELETE message
+router.delete('/messages/:id', async (req, res) => {
+    try {
+        const deletedMessage = await Message.findByIdAndDelete(req.params.id);
+
+        if (!deletedMessage) {
+            return res.status(404).json({ error: 'Message not found' });
+        }
+
+        res.json({
+            message: 'Message deleted successfully',
+            data: deletedMessage
+        });
+
+        console.log(`✅ Message ${deletedMessage._id} deleted`);
+
+    } catch (error) {
+        console.error('Error deleting message:', error);
+        res.status(500).json({ error: 'Failed to delete message' });
     }
 });
 

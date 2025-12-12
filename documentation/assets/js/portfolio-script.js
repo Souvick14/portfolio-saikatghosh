@@ -1326,7 +1326,7 @@ if (contactForm) {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
         try {
-            const response = await fetch('/api/contact/send', {
+            const response = await fetch('/api/contact/messages', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -1338,21 +1338,14 @@ if (contactForm) {
 
             if (response.ok) {
                 // Success
-                alert('✅ Message sent successfully! I\'ll get back to you soon.');
+                alert('✅ Message sent successfully! We\'ll get back to you soon.');
                 contactForm.reset();
             } else {
-                // API error
-                if (response.status === 503) {
-                    // Email not configured
-                    alert('⚠️ Contact form received, but email is not configured yet. Please check server console.');
-                    console.error('Email not configured:', result);
-                } else {
-                    throw new Error(result.error || 'Failed to send message');
-                }
+                throw new Error(result.error || 'Failed to send message');
             }
         } catch (error) {
             console.error('Error sending message:', error);
-            alert('❌ Failed to send message. Please try again or contact directly via email.');
+            alert('❌ Failed to send message. Please try again.');
         } finally {
             // Re-enable submit button
             submitBtn.disabled = false;
