@@ -252,9 +252,7 @@ body {
 @media (max-width: 768px) {
 
     /* Show mobile header */
-    .mobile-header {
-        display: flex !important;
-    }
+
 
     /* Hide desktop sidebar by default */
     .admin-sidebar {
@@ -340,13 +338,9 @@ body {
 
 /* Small mobile screens */
 @media (max-width: 480px) {
-    .mobile-header {
-        padding: 0 0.75rem;
-    }
 
-    .mobile-logo {
-        font-size: 1.125rem;
-    }
+
+
 
     .content-section {
         padding: 1rem 0.75rem;
@@ -605,22 +599,7 @@ body {
     border-color: var(--error);
 }
 
-/* Mobile Header (Hamburger Menu) */
-.mobile-header {
-    display: none;
-    /* Hidden by default on desktop */
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 60px;
-    background: var(--bg-card);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 1000;
-    padding: 0 1rem;
-    align-items: center;
-    justify-content: space-between;
-}
+
 
 /* Modal */
 .modal {
@@ -686,6 +665,11 @@ body {
 }
 
 .hamburger-btn {
+        right: 1rem;
+        display: none;
+    bottom: 1rem;
+    position: fixed;
+    z-index: 2001;
     background: none;
     border: none;
     color: var(--text-primary);
@@ -982,6 +966,9 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
+    .hamburger-btn{
+        display: block;
+    }
     .admin-sidebar {
         width: 100%;
         position: fixed;
