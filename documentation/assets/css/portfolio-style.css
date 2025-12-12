@@ -1469,16 +1469,26 @@ p {
 
     font-weight: 100;
 }
-
-/* #motion-designer {
+/* 
+#motion-designer {
+    font-family: agbalumo;
+    font-style: normal;
+    font-size: 3rem;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     background-image: url(../images/jr-korpa-9XngoIpxcEo-unsplash.jpg);
-    -webkit-text-stroke: 1.5px white;
-    text-stroke: 1.5px white;
+    -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.46);
+    text-stroke: 0.5px rgba(255, 255, 255, 0.46); 
 } */
 
 @font-face {
     font-family: telma;
     src: url(/documentation/assets/fonts/Telma-Regular.woff2);
 }
+
+
+/* @font-face {
+    font-family: agbalumo;
+    src: url(/documentation/assets/fonts/Agbalumo-Regular.ttf);
+}
+ */
