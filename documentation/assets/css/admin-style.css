@@ -600,6 +600,23 @@ body {
     border-color: var(--error);
 }
 
+/* Mobile Header (Hamburger Menu) */
+.mobile-header {
+    display: none;
+    /* Hidden by default on desktop */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: var(--bg-card);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    padding: 0 1rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
 /* Modal */
 .modal {
     display: none;
