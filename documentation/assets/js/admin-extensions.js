@@ -347,10 +347,10 @@ if (typeof AdminPanel !== 'undefined') {
                 </div>
             </div>
             <div class="commercial-actions">
-                <button class="btn-edit" onclick="adminPanel.editClientWork('${work._id}')">
+                <button class="btn-edit" onclick="window.adminPanel.editClientWork('${work._id}')">
                     <i class="fas fa-edit"></i> Edit
                 </button>
-                <button class="btn-delete" onclick="adminPanel.deleteClientWork('${work._id}')">
+                <button class="btn-delete" onclick="window.adminPanel.deleteClientWork('${work._id}')">
                     <i class="fas fa-trash"></i> Delete
                 </button>
             </div>
