@@ -479,6 +479,24 @@
                                     Lower numbers appear first
                                 </small>
                             </div>
+                            <div class="form-group">
+    <label for="youtubeGenre">Genre *</label>
+    <select id="youtubeGenre" required class="inputstyler">
+        <option value="">Select Genre</option>
+        <option value="Motion Graphics">Motion Graphics</option>
+        <option value="Commercial">Commercial</option>
+        <option value="Others">Others</option>
+    </select>
+</div>
+
+<div class="form-group" id="youtubeCustomGenreGroup" style="display: none;">
+    <label for="youtubeCustomGenre">Custom Genre *</label>
+    <input type="text" id="youtubeCustomGenre" class="inputstyler"
+           placeholder="Enter custom genre (e.g., Tutorial, Documentary)">
+    <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">
+        This genre will be saved for future use
+    </small>
+</div>
 
                             <!-- Video Preview -->
                             <div class="form-group">
@@ -704,7 +722,24 @@
                                            placeholder="e.g., $15K">
                                 </div>
                             </div>
+<div class="form-group">
+    <label for="clientWorkGenre">Genre *</label>
+    <select id="clientWorkGenre" required class="inputstyler">
+        <option value="">Select Genre</option>
+        <option value="Motion Graphics">Motion Graphics</option>
+        <option value="Commercial">Commercial</option>
+        <option value="Others">Others</option>
+    </select>
+</div>
 
+<div class="form-group" id="clientWorkCustomGenreGroup" style="display: none;">
+    <label for="clientWorkCustomGenre">Custom Genre *</label>
+    <input type="text" id="clientWorkCustomGenre" class="inputstyler"
+           placeholder="Enter custom genre (e.g., Tutorial, Documentary)">
+    <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">
+        This genre will be saved for future use
+    </small>
+</div>
                             <!-- Video Preview -->
                             <div class="form-group">
                                 <label>Video Preview</label>
@@ -850,6 +885,7 @@
                                        placeholder="Los Angeles, CA">
                             </div>
                         </div>
+                        
                     </div>
 
                     <div class="settings-section">
