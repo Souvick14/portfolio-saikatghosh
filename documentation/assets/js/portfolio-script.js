@@ -162,6 +162,7 @@ class CarouselController {
         this.wrapper.innerHTML = '';
         commercials.forEach(commercial => {
             const slide = document.createElement('div');
+            console.log(' cgfhdjjfjdfj: ' + commercial.videoId);
             slide.className = 'carousel-slide commercial-slide';
             slide.innerHTML = `
                 <div class="commercial-video">
