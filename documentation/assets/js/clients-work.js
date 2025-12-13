@@ -167,8 +167,12 @@
     function extractYouTubeId(url) {
         if (!url) return null;
         
+        // youtube.com/shorts/VIDEO_ID (YouTube Shorts)
+        let match = url.match(/\/shorts\/([A-Za-z0-9_-]+)/);
+        if (match) return match[1];
+        
         // youtu.be/VIDEO_ID
-        let match = url.match(/youtu\.be\/([A-Za-z0-9_-]+)/);
+        match = url.match(/youtu\.be\/([A-Za-z0-9_-]+)/);
         if (match) return match[1];
         
         // youtube.com/watch?v=VIDEO_ID
