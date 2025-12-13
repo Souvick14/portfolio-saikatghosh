@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="assets/css/carousel.css">
     <link rel="stylesheet" href="assets/css/clients-work.css">
     <link rel="stylesheet" href="assets/css/ratings.css">
+    <link rel="stylesheet" href="assets/css/achievements.css">
     <link rel="stylesheet" type="text/css" href="assets/css/instagram-carousel.css">
     <link rel="stylesheet" type="text/css" href="assets/css/youtube-section.css">
     <link rel="stylesheet" href="/assets/css/home-text-editing.css">
@@ -71,6 +72,7 @@
                 <li><a href="#skills" class="nav-link">Skills</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
                 <li><a href="#ratings" class="nav-link">Ratings</a></li>
+                <li><a href="#achievements" class="nav-link">Achievements</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
 
@@ -152,6 +154,39 @@
             <div class="load-more-container" id="clientsWorkLoadMoreContainer" style="text-align: center; margin-top: 3rem; display: none;">
                 <button class="btn-load-more" id="clientsWorkLoadMore">
                     <i class="fas fa-chevron-down"></i> Load More Projects
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Achievements Section -->
+    <section class="section achievements-section" id="achievements">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Achievements</h2>
+                <p class="section-description">
+                    Milestones, awards, and recognitions that define the journey
+                </p>
+            </div>
+
+            <!-- Achievements Grid -->
+            <div class="achievements-grid" id="achievementsGrid">
+                <!-- Achievement cards will be loaded dynamically -->
+                <div class="achievements-empty">
+                    <i class="fas fa-trophy"></i>
+                    <p>Loading achievements...</p>
+                </div>
+            </div>
+
+            <!-- Show More/Less Buttons -->
+            <div class="achievements-actions">
+                <button id="achievementsShowMore" class="achievements-show-btn hidden">
+                    <span>Show More</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <button id="achievementsShowLess" class="achievements-show-btn hidden">
+                    <span>Show Less</span>
+                    <i class="fas fa-chevron-up"></i>
                 </button>
             </div>
         </div>
@@ -487,6 +522,7 @@
     <script src="assets/js/ratings.js"></script>
     <script src="assets/js/carousel.js"></script>
     <script src="assets/js/contact-loader.js"></script>
+    <script src="assets/js/achievements.js"></script>
 </body>
 
 </html>

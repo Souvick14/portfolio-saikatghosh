@@ -1,0 +1,199 @@
+/* ============================================
+   Achievements Section - Instagram Style Cards
+   ============================================ */
+
+.achievements-section {
+    padding: var(--spacing-xl) 0;
+    background: var(--bg-primary);
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Achievement Card - Instagram Style */
+.achievement-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.achievement-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(139, 92, 246, 0.3);
+}
+
+/* Card Header - Admin Profile */
+.achievement-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(15, 15, 35, 0.6);
+    backdrop-filter: blur(10px);
+}
+
+.achievement-admin-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary-purple);
+}
+
+.achievement-admin-pic.default-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-primary);
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.achievement-admin-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Card Image */
+.achievement-card-image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+}
+
+/* Card Content */
+.achievement-card-content {
+    padding: 1rem;
+}
+
+.achievement-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 0.95rem;
+    /* Limit to 3 lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+}
+
+/* Show More/Less Buttons */
+.achievements-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.achievements-show-btn {
+    padding: 0.875rem 2.5rem;
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-full);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.achievements-show-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
+}
+
+.achievements-show-btn i {
+    font-size: 0.875rem;
+    transition: transform 0.3s ease;
+}
+
+.achievements-show-btn:hover i.fa-chevron-down {
+    transform: translateY(3px);
+}
+
+.achievements-show-btn:hover i.fa-chevron-up {
+    transform: translateY(-3px);
+}
+
+/* Hidden state */
+.achievements-show-btn.hidden {
+    display: none;
+}
+
+/* Empty State */
+.achievements-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-muted);
+}
+
+.achievements-empty i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+    color: var(--primary-purple);
+}
+
+.achievements-empty p {
+    font-size: 1.125rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .achievements-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .achievements-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .achievement-card-header {
+        padding: 0.75rem;
+    }
+
+    .achievement-admin-pic {
+        width: 35px;
+        height: 35px;
+    }
+
+    .achievement-admin-name {
+        font-size: 0.875rem;
+    }
+
+    .achievement-card-content {
+        padding: 0.875rem;
+    }
+
+    .achievement-description {
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .achievements-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .achievements-show-btn {
+        padding: 0.75rem 2rem;
+        font-size: 0.95rem;
+    }
+}

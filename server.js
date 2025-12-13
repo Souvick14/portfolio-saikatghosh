@@ -84,6 +84,7 @@ const clientWorkRoutes = require('./routes/client-work');
 const contactRoutes = require('./routes/contact');
 const aboutRoutes = require('./routes/about');
 const ratingsRoutes = require('./routes/ratings');
+const achievementsRoutes = require('./routes/achievements');
 
 // Use routes
 app.use('/api/skills', skillsRoutes);
@@ -94,6 +95,7 @@ app.use('/api/client-work', clientWorkRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/about', aboutRoutes);
 app.use('/api/ratings', ratingsRoutes);
+app.use('/api/achievements', achievementsRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
