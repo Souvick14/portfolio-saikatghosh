@@ -55,6 +55,11 @@ const clientWorkSchema = new mongoose.Schema({
         default: '',
         trim: true
     },
+    genre: {
+        type: String,
+        default: 'Others',
+        trim: true
+    },
     order: {
         type: Number,
         default: 0
