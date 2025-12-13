@@ -12,7 +12,7 @@
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('achievementsTab')) {
-            init Achievements();
+            initAchievements();
         }
     });
 
