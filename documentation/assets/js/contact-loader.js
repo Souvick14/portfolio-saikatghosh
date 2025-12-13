@@ -39,14 +39,14 @@
             socialLinks.forEach(link => {
                 const icon = link.querySelector('i');
                 
-                if (icon.classList.contains('fa-youtube') && contactData.youtube) {
-                    link.href = contactData.youtube;
-                } else if (icon.classList.contains('fa-instagram') && contactData.instagram) {
-                    link.href = contactData.instagram;
-                } else if (icon.classList.contains('fa-twitter') && contactData.twitter) {
-                    link.href = contactData.twitter;
-                } else if (icon.classList.contains('fa-linkedin') && contactData.linkedin) {
-                    link.href = contactData.linkedin;
+                if (icon.classList.contains('fa-youtube') && contactData.socialMedia?.youtube) {
+                    link.href = contactData.socialMedia.youtube;
+                } else if (icon.classList.contains('fa-instagram') && contactData.socialMedia?.instagram) {
+                    link.href = contactData.socialMedia.instagram;
+                } else if (icon.classList.contains('fa-twitter') && contactData.socialMedia?.twitter) {
+                    link.href = contactData.socialMedia.twitter;
+                } else if (icon.classList.contains('fa-linkedin') && contactData.socialMedia?.linkedin) {
+                    link.href = contactData.socialMedia.linkedin;
                 }
                 
                 // Don't show link if URL is empty

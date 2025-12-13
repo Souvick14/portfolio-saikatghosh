@@ -419,7 +419,7 @@ p {
 .hero-greeting {
     font-size: 1.25rem;
     color: var(--primary-cyan);
-    margin-bottom: 1rem;
+
     font-weight: 600;
     opacity: 0;
     animation: fadeInUp 0.8s ease forwards;
