@@ -8,11 +8,63 @@
     let allClientWorks = [];
     let currentlyDisplayed = 0;
     const ITEMS_PER_PAGE = 8; // 2 rows × 4 columns
+    let genres = [];
+    let currentGenreFilter = 'all';
 
     document.addEventListener('DOMContentLoaded', function() {
+        loadGenres();
         loadClientsWork();
         setupLoadMoreButton();
     });
+
+    // Load genres from API
+    async function loadGenres() {
+        try {
+            const response = await fetch('/api/genres');
+            if (response.ok) {
+                genres = await response.json();
+                renderGenreButtons();
+            }
+        } catch (error) {
+            console.error('Error loading genres:', error);
+        }
+    }
+
+    // Render genre filter buttons
+    function renderGenreButtons() {
+        const container = document.getElementById('clientWorkGenreFilters');
+        if (!container || genres.length === 0) return;
+
+        container.innerHTML = `
+            <button class="genre-btn active" data-genre="all">All</button>
+            ${genres.map(genre => `
+                <button class="genre-btn" data-genre="${genre.name}">${genre.name}</button>
+            `).join('')}
+        `;
+
+        // Add click handlers
+        container.querySelectorAll('.genre-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterByGenre(this.dataset.genre);
+                
+                // Update active state
+                container.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    }
+
+    // Filter by genre
+    function filterByGenre(genre) {
+        currentGenreFilter = genre;
+        currentlyDisplayed = 0;
+        
+        const grid = document.getElementById('clientsWorkGrid');
+        if (!grid) return;
+        
+        grid.innerHTML = '';
+        displayNextPage();
+    }
 
     async function loadClientsWork() {
         const grid = document.getElementById('clientsWorkGrid');
@@ -62,9 +114,26 @@
         const loadMoreContainer = document.getElementById('clientsWorkLoadMoreContainer');
         const loadMoreBtn = document.getElementById('clientsWorkLoadMore');
         
+        // Apply genre filter and sort
+        let filteredWorks = [...allClientWorks];
+        
+        if (currentGenreFilter !== 'all') {
+            // Sort: Selected genre first, then others
+            filteredWorks = filteredWorks.sort((a, b) => {
+                const aMatch = a.genre === currentGenreFilter;
+                const bMatch = b.genre === currentGenreFilter;
+                
+                if (aMatch && !bMatch) return -1;
+                if (!aMatch && bMatch) return 1;
+                
+                // If both or neither match, maintain chronological order
+                return new Date(b.createdAt) - new Date(a.createdAt);
+            });
+        }
+        
         // Calculate how many items to show
-        const endIndex = Math.min(currentlyDisplayed + ITEMS_PER_PAGE, allClientWorks.length);
-        const itemsToShow = allClientWorks.slice(currentlyDisplayed, endIndex);
+        const endIndex = Math.min(currentlyDisplayed + ITEMS_PER_PAGE, filteredWorks.length);
+        const itemsToShow = filteredWorks.slice(currentlyDisplayed, endIndex);
         
         // Render cards
         itemsToShow.forEach(work => {
@@ -75,7 +144,7 @@
         currentlyDisplayed = endIndex;
         
         // Update button state
-        if (currentlyDisplayed < allClientWorks.length) {
+        if (currentlyDisplayed < filteredWorks.length) {
             // Show Load More button
             loadMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Load More Projects';
             loadMoreBtn.onclick = displayNextPage;
