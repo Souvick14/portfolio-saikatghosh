@@ -1,9 +1,9 @@
 :root{
-
-  --text-color: hsl(0, 0%, 100%);
+  --texthomestyle-color: hsl(0, 0%, 100%);
 }
 
 .wrapper {
+    max-height: 250px;
   display: grid;
   place-content: center;
   /* background-color: var(--background-color); */
@@ -11,7 +11,7 @@
   font-size: clamp(1.5rem, 1rem + 18vw, 15rem);
   font-weight: 700;
   text-transform: uppercase;
-  color: var(--text-color);
+  color: var(--texthomestyle-color);
 }
 
 .wrapper > div {
