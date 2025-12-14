@@ -73,14 +73,35 @@ if (typeof AdminPanel !== 'undefined') {
             ` : ''}
             
             <div class="blog-item-actions">
-                <button class="btn-edit" onclick="adminPanel.editBlog('${blog._id}')">
+                <button class="btn-edit" data-id="${blog._id}">
                     <i class="fas fa-edit"></i> Edit
                 </button>
-                <button class="btn-delete" onclick="adminPanel.deleteBlog('${blog._id}')">
+                <button class="btn-delete" data-id="${blog._id}">
                     <i class="fas fa-trash"></i> Delete
                 </button>
             </div>
         `;
+
+        // Attach event listeners programmatically
+        const editBtn = div.querySelector('.btn-edit');
+        const deleteBtn = div.querySelector('.btn-delete');
+
+        if (editBtn) {
+            editBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.editBlog(blog._id);
+            });
+        }
+
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.deleteBlog(blog._id);
+            });
+        }
+
         return div;
     };
 
