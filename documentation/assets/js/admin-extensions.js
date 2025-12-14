@@ -446,9 +446,28 @@ if (typeof AdminPanel !== 'undefined') {
             document.getElementById('clientWorkTitle').value = work.title;
             document.getElementById('clientWorkDescription').value = work.description;
             document.getElementById('clientWorkEngagement').value = work.engagement || '';
+            document.getElementById('clientWorkEngagement').value = work.engagement || '';
             document.getElementById('clientWorkRevenue').value = work.revenue || '';
+
+            // Set Genre
+            const genreDropdown = document.getElementById('clientWorkGenre');
+            const customGenreGroup = document.getElementById('clientWorkCustomGenreGroup');
+            const customGenreInput = document.getElementById('clientWorkCustomGenre');
             
-            this.currentClientWorkId = work._id;
+            if (genreDropdown) {
+                // Check if genre exists in dropdown
+                const options = Array.from(genreDropdown.options).map(opt => opt.value);
+                
+                if (work.genre && options.includes(work.genre)) {
+                    genreDropdown.value = work.genre;
+                    if (customGenreGroup) customGenreGroup.style.display = 'none';
+                } else {
+                    // It's a custom genre or 'Others'
+                    genreDropdown.value = 'Others';
+                    if (customGenreGroup) customGenreGroup.style.display = 'block';
+                    if (customGenreInput) customGenreInput.value = work.genre || '';
+                }
+            }
             
             document.getElementById('clientWorkModalTitle').textContent = 'Edit Client\'s Work';
             document.getElementById('submitClientWorkBtnText').textContent = 'Update Client\'s Work';

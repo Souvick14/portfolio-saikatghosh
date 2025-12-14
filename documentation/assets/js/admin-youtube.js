@@ -191,6 +191,29 @@ if (typeof AdminPanel !== 'undefined') {
             document.getElementById('youtubeVideoDescription').value = video.description || '';
             document.getElementById('youtubeVideoCategory').value = video.category || 'other';
             document.getElementById('youtubeVideoOrder').value = video.order || 0;
+
+            // Set Genre
+            const genreDropdown = document.getElementById('youtubeGenre');
+            const customGenreGroup = document.getElementById('youtubeCustomGenreGroup');
+            const customGenreInput = document.getElementById('youtubeCustomGenre');
+            
+            if (genreDropdown) {
+                // Check if genre exists in dropdown
+                const options = Array.from(genreDropdown.options).map(opt => opt.value);
+                
+                if (video.genre && options.includes(video.genre)) {
+                    genreDropdown.value = video.genre;
+                    if (customGenreGroup) customGenreGroup.style.display = 'none';
+                } else {
+                    // It's a custom genre or 'Others'
+                    genreDropdown.value = 'Others';
+                    if (customGenreGroup) customGenreGroup.style.display = 'block';
+                    if (customGenreInput) customGenreInput.value = video.genre || '';
+                }
+            }
+            document.getElementById('youtubeVideoDescription').value = video.description || '';
+            document.getElementById('youtubeVideoCategory').value = video.category || 'other';
+            document.getElementById('youtubeVideoOrder').value = video.order || 0;
         } else {
             modalTitle.textContent = 'Add YouTube Video';
             submitBtnText.textContent = 'Save Video';
