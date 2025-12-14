@@ -119,6 +119,11 @@ if (typeof AdminPanel !== 'undefined') {
             thumbnailUrl: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
         };
 
+        // Get Genre
+        if (window.AdminGenres && window.AdminGenres.getSelectedGenre) {
+            videoData.genre = await window.AdminGenres.getSelectedGenre('youtubeGenre', 'youtubeCustomGenre');
+        }
+
         try {
             const apiUrl = this.currentYouTubeVideoId 
                 ? `/api/youtube/${this.currentYouTubeVideoId}` 

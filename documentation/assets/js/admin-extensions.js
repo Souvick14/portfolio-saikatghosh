@@ -402,6 +402,12 @@ if (typeof AdminPanel !== 'undefined') {
             formData.append('technologyLogos', logoFiles[i]);
         }
 
+        // Get Genre
+        if (window.AdminGenres && window.AdminGenres.getSelectedGenre) {
+            const genre = await window.AdminGenres.getSelectedGenre('clientWorkGenre', 'clientWorkCustomGenre');
+            formData.append('genre', genre);
+        }
+
         try {
             const url = this.currentClientWorkId ? `/api/client-work/${this.currentClientWorkId}` : '/api/client-work';
             const method = this.currentClientWorkId ? 'PUT' : 'POST';
