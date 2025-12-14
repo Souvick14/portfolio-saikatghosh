@@ -1092,11 +1092,52 @@ class YouTubeVideoSection {
         this.gridContainer = document.getElementById('youtubeGrid');
         this.emptyState = document.getElementById('youtubeEmpty');
         this.videos = [];
+        this.genres = [];
+        this.currentGenre = 'all';
         this.init();
     }
 
     async init() {
-        await this.loadVideos();
+        await Promise.all([this.loadVideos(), this.loadGenres()]);
+        this.renderGenreButtons();
+        this.renderVideos();
+    }
+
+    async loadGenres() {
+        try {
+            const response = await fetch('/api/genres?category=youtube');
+            if (response.ok) {
+                this.genres = await response.json();
+            }
+        } catch (error) {
+            console.error('Error loading YouTube genres:', error);
+        }
+    }
+
+    renderGenreButtons() {
+        const container = document.getElementById('youtubeGenreFilters');
+        if (!container || this.genres.length === 0) return;
+
+        container.innerHTML = `
+            <button class="genre-btn active" data-genre="all">All</button>
+            ${this.genres.map(genre => `
+                <button class="genre-btn" data-genre="${genre.name}">${genre.name}</button>
+            `).join('')}
+        `;
+
+        container.querySelectorAll('.genre-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.filterByGenre(e.target.dataset.genre);
+                
+                // Update active state
+                container.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+            });
+        });
+    }
+
+    filterByGenre(genre) {
+        this.currentGenre = genre;
         this.renderVideos();
     }
 
@@ -1144,10 +1185,23 @@ class YouTubeVideoSection {
         }
 
         // Render each video card
-        this.videos.forEach((video, index) => {
-            const card = this.createVideoCard(video, index);
-            this.gridContainer.appendChild(card);
-        });
+    const filteredVideos = this.currentGenre === 'all' 
+        ? this.videos 
+        : this.videos.filter(video => video.genre === this.currentGenre);
+
+    if (filteredVideos.length === 0) {
+        this.gridContainer.innerHTML = `
+            <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                <p>No videos found for this genre.</p>
+            </div>
+        `;
+        return;
+    }
+
+    filteredVideos.forEach((video, index) => {
+        const card = this.createVideoCard(video, index);
+        this.gridContainer.appendChild(card);
+    });
     }
 
     createVideoCard(video, index) {

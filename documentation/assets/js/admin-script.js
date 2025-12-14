@@ -203,6 +203,8 @@ class AdminPanel {
             ratings: 'Ratings Management',
             about: 'About Management',
             contact: 'Contact Management',
+            contacts: 'Contact Management',
+            genres: 'Genre Management',
             instagramreels: 'Instagram Reels Management',
             messages: 'client messages'
 
@@ -286,7 +288,7 @@ class AdminPanel {
     }
 
     openSkillModal(skill = null) {
-        this.currentSkillId = skill ? skill.id : null;
+        this.currentSkillId = skill ? skill._id : null;
         const modal = document.getElementById('skillModal');
         const modalTitle = document.getElementById('modalTitle');
         const submitBtnText = document.getElementById('submitBtnText');

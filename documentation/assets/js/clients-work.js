@@ -118,18 +118,11 @@
         let filteredWorks = [...allClientWorks];
         
         if (currentGenreFilter !== 'all') {
-            // Sort: Selected genre first, then others
-            filteredWorks = filteredWorks.sort((a, b) => {
-                const aMatch = a.genre === currentGenreFilter;
-                const bMatch = b.genre === currentGenreFilter;
-                
-                if (aMatch && !bMatch) return -1;
-                if (!aMatch && bMatch) return 1;
-                
-                // If both or neither match, maintain chronological order
-                return new Date(b.createdAt) - new Date(a.createdAt);
-            });
+            filteredWorks = filteredWorks.filter(work => work.genre === currentGenreFilter);
         }
+        
+        // Sort by date (newest first)
+        filteredWorks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         
         // Calculate how many items to show
         const endIndex = Math.min(currentlyDisplayed + ITEMS_PER_PAGE, filteredWorks.length);

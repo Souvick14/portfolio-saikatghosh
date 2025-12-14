@@ -113,6 +113,10 @@
                     <i class="fas fa-trophy"></i>
                     <span>Achievements</span>
                 </a>
+                <a href="#" class="nav-item" data-tab="genres">
+                    <i class="fas fa-tags"></i>
+                    <span>Genres</span>
+                </a>
                 <a href="#" class="nav-item" data-tab="contact">
                     <i class="fas fa-cog"></i>
                     <span>Contact Settings</span>
@@ -1093,6 +1097,62 @@
                                 <p>No read messages</p>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
+            </section>
+
+            <!-- Genre Management Tab -->
+            <section class="content-section" id="genresTab">
+                <div class="section-actions">
+                    <button class="btn-primary" id="addGenreBtn">
+                        <i class="fas fa-plus"></i> Add New Genre
+                    </button>
+                    <button class="btn-secondary" id="refreshGenresBtn">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </div>
+
+                <!-- Genres List -->
+                <div class="genres-list" id="genresList">
+                    <!-- Genres will be loaded here -->
+                </div>
+
+                <!-- Genre Form Modal -->
+                <div class="modal" id="genreModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 id="genreModalTitle">Add New Genre</h2>
+                            <button class="modal-close" id="closeGenreModal">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <form id="genreForm" class="skill-form">
+                            <input type="hidden" id="genreId" class="inputstyler">
+                            
+                            <div class="form-group">
+                                <label for="genreName">Genre Name *</label>
+                                <input type="text" id="genreName" class="inputstyler" required 
+                                       placeholder="e.g., Documentary, Travel, Vlogs">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="genreCategory">Category</label>
+                                <select id="genreCategory" class="inputstyler">
+                                    <option value="both">All Categories</option>
+                                    <option value="clientWork">Client Work Only</option>
+                                    <option value="youtube">YouTube Only</option>
+                                </select>
+                            </div>
+
+                            <div class="modal-actions">
+                                <button type="button" class="btn-secondary" id="cancelGenreBtn">Cancel</button>
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-save"></i> <span id="submitGenreBtnText">Save Genre</span>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </section>
