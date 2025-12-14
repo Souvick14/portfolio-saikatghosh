@@ -16,11 +16,13 @@
 
 /* Achievement Card - Instagram Style */
 .achievement-card {
-    background: var(--bg-card);
-    border-radius: var(--radius-lg);
+        background: #000000;
+    border-radius: 1rem;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
+    opacity: 1;
+    border: 1px solid #0b0b29;
     position: relative;
 }
 
