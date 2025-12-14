@@ -190,6 +190,13 @@
     async function saveAchievement(e) {
         e.preventDefault();
 
+        const submitBtn = document.querySelector('#achievementForm button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
         const formData = new FormData();
         const description = document.getElementById('achievementDescription').value.trim();
         const order = document.getElementById('achievementOrder').value;
@@ -216,7 +223,10 @@
                 body: formData
             });
 
-            if (!response.ok) throw new Error('Failed to save achievement');
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to save achievement');
+            }
 
             const result = await response.json();
             showNotification(result.message || 'Achievement saved successfully', 'success');
@@ -226,7 +236,13 @@
 
         } catch (error) {
             console.error('Error saving achievement:', error);
-            showNotification('Failed to save achievement', 'error');
+            showNotification(error.message || 'Failed to save achievement', 'error');
+        } finally {
+            // Restore button state
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
         }
     }
 
