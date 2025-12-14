@@ -97,6 +97,7 @@
             displayNextPage();
             
             console.log(`✅ Loaded ${allClientWorks.length} client work items`);
+            console.log('🔍 Client Work Data Snapshot:', allClientWorks.map(w => ({ title: w.title, genre: w.genre })));
 
         } catch (error) {
             console.error('Error loading client work:', error);
