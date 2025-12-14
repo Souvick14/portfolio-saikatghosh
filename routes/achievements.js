@@ -9,26 +9,32 @@ const path = require('path');
 const fs = require('fs');
 const Achievement = require('../models/Achievement');
 
-// Configure multer for achievement image uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const uploadPath = path.join(__dirname, '../uploads/achievements');
-        
-        // Create directory if it doesn't exist
-        if (!fs.existsSync(uploadPath)) {
-            fs.mkdirSync(uploadPath, { recursive: true });
-        }
-        
-        cb(null, uploadPath);
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, 'achievement-' + uniqueSuffix + path.extname(file.originalname));
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+// Configure Cloudinary
+if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET
+    });
+    console.log('✅ Cloudinary configured for Achievement image uploads');
+}
+
+// Configure multer for Cloudinary upload
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'portfolio/achievements',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+        transformation: [{ width: 800, height: 800, crop: 'limit' }]
     }
 });
 
 const upload = multer({
     storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
     fileFilter: function (req, file, cb) {
         const allowedTypes = /jpeg|jpg|png|gif|webp/;
         const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -39,8 +45,7 @@ const upload = multer({
         } else {
             cb(new Error('Only image files are allowed (jpeg, jpg, png, gif, webp)'));
         }
-    },
-    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+    }
 });
 
 // ============================================
@@ -93,7 +98,7 @@ router.post('/', upload.single('achievementImage'), async (req, res) => {
         
         const achievementData = {
             description: description.trim(),
-            achievementImage: `/uploads/achievements/${req.file.filename}`,
+            achievementImage: req.file.path,
             order: order ? parseInt(order) : 0
         };
         
@@ -115,12 +120,8 @@ router.post('/', upload.single('achievementImage'), async (req, res) => {
         console.error('Error creating achievement:', error);
         
         // Delete uploaded file if database save fails
-        if (req.file) {
-            const filePath = path.join(__dirname, '../uploads/achievements', req.file.filename);
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-            }
-        }
+        // If using Cloudinary, we don't need to manually unlink local files
+        // But if you wanted to delete from Cloudinary on error, you'd need the public_id
         
         res.status(500).json({ error: 'Failed to create achievement' });
     }
@@ -147,13 +148,11 @@ router.put('/:id', upload.single('achievementImage'), async (req, res) => {
         
         // Update image if new one uploaded
         if (req.file) {
-            // Delete old image
-            const oldImagePath = path.join(__dirname, '..', achievement.achievementImage);
-            if (fs.existsSync(oldImagePath)) {
-                fs.unlinkSync(oldImagePath);
-            }
+            // Note: To delete the old image from Cloudinary, we would need its public_id
+            // const publicId = ...;
+            // await cloudinary.uploader.destroy(publicId);
             
-            achievement.achievementImage = `/uploads/achievements/${req.file.filename}`;
+            achievement.achievementImage = req.file.path;
         }
         
         await achievement.save();
@@ -183,10 +182,8 @@ router.delete('/:id', async (req, res) => {
         }
         
         // Delete image file
-        const imagePath = path.join(__dirname, '..', achievement.achievementImage);
-        if (fs.existsSync(imagePath)) {
-            fs.unlinkSync(imagePath);
-        }
+        // Note: To delete image from Cloudinary, we would need its public_id
+        // await cloudinary.uploader.destroy(publicId);
         
         await Achievement.findByIdAndDelete(req.params.id);
         
