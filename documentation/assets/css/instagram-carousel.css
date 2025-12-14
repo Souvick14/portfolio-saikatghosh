@@ -173,7 +173,7 @@
 /* Flip back button */
 .flip-back-button {
     position: absolute;
-    top: 1rem;
+    bottom: 1rem;
     right: 1rem;
     width: 36px;
     height: 36px;
