@@ -118,7 +118,10 @@
         let filteredWorks = [...allClientWorks];
         
         if (currentGenreFilter !== 'all') {
-            filteredWorks = filteredWorks.filter(work => work.genre === currentGenreFilter);
+            filteredWorks = filteredWorks.filter(work => {
+                if (!work.genre) return false;
+                return work.genre.trim().toLowerCase() === currentGenreFilter.trim().toLowerCase();
+            });
         }
         
         // Sort by date (newest first)

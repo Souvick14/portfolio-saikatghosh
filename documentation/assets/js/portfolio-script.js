@@ -1187,7 +1187,10 @@ class YouTubeVideoSection {
         // Render each video card
     const filteredVideos = this.currentGenre === 'all' 
         ? this.videos 
-        : this.videos.filter(video => video.genre === this.currentGenre);
+        : this.videos.filter(video => {
+            if (!video.genre) return false;
+            return video.genre.trim().toLowerCase() === this.currentGenre.trim().toLowerCase();
+        });
 
     if (filteredVideos.length === 0) {
         this.gridContainer.innerHTML = `

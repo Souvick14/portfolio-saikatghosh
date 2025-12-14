@@ -91,6 +91,7 @@ router.post('/', upload.array('technologyLogos', 10), async (req, res) => {
             description: req.body.description,
             engagement: req.body.engagement || '',
             revenue: req.body.revenue || '',
+            genre: req.body.genre || 'Others',
             order: req.body.order || 0
         };
 
@@ -119,6 +120,7 @@ router.put('/:id', upload.array('technologyLogos', 10), async (req, res) => {
             description: req.body.description,
             engagement: req.body.engagement || '',
             revenue: req.body.revenue || '',
+            genre: req.body.genre || 'Others',
             order: req.body.order || 0
         };
 
