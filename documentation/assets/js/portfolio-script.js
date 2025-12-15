@@ -1101,6 +1101,7 @@ class YouTubeVideoSection {
         await Promise.all([this.loadVideos(), this.loadGenres()]);
         this.renderGenreButtons();
         this.renderVideos();
+        this.setupScrollButtons();
     }
 
     async loadGenres() {
@@ -1176,6 +1177,7 @@ class YouTubeVideoSection {
             if (this.emptyState) {
                 this.emptyState.style.display = 'block';
             }
+            this.updateScrollButtons();
             return;
         }
 
@@ -1184,33 +1186,39 @@ class YouTubeVideoSection {
             this.emptyState.style.display = 'none';
         }
 
-        // Render each video card
-    const filteredVideos = this.currentGenre === 'all' 
-        ? this.videos 
-        : this.videos.filter(video => {
-            if (!video.genre) return false;
-            return video.genre.trim().toLowerCase() === this.currentGenre.trim().toLowerCase();
+        // Filter videos
+        const filteredVideos = this.currentGenre === 'all' 
+            ? this.videos 
+            : this.videos.filter(video => {
+                if (!video.genre) return false;
+                return video.genre.trim().toLowerCase() === this.currentGenre.trim().toLowerCase();
+            });
+
+        if (filteredVideos.length === 0) {
+            this.gridContainer.innerHTML = `
+                <div class="empty-state" style="width: 100%; flex: 1; text-align: center; padding: 3rem;">
+                    <p>No videos found for this genre.</p>
+                </div>
+            `;
+            this.updateScrollButtons();
+            return;
+        }
+
+        filteredVideos.forEach((video, index) => {
+            const card = this.createVideoCard(video, index);
+            this.gridContainer.appendChild(card);
         });
-
-    if (filteredVideos.length === 0) {
-        this.gridContainer.innerHTML = `
-            <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
-                <p>No videos found for this genre.</p>
-            </div>
-        `;
-        return;
-    }
-
-    filteredVideos.forEach((video, index) => {
-        const card = this.createVideoCard(video, index);
-        this.gridContainer.appendChild(card);
-    });
+        
+        // Reset scroll position and update buttons
+        this.gridContainer.scrollLeft = 0;
+        this.updateScrollButtons();
     }
 
     createVideoCard(video, index) {
         const card = document.createElement('div');
         card.className = 'youtube-video-card';
         card.style.animationDelay = `${index * 0.1}s`;
+        // Add specific width class or let CSS handle it via .horizontal-scroll-grid > *
         
         card.innerHTML = `
             <div class="youtube-thumbnail-wrapper">
@@ -1230,6 +1238,58 @@ class YouTubeVideoSection {
         `;
         
         return card;
+    }
+
+    setupScrollButtons() {
+        const prevBtn = document.getElementById('youtubePrev');
+        const nextBtn = document.getElementById('youtubeNext');
+        
+        if (!prevBtn || !nextBtn || !this.gridContainer) return;
+        
+        // Scroll amount: Approximate width of one item + gap
+        const getScrollAmount = () => {
+             return this.gridContainer.clientWidth * 0.75;
+        };
+
+        prevBtn.addEventListener('click', () => {
+             this.gridContainer.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+        });
+
+        nextBtn.addEventListener('click', () => {
+             this.gridContainer.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+        });
+
+        // Update button visibility on scroll
+        this.gridContainer.addEventListener('scroll', () => this.updateScrollButtons());
+        
+        // Update on resize
+        window.addEventListener('resize', () => this.updateScrollButtons());
+    }
+
+    updateScrollButtons() {
+        const prevBtn = document.getElementById('youtubePrev');
+        const nextBtn = document.getElementById('youtubeNext');
+        const grid = this.gridContainer;
+        
+        if (!grid || !prevBtn || !nextBtn) return;
+
+        const tolerance = 5;
+        const maxScrollLeft = grid.scrollWidth - grid.clientWidth;
+
+        // Show prev button if scrolled right
+        if (grid.scrollLeft > tolerance) {
+            prevBtn.classList.add('visible');
+        } else {
+            prevBtn.classList.remove('visible');
+        }
+
+        // Show next button if can scroll more right
+        // If content fits perfectly or is less than container, maxScrollLeft might be 0 or small
+        if (maxScrollLeft - grid.scrollLeft > tolerance) {
+            nextBtn.classList.add('visible');
+        } else {
+            nextBtn.classList.remove('visible');
+        }
     }
 
     // Public method to refresh videos (called from admin panel)

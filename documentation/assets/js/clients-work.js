@@ -6,15 +6,12 @@
     'use strict';
 
     let allClientWorks = [];
-    let currentlyDisplayed = 0;
-    const ITEMS_PER_PAGE = 8; // 2 rows × 4 columns
-    let genres = [];
     let currentGenreFilter = 'all';
 
     document.addEventListener('DOMContentLoaded', function() {
         loadGenres();
         loadClientsWork();
-        setupLoadMoreButton();
+        setupScrollButtons();
     });
 
     // Load genres from API
@@ -22,8 +19,8 @@
         try {
             const response = await fetch('/api/genres');
             if (response.ok) {
-                genres = await response.json();
-                renderGenreButtons();
+                const genres = await response.json();
+                renderGenreButtons(genres);
             }
         } catch (error) {
             console.error('Error loading genres:', error);
@@ -31,9 +28,9 @@
     }
 
     // Render genre filter buttons
-    function renderGenreButtons() {
+    function renderGenreButtons(genres) {
         const container = document.getElementById('clientWorkGenreFilters');
-        if (!container || genres.length === 0) return;
+        if (!container || !genres || genres.length === 0) return;
 
         container.innerHTML = `
             <button class="genre-btn active" data-genre="all">All</button>
@@ -57,13 +54,7 @@
     // Filter by genre
     function filterByGenre(genre) {
         currentGenreFilter = genre;
-        currentlyDisplayed = 0;
-        
-        const grid = document.getElementById('clientsWorkGrid');
-        if (!grid) return;
-        
-        grid.innerHTML = '';
-        displayNextPage();
+        loadClientsWork(); // Re-render with filter
     }
 
     async function loadClientsWork() {
@@ -72,117 +63,71 @@
         if (!grid) return;
 
         try {
-            const response = await fetch('/api/client-work');
-            
-            if (!response.ok) {
-                throw new Error('Failed to load client work');
-            }
+            // Only fetch if not already loaded (simple cache)
+            if (allClientWorks.length === 0) {
+                const response = await fetch('/api/client-work');
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load client work');
+                }
 
-            allClientWorks = await response.json();
+                allClientWorks = await response.json();
+            }
             
             // Clear loading state
             grid.innerHTML = '';
+            
+            // Apply filtering
+            let filteredWorks = [...allClientWorks];
+            if (currentGenreFilter !== 'all') {
+                filteredWorks = filteredWorks.filter(work => {
+                    if (!work.genre) return false;
+                    return work.genre.trim().toLowerCase() === currentGenreFilter.trim().toLowerCase();
+                });
+            }
 
-            if (!allClientWorks || allClientWorks.length === 0) {
+            // Sort by date (newest first)
+            filteredWorks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            if (!filteredWorks || filteredWorks.length === 0) {
                 grid.innerHTML = `
-                    <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem;">
+                    <div class="empty-state" style="width: 100%; flex: 1; text-align: center; padding: 4rem 2rem;">
                         <i class="fas fa-briefcase" style="font-size: 4rem; color: var(--primary-purple); opacity: 0.3; margin-bottom: 1rem;"></i>
-                        <p style="color: var(--text-secondary); font-size: 1.125rem;">No client work available yet</p>
+                        <p style="color: var(--text-secondary); font-size: 1.125rem;">No client work available for this category</p>
                     </div>
                 `;
+                updateScrollButtons(); // Update buttons (likely hide both)
                 return;
             }
 
-            // Display first page (8 items)
-            displayNextPage();
+            // Render all filtered cards
+            filteredWorks.forEach(work => {
+                const card = createClientWorkCard(work);
+                grid.appendChild(card);
+            });
             
-            console.log(`✅ Loaded ${allClientWorks.length} client work items`);
-            console.log('🔍 Client Work Data Snapshot:', allClientWorks.map(w => ({ title: w.title, genre: w.genre })));
+            console.log(`✅ Loaded ${filteredWorks.length} client work items`);
+            
+            // Reset scroll position
+            grid.scrollLeft = 0;
+            updateScrollButtons();
 
         } catch (error) {
             console.error('Error loading client work:', error);
             grid.innerHTML = `
-                <div class="error-state" style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem;">
+                <div class="error-state" style="width: 100%; flex: 1; text-align: center; padding: 4rem 2rem;">
                     <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: var(--error); opacity: 0.5; margin-bottom: 1rem;"></i>
                     <p style="color: var(--error);">Failed to load client work</p>
                 </div>
             `;
-        }
-    }
-
-    function displayNextPage() {
-        const grid = document.getElementById('clientsWorkGrid');
-        const loadMoreContainer = document.getElementById('clientsWorkLoadMoreContainer');
-        const loadMoreBtn = document.getElementById('clientsWorkLoadMore');
-        
-        // Apply genre filter and sort
-        let filteredWorks = [...allClientWorks];
-        
-        if (currentGenreFilter !== 'all') {
-            filteredWorks = filteredWorks.filter(work => {
-                if (!work.genre) return false;
-                return work.genre.trim().toLowerCase() === currentGenreFilter.trim().toLowerCase();
-            });
-        }
-        
-        // Sort by date (newest first)
-        filteredWorks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        
-        // Calculate how many items to show
-        const endIndex = Math.min(currentlyDisplayed + ITEMS_PER_PAGE, filteredWorks.length);
-        const itemsToShow = filteredWorks.slice(currentlyDisplayed, endIndex);
-        
-        // Render cards
-        itemsToShow.forEach(work => {
-            const card = createClientWorkCard(work);
-            grid.appendChild(card);
-        });
-        
-        currentlyDisplayed = endIndex;
-        
-        // Update button state
-        if (currentlyDisplayed < filteredWorks.length) {
-            // Show Load More button
-            loadMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Load More Projects';
-            loadMoreBtn.onclick = displayNextPage;
-            loadMoreContainer.style.display = 'block';
-        } else if (currentlyDisplayed > ITEMS_PER_PAGE) {
-            // Show Less button when all items shown and more than initial amount
-            loadMoreBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Show Less';
-            loadMoreBtn.onclick = showLess;
-            loadMoreContainer.style.display = 'block';
-        } else {
-            // Hide button if showing exactly initial amount or less
-            loadMoreContainer.style.display = 'none';
-        }
-    }
-
-    function showLess() {
-        const grid = document.getElementById('clientsWorkGrid');
-        const loadMoreBtn = document.getElementById('clientsWorkLoadMore');
-        
-        // Remove excess cards
-        const cards = grid.querySelectorAll('.client-work-card');
-        for (let i = cards.length - 1; i >= ITEMS_PER_PAGE; i--) {
-            cards[i].remove();
-        }
-        
-        currentlyDisplayed = ITEMS_PER_PAGE;
-        
-        // Update button to Load More
-        loadMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Load More Projects';
-        loadMoreBtn.onclick = displayNextPage;
-        
-        // Scroll to section top
-        const section = document.getElementById('clients-work');
-        if (section) {
-            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            updateScrollButtons();
         }
     }
 
     function createClientWorkCard(work) {
         const card = document.createElement('div');
         card.className = 'client-work-card';
+        // Add specific width class or let CSS handle it via flex-basis in .horizontal-scroll-grid > *
         
         // Extract YouTube video ID
         let videoId = extractYouTubeId(work.youtubeUrl);
@@ -252,9 +197,59 @@
         return null;
     }
 
-    function setupLoadMoreButton() {
-        // Button click handler is set dynamically by displayNextPage/showLess
-        // This function is kept for potential future setup needs
+    // Scroll Logic
+    function setupScrollButtons() {
+        const grid = document.getElementById('clientsWorkGrid');
+        const prevBtn = document.getElementById('clientWorkPrev');
+        const nextBtn = document.getElementById('clientWorkNext');
+        
+        if (!grid || !prevBtn || !nextBtn) return;
+        
+        // Scroll amount: Width of one item + gap, or partial container width
+        const getScrollAmount = () => {
+             // Approximately one card width + gap. 
+             // Or safer: container width * 0.75 to scroll 3 items at a time
+             return grid.clientWidth * 0.75;
+        };
+
+        prevBtn.addEventListener('click', () => {
+            grid.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+        });
+
+        nextBtn.addEventListener('click', () => {
+            grid.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+        });
+
+        // Update button visibility on scroll
+        grid.addEventListener('scroll', updateScrollButtons);
+        
+        // Update on resize
+        window.addEventListener('resize', updateScrollButtons);
+    }
+
+    function updateScrollButtons() {
+        const grid = document.getElementById('clientsWorkGrid');
+        const prevBtn = document.getElementById('clientWorkPrev');
+        const nextBtn = document.getElementById('clientWorkNext');
+        
+        if (!grid || !prevBtn || !nextBtn) return;
+
+        const tolerance = 5; // Pixels tolerance for calculation
+        const maxScrollLeft = grid.scrollWidth - grid.clientWidth;
+
+        // Show prev button if scrolled right
+        if (grid.scrollLeft > tolerance) {
+            prevBtn.classList.add('visible');
+        } else {
+            prevBtn.classList.remove('visible');
+        }
+
+        // Show next button if can scroll more right
+        if (maxScrollLeft - grid.scrollLeft > tolerance) {
+            nextBtn.classList.add('visible');
+        } else {
+            nextBtn.classList.remove('visible');
+        }
     }
 
 })();

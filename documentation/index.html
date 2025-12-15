@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="assets/css/genre-filters.css">
     <link rel="stylesheet" type="text/css" href="assets/css/instagram-carousel.css">
     <link rel="stylesheet" type="text/css" href="assets/css/youtube-section.css">
+    <link rel="stylesheet" href="assets/css/horizontal-scroll.css">
     <link rel="stylesheet" href="/assets/css/home-text-editing.css">
 </head>
 
@@ -152,13 +153,23 @@
             <!-- Genre Filters -->
             <div class="genre-filters" id="clientWorkGenreFilters"></div>
 
-            <!-- Client Work Grid (4 columns) -->
-            <div class="clients-work-grid" id="clientsWorkGrid">
-                <!-- Client work cards will be loaded dynamically -->
-                <div class="loading-state">
-                    <div class="loader"></div>
-                    <p>Loading client work...</p>
+            <!-- Client Work Horizontal Scroll Container -->
+            <div class="horizontal-scroll-container">
+                <button class="scroll-btn scroll-btn-left" id="clientWorkPrev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <div class="horizontal-scroll-grid" id="clientsWorkGrid">
+                    <!-- Client work cards will be loaded dynamically -->
+                    <div class="loading-state">
+                        <div class="loader"></div>
+                        <p>Loading client work...</p>
+                    </div>
                 </div>
+
+                <button class="scroll-btn scroll-btn-right" id="clientWorkNext">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
 
             <!-- Load More Button -->
@@ -214,12 +225,22 @@
             </div>
 
             <div class="genre-filters" id="youtubeGenreFilters"></div>
-            <div class="youtube-grid" id="youtubeGrid">
-                <!-- YouTube videos will be loaded dynamically -->
-                <div class="youtube-loading">
-                    <div class="loader"></div>
-                    <p>Loading videos...</p>
+            <div class="horizontal-scroll-container">
+                <button class="scroll-btn scroll-btn-left" id="youtubePrev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <div class="horizontal-scroll-grid" id="youtubeGrid">
+                    <!-- YouTube videos will be loaded dynamically -->
+                    <div class="youtube-loading">
+                        <div class="loader"></div>
+                        <p>Loading videos...</p>
+                    </div>
                 </div>
+
+                <button class="scroll-btn scroll-btn-right" id="youtubeNext">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
 
             <!-- Empty state message -->
@@ -517,7 +538,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="portfolio-footer">
+    <footer class="portfolio-footer" id="footer">
         <div class="footer-content">
             <p class="footer-text">© 2024 Influencer Portfolio. All rights reserved.</p>
             <p class="footer-text">Crafted by <a href="https://portfolio3d-azure-nine.vercel.app/"> Souvick Roy</a> with <i class="fas fa-heart" style="color: var(--accent-pink);"></i> and

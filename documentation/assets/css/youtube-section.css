@@ -8,9 +8,7 @@
 }
 
 .youtube-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
-    gap: 2rem;
+    /* Legacy grid styles removed - using horizontal-scroll-grid */
     margin-top: 2rem;
 }
 
@@ -129,7 +127,10 @@
 
 /* Loading state */
 .youtube-loading {
-    grid-column: 1 / -1;
+    width: 100%;
+    flex: 0 0 100%;
+    grid-column: auto;
+    /* Reset grid column */
     text-align: center;
     padding: 4rem 2rem;
     color: var(--text-muted);
