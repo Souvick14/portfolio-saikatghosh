@@ -9,7 +9,8 @@ const sectionIds = [
   "skills",
   "about",
   "ratings",
-  "contact"
+  "contact",
+  "footer"
 ];
 
 a.addEventListener('click', function() {
