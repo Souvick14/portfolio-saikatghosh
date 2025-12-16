@@ -115,6 +115,24 @@ class AdminPanel {
             resetDataBtn.addEventListener('click', () => this.resetToDefault());
         }
 
+        // Skills List Event Delegation
+        const skillsList = document.getElementById('skillsList');
+        if (skillsList) {
+            skillsList.addEventListener('click', (e) => {
+                const target = e.target;
+                const editBtn = target.closest('.btn-edit');
+                const deleteBtn = target.closest('.btn-delete');
+
+                if (editBtn) {
+                    const id = editBtn.dataset.id;
+                    if (id) this.editSkill(id);
+                } else if (deleteBtn) {
+                    const id = deleteBtn.dataset.id;
+                    if (id) this.deleteSkill(id);
+                }
+            });
+        }
+
         // Modal events
         const closeModal = document.getElementById('closeModal');
         if (closeModal) {
@@ -276,10 +294,10 @@ class AdminPanel {
             </div>
             
             <div class="skill-item-actions">
-                <button class="btn-edit" onclick="adminPanel.editSkill('${skill._id}')">
+                <button class="btn-edit" data-id="${skill._id}">
                     <i class="fas fa-edit"></i> Edit
                 </button>
-                <button class="btn-delete" onclick="adminPanel.deleteSkill('${skill._id}')">
+                <button class="btn-delete" data-id="${skill._id}">
                     <i class="fas fa-trash"></i> Delete
                 </button>
             </div>
