@@ -151,9 +151,22 @@ class CarouselController {
                     <div class="blog-date">${this.formatDate(blog.publishDate)}</div>
                     <h3 class="blog-title">${blog.title}</h3>
                     <p class="blog-excerpt">${blog.excerpt}</p>
-                    <a href="#" onclick="return false;" class="blog-link">Read More</a>
+                    <button class="blog-link read-more-btn" style="border: none; cursor: pointer;">Read More</button>
                 </div>
             `;
+            
+            // Add toggle functionality
+            const readMoreBtn = slide.querySelector('.read-more-btn');
+            const excerpt = slide.querySelector('.blog-excerpt');
+            
+            if (readMoreBtn && excerpt) {
+                readMoreBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    excerpt.classList.toggle('show');
+                    readMoreBtn.textContent = excerpt.classList.contains('show') ? 'Read Less' : 'Read More';
+                });
+            }
+
             this.wrapper.appendChild(slide);
         });
     }
